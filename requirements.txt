@@ -1,4 +1,5 @@
 --find-links wheelhouse
+setuptools==38.2.5
 azure==2.0.0
 Flask==0.12.1
 
