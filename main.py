@@ -16,9 +16,9 @@ def enqueue():
     print('enqueue')
     data = json.loads(request.data.decode("utf-8"))
     message = data['message']
-    accName = 'cfvftestac3f'
-    queueName = 'q3test'
-    accKey = '50hNdU1mXcoWTVMsB00FD55N92kq+/7Xmml43SfeKGby0n+63htAWR9i6AyEW9JglmDkF73T+qw5t5uA/LK0jg=='
+    accName = 'cfvtes9c07'
+    queueName = 'qtest'
+    accKey = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
 
     # body = '<QueueMessage><MessageText>{0}</MessageText></QueueMessage>'.format(message)
     # url = 'https://{0}.queue.core.windows.net/{1}/messages?'.format(
