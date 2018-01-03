@@ -1,5 +1,4 @@
 --find-links wheelhouse
-pip==9.0.1
 setuptools==38.2.5
 
 Flask==0.12.1
