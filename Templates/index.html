@@ -14,7 +14,9 @@
         <input type="text" ng-model="ctrl.message">
         <button ng-click="ctrl.enqueue()">Enqueue</button>
         <h2>Messages:</h2>
-        <p ng-repeat="msg in ctrl.messages">[[msg]]</p>
+        <div ng-repeat="msg in ctrl.messages">
+            <p >[[msg]]</p>
+        </div>
     </div>
 </body>
 </html>
