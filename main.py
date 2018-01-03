@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from azure.storage.queue import QueueService
 import json
-# import requests
 
 app = Flask(__name__, template_folder='Templates')
+stored = []
 
 
 @app.route('/', methods=['GET'])
@@ -28,6 +28,20 @@ def enqueue():
     queue_service = QueueService(account_name=accName, account_key=accKey)
     queue_service.put_message(queueName, message)
     return '', 200
+
+
+@app.route('/dequeue', methods=['POST'])
+def dequeue():
+    data = request.form
+    message = data['message']
+    stored.append(message)
+    return '', 200
+
+
+@app.route('/messages', methods=['GET'])
+def messages():
+    return jsonify(stored)
+
 
 if __name__ == '__main__':
     app.run()
