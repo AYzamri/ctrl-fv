@@ -1,4 +1,4 @@
 --find-links wheelhouse
-azure
+azure=3.0.0
 Flask==0.12.1
 
