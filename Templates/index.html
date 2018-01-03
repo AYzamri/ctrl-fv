@@ -1,0 +1,18 @@
+<html lang="en" ng-app="myApp">
+
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>working app</title>
+</head>
+
+<body ng-controller="myCtrl as ctrl">
+    <div>
+        <h5>Hello!</h5>
+        <span>[[ ctrl.name ]]</span>
+        <h5>This is your message:</h5>
+        <input type="text" ng-model="ctrl.message">
+        <button ng-click="ctrl.enqueue()">Enqueue</button>
+    </div>
+</body>
+</html>
