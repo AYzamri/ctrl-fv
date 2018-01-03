@@ -1,4 +1,4 @@
 --find-links wheelhouse
-setuptools==38.2.5
+
 Flask==0.12.1
 
