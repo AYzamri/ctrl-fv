@@ -15,7 +15,7 @@ var mainCtrl = app.controller('myCtrl', ['$scope','$http', function($scope,$http
                     ctrl.messages = data['data'];});
 
               ctrl.enqueue = function(){
-                var data = {message : ctrl.message}
+                var data = {message : btoa(ctrl.message)}
                 $http.post(url+'/enqueue',data);
               }
               }]);
