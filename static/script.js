@@ -1,13 +1,16 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['lr.upload']);
 app.config(['$interpolateProvider', function($interpolateProvider) {
                     $interpolateProvider.startSymbol('[[');
                     $interpolateProvider.endSymbol(']]');
             }]);
 
 var url = 'https://cfvtest.azurewebsites.net/';
-//var url = 'http://localhost:5000';
+var localhost = 'http://localhost:5000';
+
+//url=localhost
 var mainCtrl = app.controller('myCtrl', ['$scope','$http', function($scope,$http) {
               var ctrl = this;
+              ctrl.url = url;
               ctrl.name = 'Ctrl-FV!';
               ctrl.messages = [];
 
@@ -16,7 +19,8 @@ var mainCtrl = app.controller('myCtrl', ['$scope','$http', function($scope,$http
 
               ctrl.enqueue = function(){
                 var data = {message : btoa(ctrl.message)}
-                $http.post(url+'/enqueue',data);
+                $http.post(ctrl.url+'/enqueue',data);
               }
+
               }]);
 

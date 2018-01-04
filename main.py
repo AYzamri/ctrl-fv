@@ -17,17 +17,18 @@ def enqueue():
     data = json.loads(request.data.decode("utf-8"))
     message = data['message']
     accName = 'cfvtes9c07'
-    queueName = 'qtest'
+    queueName = 'indexq'
     accKey = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
-
-    # body = '<QueueMessage><MessageText>{0}</MessageText></QueueMessage>'.format(message)
-    # url = 'https://{0}.queue.core.windows.net/{1}/messages?'.format(
-    #     accName, queueName)
-    # requests.post(url=url, data=body)
 
     queue_service = QueueService(account_name=accName, account_key=accKey)
     queue_service.put_message(queueName, message)
     return '', 200
+
+
+@app.route('/video', methods=['POST'])
+def uploadVideo():
+    data = request.data
+    print('got data')
 
 
 @app.route('/dequeue', methods=['POST'])
