@@ -18,11 +18,11 @@
         <div
                 class="btn btn-primary btn-upload"
                 upload-button
-                url="[[ctrl.url]]/video"
-        >Fileupload
+                url="[[ctrl.url]]/video">File upload
         </div>
+        <h4>Progress:</h4>
+        <h5> [[ctrl.current]] / [[ctrl.total]]</h5>
         <h2>Messages:</h2>
-        <h4>(Refresh to see new messages)</h4>
         <div ng-repeat="msg in ctrl.messages">
             <p>[[msg]]</p>
         </div>
