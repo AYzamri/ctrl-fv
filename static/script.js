@@ -7,7 +7,7 @@ app.config(['$interpolateProvider', function($interpolateProvider) {
 var url = 'https://cfvtest.azurewebsites.net/';
 var localhost = 'http://localhost:5000';
 
-//url=localhost
+url=localhost
 var mainCtrl = app.controller('myCtrl', ['$scope','$http', function($scope,$http) {
               var ctrl = this;
               ctrl.url = url;
