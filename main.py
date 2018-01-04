@@ -29,6 +29,7 @@ def enqueue():
 def uploadVideo():
     data = request.data
     print('got data')
+    return '',200
 
 
 @app.route('/dequeue', methods=['POST'])
