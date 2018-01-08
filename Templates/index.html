@@ -1,31 +1,23 @@
 <html lang="en" ng-app="myApp">
 
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='uploadvid.js') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular-upload.js') }}"></script>
+    <link rel="import" href="partial/uploadvid.html">
     <title>working app</title>
 </head>
 
-<body ng-controller="myCtrl as ctrl">
+<body ng-controller="mainCtrl as ctrl">
     <div>
         <h5>Hello!</h5>
         <span>[[ ctrl.name ]]</span>
-        <h5>This is your message:</h5>
-        <input type="text" ng-model="ctrl.message">
-        <button ng-click="ctrl.enqueue()">Enqueue</button>
-        <div
-                class="btn btn-primary btn-upload"
-                upload-button
-                url="[[ctrl.url]]/video">File upload
-        </div>
-        <h4>Progress:</h4>
-        <h5> [[ctrl.current]] / [[ctrl.total]]</h5>
-        <h2>Messages:</h2>
-        <div ng-repeat="msg in ctrl.messages">
-            <p>[[msg]]</p>
-        </div>
+        <br>
     </div>
+    <a href="#upload">Go to upload</a>
+    <ng-view></ng-view>
 </body>
 </html>

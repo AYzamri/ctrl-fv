@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, jsonify
-import json
+from flask import Flask, render_template, request
 import server_logic
 
 app = Flask(__name__, template_folder='Templates')
@@ -11,30 +10,23 @@ def hello_world():
     return render_template('index.html')
 
 
-@app.route('/enqueue', methods=['POST'])
-def enqueue():
-    print('enqueue')
-    data = json.loads(request.data.decode("utf-8"))
-    message = data['message']
-    queueName = 'indexq'
-    server_logic.enqueue_message(queueName, message)
-    return '', 200
-
-
-@app.route('/dequeue', methods=['POST'])
-def dequeue():
-    data = request.form
-    message = data['message']
-    stored.append(message)
-    return '', 200
-
-
-@app.route('/messages', methods=['GET'])
-def messages():
-    return jsonify(stored)
-
-
-currentProgress = totalProgress = 0
+#
+# @app.route('/enqueue', methods=['POST'])
+# def enqueue():
+#     print('enqueue')
+#     data = json.loads(request.data.decode("utf-8"))
+#     message = data['message']
+#     queueName = 'indexq'
+#     server_logic.enqueue_message(queueName, message)
+#     return '', 200
+#
+#
+# @app.route('/dequeue', methods=['POST'])
+# def dequeue():
+#     data = request.form
+#     message = data['message']
+#     stored.append(message)
+#     return '', 200
 
 
 @app.route('/video', methods=['POST'])
@@ -46,10 +38,9 @@ def uploadvideo():
     return '', 200
 
 
-@app.route('/progress', methods=['GET'])
-def progress():
-    data = {"current": currentProgress, "total": totalProgress}
-    return jsonify(data), 200
+@app.route('/partial/<path:path>')
+def serve_partial(path):
+    return render_template('partial/{}'.format(path))
 
 
 @app.after_request
