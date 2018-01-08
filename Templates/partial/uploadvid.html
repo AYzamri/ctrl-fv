@@ -1,0 +1,11 @@
+<div ng-controller="uploadVidCtrl as ctrl">
+    <h3>Welcome to upload page</h3>
+    <h5>[[ctrl.hello]]</h5>
+    <input type="file" name="videoFile"/>
+    <br>
+    <input type="text" ng-model="ctrl.videoName">
+    <br>
+    <input type="text" ng-model="ctrl.videoDescription">
+    <br>
+    <button ng-click="ctrl.upload()">Upload!!!!!</button>
+</div>
