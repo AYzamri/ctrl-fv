@@ -1,24 +1,23 @@
 var app = angular.module('myApp');
+var server = app.config['server'];
 
-app.controller('uploadVidCtrl', ['$http', '$scope', function ($http, $scope)
+app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $scope, upload)
 {
     var ctrl = this;
+    ctrl.url = server + '/video';
+
     ctrl.hello = 'uploadVidCtrl is up';
 
-    ctrl.upload = function ()
+    ctrl.doUpload = function ()
     {
-        var url = server + '/video';
         upload({
-            url: url,
+            url: ctrl.url,
             method: 'POST',
             data: {
-                video: $scope.videoFile,
-                name: ctrl.videoName,
-                description: ctrl.videoDescription
+                video: ctrl.vidArray[0], videoName: ctrl.videoName,
+                videoDescription: ctrl.videoDescription,
+                transcript: ctrl.transArray[0]
             }
-        }).then(function (response)
-        {
-            window.alert('done');
-        });
+        })
     }
 }]);
