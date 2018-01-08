@@ -1,12 +1,9 @@
-from azure.storage.blob import BlockBlobService, PublicAccess
 from flask import Flask, render_template, request, jsonify
-from azure.storage.queue import QueueService
 import json
+import server_logic
 
 app = Flask(__name__, template_folder='Templates')
 stored = []
-accName = 'cfvtes9c07'
-accKey = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
 
 
 @app.route('/', methods=['GET'])
@@ -20,9 +17,7 @@ def enqueue():
     data = json.loads(request.data.decode("utf-8"))
     message = data['message']
     queueName = 'indexq'
-
-    queue_service = QueueService(account_name=accName, account_key=accKey)
-    queue_service.put_message(queueName, message)
+    server_logic.enqueue_message(queueName, message)
     return '', 200
 
 
@@ -42,22 +37,12 @@ def messages():
 currentProgress = totalProgress = 0
 
 
-def updateProgress(current, total):
-    currentProgress = current
-    totalProgress = total
-
-
 @app.route('/video', methods=['POST'])
-def uploadVideo():
+def uploadvideo():
     file = request.files['file']
+    blobName = 'blob1'
+    server_logic.uploav_vid_to_blob(name=blobName, vid=file)
 
-    block_blob_service = BlockBlobService(account_name=accName, account_key=accKey)
-    container_name = 'videoscontainer'
-    # Set the permission so the blobs are public.
-    block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
-
-    block_blob_service.create_blob_from_stream(container_name=container_name, blob_name='blob1', stream=file,
-                                               progress_callback=updateProgress)
     return '', 200
 
 
@@ -65,6 +50,14 @@ def uploadVideo():
 def progress():
     data = {"current": currentProgress, "total": totalProgress}
     return jsonify(data), 200
+
+
+@app.after_request
+def allow_cross_domain(response):
+    """Hook to set up response headers."""
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'content-type'
+    return response
 
 
 if __name__ == '__main__':

@@ -4,27 +4,27 @@ app.config(['$interpolateProvider', function($interpolateProvider) {
                     $interpolateProvider.endSymbol(']]');
             }]);
 
-var url = 'https://cfvtest.azurewebsites.net/';
+var server = 'https://cfvtest.azurewebsites.net/';
 var localhost = 'http://localhost:5000';
 
-//url=localhost
+// server=localhost;
 var mainCtrl = app.controller('myCtrl', ['$scope','$http', function($scope,$http) {
               var ctrl = this;
-              ctrl.url = url;
+              ctrl.url = server;
               ctrl.name = 'Ctrl-FV!';
               ctrl.messages = [];
               ctrl.current = 0;
               ctrl.total = 0;
 
               ctrl.enqueue = function(){
-                var data = {message : btoa(ctrl.message)}
+                var data = {message : btoa(ctrl.message)};
                 $http.post(ctrl.url+'/enqueue',data);
-              }
+              };
 
               setInterval(function(){
-              $http.get(url+'/messages').then(function(data){
+              $http.get(server+'/messages').then(function(data){
                                   ctrl.messages = data['data'];});
-              $http.get(url+'/progress').then(function(data){
+              $http.get(server+'/progress').then(function(data){
               ctrl.current = data.data['current'];
               ctrl.total = data.data['total']})
               },10000)
