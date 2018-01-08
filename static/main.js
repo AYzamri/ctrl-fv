@@ -21,7 +21,7 @@ app.config(['$routeProvider', function ($routeProvider)
 var server = 'https://cfvtest.azurewebsites.net/';
 var localhost = 'http://localhost:5000';
 
-app.config['server'] = localhost;
+app.config['server'] = server;
 app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http)
 {
     var ctrl = this;
