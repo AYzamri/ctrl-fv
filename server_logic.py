@@ -14,7 +14,7 @@ def uploav_file_to_blob(name, file, container_name):
 
 
 def enqueue_message(qname, message):
-    message = base64.b64encode(message)
+    message = base64.b64encode(bytes(message, 'utf-8'))
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
     queue_service.put_message(qname, message)
 
