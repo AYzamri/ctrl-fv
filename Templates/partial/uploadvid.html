@@ -1,11 +1,18 @@
-<div ng-controller="uploadVidCtrl as ctrl">
+<div>
     <h3>Welcome to upload page</h3>
     <h5>[[ctrl.hello]]</h5>
-    <input type="file" name="videoFile"/>
     <br>
     <input type="text" ng-model="ctrl.videoName">
     <br>
     <input type="text" ng-model="ctrl.videoDescription">
     <br>
-    <button ng-click="ctrl.upload()">Upload!!!!!</button>
+    <p>Upload video:</p>
+    <input type="file" files-input ng-model="ctrl.vidArray">
+    <br>
+    <p>Upload transcript:</p>
+    <input type="file" files-input ng-model="ctrl.transArray">
+    <button ng-click="ctrl.doUpload()">Upload</button>
+    <div ng-repeat="file in ctrl.fileArray">
+        [[file.name]]
+    </div>
 </div>
