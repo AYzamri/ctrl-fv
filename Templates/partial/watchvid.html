@@ -6,14 +6,18 @@
      <input type="submit" id="submit" value="Search " />
     </form>
     <video id="currentVideo" controls>
-        <source src="https://cfvtes9c07.blob.core.windows.net/videoscontainer/ClimateChange.mp4">
+        <source ng-src=[[ctrl.currentVideoPath]]>
     </video>
 
     <table>
-    <tr ng-repeat="res in search_results" ng-click="jump(res)">
-    <td>[[res.startTime | secondsToDateTime | date:'HH:mm:ss']]</td>
-    <td>[[res.paragraph]]</td>
-    </tr>
+        <tr>
+            <th>Time</th>
+            <th>Paragraph</th>
+        </tr>
+        <tr ng-repeat="res in search_results" ng-click="jump(res)">
+            <td>[[res.startTime | secondsToDateTime | date:'HH:mm:ss']]</td>
+            <td>[[res.paragraph]]</td>
+        </tr>
     </table>
 
 

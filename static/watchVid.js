@@ -14,6 +14,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', function ($http, $scope)
             var video = document.getElementById("currentVideo");
             video.currentTime = res.startTime;
     };
+    ctrl.currentVideoPath = "https://cfvtes9c07.blob.core.windows.net/videoscontainer/ClimateChange.mp4";
 
 }]);
 app.filter('secondsToDateTime', [function() {
@@ -21,3 +22,8 @@ app.filter('secondsToDateTime', [function() {
         return new Date(1970, 0, 1).setSeconds(seconds);
     };
 }])
+app.filter("trustUrl", ['$sce', function ($sce) {
+        return function (recordingUrl) {
+            return $sce.trustAsResourceUrl(recordingUrl);
+        };
+    }]);
