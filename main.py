@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import server_logic
 
 app = Flask(__name__, template_folder='Templates')
@@ -19,17 +19,26 @@ def serve_partial(path):
 
 @app.route('/video', methods=['POST'])
 def uploadvideo():
-    video = request.files['video']
-    transcript = request.files['transcript']
-    video_name = request.form['videoName']
-    video_description = request.form['videoDescription']
-    vid_id = server_logic.create_id_by_name(video_name)
+    try:
+        video = request.files['video']
+        transcript = request.files['transcript']
+        video_name = request.form['videoName']
+        video_description = request.form['videoDescription']
+        vid_id = server_logic.create_id_by_name(video_name)
 
-    server_logic.upload_file_to_blob(name=vid_id, file=video, container_name='videoscontainer')
-    server_logic.upload_file_to_blob(name=vid_id, file=transcript, container_name='transcriptscontainer')
-    server_logic.enqueue_message(qname='indexq', message=vid_id)
-    # server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
+        server_logic.upload_file_to_blob(name=vid_id, file=video, container_name='videoscontainer')
+        server_logic.upload_file_to_blob(name=vid_id, file=transcript, container_name='transcriptscontainer')
+        server_logic.enqueue_message(qname='indexq', message=vid_id)
+        # server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
+    except Exception as e:
+        handle_error(500, e.message)
     return '', 200
+
+
+def handle_error(status_code, message):
+    response = jsonify({'code': status_code, 'message': message})
+    response.status_code = status_code
+    return response
 
 
 @app.after_request

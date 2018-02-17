@@ -18,6 +18,12 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $
                 videoDescription: ctrl.videoDescription,
                 transcript: ctrl.transArray[0]
             }
+        }).then(function ()
+        {
+            window.alert('added video to archive')
+        }).catch(function (error)
+        {
+            window.alert(error.message)
         })
     }
 }]);
