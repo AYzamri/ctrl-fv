@@ -31,11 +31,15 @@ def uploadvideo():
         server_logic.enqueue_message(qname='indexq', message=vid_id)
         server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
     except Exception as e:
-        return handle_error(500, e.message)
+        return handle_error(500, e)
     return '', 200
 
 
-def handle_error(status_code, message):
+def handle_error(status_code, error):
+    if (error.message):
+        message = error.message
+    else:
+        message = error
     response = jsonify({'code': status_code, 'message': message})
     response.status_code = status_code
     return response
