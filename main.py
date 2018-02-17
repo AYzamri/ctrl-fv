@@ -36,11 +36,7 @@ def uploadvideo():
 
 
 def handle_error(status_code, error):
-    if (error.message):
-        message = error.message
-    else:
-        message = error
-    response = jsonify({'code': status_code, 'message': message})
+    response = jsonify({'code': status_code, 'message': error})
     response.status_code = status_code
     return response
 
