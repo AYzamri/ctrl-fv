@@ -18,6 +18,7 @@ def serve_partial(path):
 @app.route('/video', methods=['POST'])
 def uploadvideo():
     try:
+        raise Exception('test')
         video = request.files['video']
         transcript = request.files['transcript']
         video_name = request.form['videoName']
