@@ -1,0 +1,20 @@
+<html lang="en" ng-app="myApp">
+
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='uploadvid.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-upload.js') }}"></script>
+    <title>working app</title>
+</head>
+
+<body ng-controller="mainCtrl as ctrl">
+    <div>
+        <h5>Hello!</h5>
+        <span>[[ ctrl.name ]]</span>
+        <br>
+        <div ng-view></div>
+    </div>
+</body>
+</html>

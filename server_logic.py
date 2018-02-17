@@ -4,18 +4,17 @@ import pyodbc
 import base64
 import datetime
 
+storage_acc_name = 'cfvtes9c07'
+storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
 
-def get_id_by_name(name):
+
+def create_id_by_name(name):
     date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H:%M')
     name = '{}_{}'.format(name, date_time_str)
     return name
 
 
-storage_acc_name = 'cfvtes9c07'
-storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
-
-
-def uploav_file_to_blob(name, file, container_name):
+def upload_file_to_blob(name, file, container_name):
     block_blob_service = BlockBlobService(account_name=storage_acc_name, account_key=storage_acc_key)
     # Set the permission so the blobs are public.
     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
@@ -23,8 +22,9 @@ def uploav_file_to_blob(name, file, container_name):
 
 
 def enqueue_message(qname, message):
+    encoded = message.decode()
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
-    queue_service.put_message(qname, message)
+    queue_service.put_message(qname, encoded)
 
 
 def upload_vid_meta_data(blobname, videoname, videodescription):
