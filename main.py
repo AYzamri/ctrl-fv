@@ -1,5 +1,3 @@
-import random
-import string
 
 from flask import Flask, render_template, request, jsonify
 import server_logic

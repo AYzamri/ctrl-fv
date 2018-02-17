@@ -1,7 +1,6 @@
 from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.storage.queue import QueueService
 import pyodbc
-import base64
 import datetime
 
 storage_acc_name = 'cfvtes9c07'
