@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute', 'lr.upload']);
+var app = angular.module('myApp');
 
 var server = 'https://cfvtest.azurewebsites.net/';
 var localhost = 'http://localhost:5000';
