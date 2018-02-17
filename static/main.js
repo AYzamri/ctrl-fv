@@ -16,12 +16,17 @@ app.config(['$routeProvider', function ($routeProvider)
         controller: "uploadVidCtrl",
         controllerAs: "ctrl"
     });
+    $routeProvider.when("/watch", {
+        templateUrl: "../partial/watchvid.html",
+        controller: "watchVidCtrl",
+        controllerAs: "ctrl"
+    });
 }]);
 
 var server = 'https://cfvtest.azurewebsites.net/';
 var localhost = 'http://localhost:5000';
 
-app.config['server'] = server;
+app.config['server'] = localhost;
 app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http)
 {
     var ctrl = this;
