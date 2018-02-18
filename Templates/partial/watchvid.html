@@ -1,8 +1,8 @@
 <div>
     <h3>Welcome to watch video</h3>
     <form
-    ng-submit="searchInVid">
-    <input type="text" placeholder="Search Inside" value=[[ctrl.searchVal]]>
+    ng-submit="searchInVid()">
+    <input type="text" placeholder="Search Inside" ng-model=searchVal>
      <input type="submit" id="submit" value="Search " />
     </form>
     <video id="currentVideo" controls>
