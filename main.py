@@ -38,6 +38,15 @@ def handle_error(status_code, error):
     response.status_code = status_code
     return response
 
+@app.route('/choosevideo', methods=['POST'])
+def choosevideo():
+    try:
+        videoId = request.videoId
+        video = server_logic.get_video_from_blob(name=videoId, file=video, container_name='videoscontainer')
+    except Exception as e:
+        return handle_error(500, e)
+    return '', 200
+
 
 @app.after_request
 def allow_cross_domain(response):
