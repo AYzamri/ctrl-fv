@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, jsonify
 import server_logic
 
@@ -29,7 +28,7 @@ def uploadvideo():
         server_logic.enqueue_message(qname='indexq', message=vid_id)
         server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
     except Exception as e:
-        return handle_error(500, e)
+        return handle_error(501, e)
     return '', 200
 
 
@@ -37,6 +36,7 @@ def handle_error(status_code, error):
     response = jsonify({'code': status_code, 'message': error})
     response.status_code = status_code
     return response
+
 
 @app.route('/choosevideo', methods=['POST'])
 def choosevideo():
