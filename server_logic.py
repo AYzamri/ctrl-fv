@@ -25,17 +25,17 @@ def enqueue_message(qname, message):
     queue_service.put_message(qname, message)
 
 
-    def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
-        server = 'cfvtest.database.windows.net'
-        database = 'cfvtest'
-        username = 'drasco'
-        password = 'testTest1'
-        driver = '{ODBC Driver 13 for SQL Server}'
-        table = 'VideosMetaData'
-        cnxn = pyodbc.connect(
-            'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
-        cursor = cnxn.cursor()
-        query = "INSERT INTO {0} (vid_id,title,description,userID) VALUES('{1}','{2}','{3}','{4}')"
-        query = query.format(table, blobname, videoname, videodescription, user_id)
-        cursor.execute(query)
-        cnxn.commit()
+def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
+    server = 'cfvtest.database.windows.net'
+    database = 'cfvtest'
+    username = 'drasco'
+    password = 'testTest1'
+    driver = '{ODBC Driver 13 for SQL Server}'
+    table = 'VideosMetaData'
+    cnxn = pyodbc.connect(
+        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+    cursor = cnxn.cursor()
+    query = "INSERT INTO {0} (vid_id,title,description,userID) VALUES('{1}','{2}','{3}','{4}')"
+    query = query.format(table, blobname, videoname, videodescription, user_id)
+    cursor.execute(query)
+    cnxn.commit()
