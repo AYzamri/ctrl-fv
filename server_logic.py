@@ -22,8 +22,8 @@ def upload_file_to_blob(name, file, container_name):
 
 def enqueue_message(qname, message):
     encoded = message.decode()
-    queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
-    queue_service.put_message(qname, encoded)
+    # queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
+    # queue_service.put_message(qname, encoded)
 
 
 def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
