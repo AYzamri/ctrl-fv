@@ -23,8 +23,8 @@ def uploadvideo():
         video_description = request.form['videoDescription']
         vid_id = server_logic.create_id_by_name(video_name)
 
-        # server_logic.upload_file_to_blob(name=vid_id, file=video, container_name='videoscontainer')
-        # server_logic.upload_file_to_blob(name=vid_id, file=transcript, container_name='transcriptscontainer')
+        server_logic.upload_file_to_blob(name=vid_id, file=video, container_name='videoscontainer')
+        server_logic.upload_file_to_blob(name=vid_id, file=transcript, container_name='transcriptscontainer')
         # server_logic.enqueue_message(qname='indexq', message=vid_id)
         server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
     except Exception as e:
