@@ -2,6 +2,7 @@ from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.storage.queue import QueueService
 import pyodbc
 import datetime
+from base64 import b64encode
 
 storage_acc_name = 'cfvtes9c07'
 storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
@@ -21,6 +22,7 @@ def upload_file_to_blob(name, file, container_name):
 
 
 def enqueue_message(qname, message):
+    message = b64encode(message.encode('ascii')).decode()
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
     queue_service.put_message(qname, message)
 
