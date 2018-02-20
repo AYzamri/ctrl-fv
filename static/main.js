@@ -21,6 +21,11 @@ app.config(['$routeProvider', function ($routeProvider)
         controller: "watchVidCtrl",
         controllerAs: "ctrl"
     });
+    $routeProvider.when("/search", {
+        templateUrl: "../partial/searchvid.html",
+        controller: "searchVidCtrl",
+        controllerAs: "ctrl"
+    });
 }]);
 
 app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http)

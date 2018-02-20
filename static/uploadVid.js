@@ -14,7 +14,8 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $
             url: ctrl.url,
             method: 'POST',
             data: {
-                video: ctrl.vidArray[0], videoName: ctrl.videoName,
+                video: ctrl.vidArray[0],
+                videoName: ctrl.videoName,
                 videoDescription: ctrl.videoDescription,
                 transcript: ctrl.transArray[0]
             }
