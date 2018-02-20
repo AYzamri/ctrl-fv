@@ -9,7 +9,7 @@ storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v
 
 
 def create_id_by_name(name):
-    date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H:%M')
+    date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H%M')
     name = '{}_{}'.format(name, date_time_str)
     return name
 
