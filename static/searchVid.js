@@ -4,7 +4,6 @@ var server = app.config['server'];
 app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 {
     var ctrl = this;
-    ctrl.url = server + '/choosevideo';
     var dummyDict = {
     hello: [
         {startTime: 10, paragraph:"hello shaked hazon"},
@@ -27,8 +26,10 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 
     ];
 
-    ctrl.chooseVid = function (vid)
+    $scope.chooseVid = function (vid)
     {
+    this.
+    console.log("test");
         //$scope.$emit('videoChosen', vid,dummyDict);
 //        choose({
 //            url: ctrl.url,

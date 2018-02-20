@@ -1,8 +1,10 @@
 var app = angular.module('myApp');
 var videoUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
-app.controller('watchVidCtrl', ['$http', '$scope', function ($http, $scope)
+app.controller('watchVidCtrl', ['$http', '$scope','$routeParams', function ($http, $scope,$routeParams)
 {
     var ctrl = this;
+    var vidId = $routeParams.vidId ;
+    vidId = vidId.replace(":",'');
     ctrl.hello = 'watchVidCtrl is up';
     $scope.searchVal = "";
     $scope.search_results = [];
@@ -28,7 +30,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', function ($http, $scope)
     $scope.searchInVid = function() {
            $scope.search_results = $scope.dummyDict[$scope.searchVal];
     };
-    ctrl.currentVideoPath = "https://cfvtes9c07.blob.core.windows.net/videoscontainer/"+"ClimateChange.mp4";
+    ctrl.currentVideoPath = videoUrl+"/"+vidId+".mp4";
 
 }]);
 app.filter('secondsToDateTime', [function() {

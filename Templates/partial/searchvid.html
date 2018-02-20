@@ -10,10 +10,16 @@
         <tr>
             <th>Video Name</th>
             <th>Description</th>
+            <th>Go To Video</th>
         </tr>
-        <tr ng-repeat="vid in vid_search_results" ng-click="ctrl.chooseVid(vid)">
+        <tr ng-repeat="vid in vid_search_results">
             <td>[[vid.name]]</td>
             <td>[[vid.description]]</td>
+            <td>
+                <a ng-href="#watch/:[[vid.id]]">
+                <h5>watch</h5></a>
+            </td>
+
         </tr>
     </table>
 </div>

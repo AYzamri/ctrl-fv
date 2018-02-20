@@ -16,7 +16,7 @@ app.config(['$routeProvider', function ($routeProvider)
         controller: "uploadVidCtrl",
         controllerAs: "ctrl"
     });
-    $routeProvider.when("/watch", {
+    $routeProvider.when("/watch/:vidId", {
         templateUrl: "../partial/watchvid.html",
         controller: "watchVidCtrl",
         controllerAs: "ctrl"
