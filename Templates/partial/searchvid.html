@@ -1,0 +1,25 @@
+<div>
+    <h3>Welcome to search video</h3>
+    <form
+    ng-submit="searchForVid()">
+    <input type="text" placeholder="search for a video" ng-model=searchVal>
+     <input type="submit" id="submit" value="Search " />
+    </form>
+
+    <table>
+        <tr>
+            <th>Video Name</th>
+            <th>Description</th>
+            <th>Go To Video</th>
+        </tr>
+        <tr ng-repeat="vid in vid_search_results">
+            <td>[[vid.name]]</td>
+            <td>[[vid.description]]</td>
+            <td>
+                <a ng-href="#watch/:[[vid.id]]">
+                <h5>watch</h5></a>
+            </td>
+
+        </tr>
+    </table>
+</div>

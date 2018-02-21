@@ -41,10 +41,10 @@ def handle_error(status_code, error):
 @app.route('/choosevideo', methods=['POST'])
 def choosevideo():
     try:
-        videoId = request.videoId
-        video = server_logic.get_video_from_blob(name=videoId, file=video, container_name='videoscontainer')
+        vid_id = request.videoId
+        # get dictionary of video for each term the timestamp
     except Exception as e:
-        return handle_error(500, e)
+        return handle_error(501, e)
     return '', 200
 
 
