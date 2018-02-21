@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import server_logic
-
+import urllib
 app = Flask(__name__, template_folder='Templates')
 
 
@@ -38,10 +38,11 @@ def handle_error(status_code, error):
     return response
 
 
-@app.route('/choosevideo', methods=['POST'])
-def choosevideo():
+@app.route('/searchvid', methods=['GET'])
+def searchvid():
     try:
-        vid_id = request.videoId
+        search_term = urllib.quote_plus(request.search_term)
+
         # get dictionary of video for each term the timestamp
     except Exception as e:
         return handle_error(501, e)
