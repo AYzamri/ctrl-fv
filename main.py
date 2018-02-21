@@ -32,20 +32,27 @@ def uploadvideo():
     return '', 200
 
 
+@app.route('/invertedIndex', methods=['GET'])
+def getInvertedIndex():
+    vid_id = request.args.get('vidid')
+    index_json = server_logic.get_inderted_index_json(vid_id)
+    return index_json, 200
+
+
 def handle_error(status_code, error):
     response = jsonify({'code': status_code, 'message': error})
     response.status_code = status_code
     return response
 
 
-@app.route('/choosevideo', methods=['POST'])
-def choosevideo():
-    try:
-        vid_id = request.videoId
-        # get dictionary of video for each term the timestamp
-    except Exception as e:
-        return handle_error(501, e)
-    return '', 200
+# @app.route('/choosevideo', methods=['POST'])
+# def choosevideo():
+#     try:
+#         vid_id = request.videoId
+#         # get dictionary of video for each term the timestamp
+#     except Exception as e:
+#         return handle_error(501, e)
+#     return '', 200
 
 
 @app.after_request

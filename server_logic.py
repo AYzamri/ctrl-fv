@@ -1,7 +1,10 @@
 from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.storage.queue import QueueService
+from azure.storage.table import TableService, Entity
 import pyodbc
 import datetime
+import urllib.parse
+import json
 from base64 import b64encode
 
 storage_acc_name = 'cfvtes9c07'
@@ -25,6 +28,21 @@ def enqueue_message(qname, message):
     message = b64encode(message.encode('ascii')).decode()
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
     queue_service.put_message(qname, message)
+
+
+def get_inverted_index(vid_id):
+    service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
+    terms = service.query_entities(table_name='VideosInvertedIndexes',
+                                   filter='PartitionKey eq \'' + vid_id + '\'',
+                                   select='RowKey,Appearances')
+    return terms.items
+
+
+def get_inderted_index_json(vid_id):
+    inverted = get_inverted_index(vid_id)
+    json_text = json.dumps(inverted)
+    parsed = urllib.parse.unquote(json_text)
+    return parsed
 
 
 def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):

@@ -1,10 +1,18 @@
 var app = angular.module('myApp');
-var videoUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
+var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
+var server = app.config['server'];
 app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($http, $scope, $routeParams)
 {
     var ctrl = this;
     var vidId = $routeParams.vidId;
     ctrl.hello = 'watchVidCtrl is up';
+    ctrl.currentVideoPath = containerUrl + "/" + vidId + ".mp4";
+
+    $http.get(server + '/invertedIndex?vidid=' + vidId).then(function ()
+    {
+
+    });
+
     $scope.searchVal = "";
     $scope.search_results = [];
     $scope.dummyDict = {
@@ -31,7 +39,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     {
         $scope.search_results = $scope.dummyDict[$scope.searchVal];
     };
-    ctrl.currentVideoPath = videoUrl + "/" + vidId + ".mp4";
 
 }]);
 app.filter('secondsToDateTime', [function ()
@@ -40,7 +47,7 @@ app.filter('secondsToDateTime', [function ()
     {
         return new Date(1970, 0, 1).setSeconds(seconds);
     };
-}])
+}]);
 app.filter("trustUrl", ['$sce', function ($sce)
 {
     return function (recordingUrl)
