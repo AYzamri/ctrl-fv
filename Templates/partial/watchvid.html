@@ -1,12 +1,12 @@
 <div>
     <h3>Welcome to watch video</h3>
     <form
-    ng-submit="searchInVid()">
-    <input type="text" placeholder="Search Inside" ng-model=searchVal>
-     <input type="submit" id="submit" value="Search " />
+            ng-submit="ctrl.searchInVid()">
+        <input type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
+        <input type="submit" id="submit" value="Search "/>
     </form>
     <video id="currentVideo" controls>
-        <source ng-src=[[ctrl.currentVideoPath]]>
+        <source ng-src="[[ctrl.currentVideoPath]]">
     </video>
 
     <table>
@@ -14,9 +14,9 @@
             <th>Time</th>
             <th>Paragraph</th>
         </tr>
-        <tr ng-repeat="res in search_results" ng-click="jump(res)">
-            <td>[[res.startTime | secondsToDateTime | date:'HH:mm:ss']]</td>
-            <td>[[res.paragraph]]</td>
+        <tr ng-repeat="(time,paragraph) in ctrl.search_results" ng-click="ctrl.jump(time)">
+            <td>[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
+            <td>[[paragraph]]</td>
         </tr>
     </table>
 

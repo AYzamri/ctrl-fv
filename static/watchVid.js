@@ -4,40 +4,29 @@ var server = app.config['server'];
 app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($http, $scope, $routeParams)
 {
     var ctrl = this;
-    var vidId = $routeParams.vidId;
+    ctrl.vidId = $routeParams.vidId;
     ctrl.hello = 'watchVidCtrl is up';
-    ctrl.currentVideoPath = containerUrl + "/" + vidId + ".mp4";
+    ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
 
-    $http.get(server + '/invertedIndex?vidid=' + vidId).then(function ()
+    $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (index)
     {
-
+        ctrl.invertedIndex = index.data;
+    }).catch(function (err)
+    {
+        window.alert(err);
     });
 
-    $scope.searchVal = "";
-    $scope.search_results = [];
-    $scope.dummyDict = {
-        hello: [
-            {startTime: 10, paragraph: "hello shaked hazon"},
-            {startTime: 30, paragraph: "hello ron michaeli "},
-            {startTime: 20, paragraph: "hello dan gleyzer "},
-            {startTime: 250, paragraph: " Adam Zamri"}
-        ],
-        test: [
-            {startTime: 30, paragraph: "shaked test  hazon"},
-            {startTime: 50, paragraph: "ron test  michaeli "},
-            {startTime: 70, paragraph: "dan test  gleyzer "},
-            {startTime: 90, paragraph: "hello Adam Zamri"}
-        ]
-    };
+    ctrl.searchVal = "";
+    ctrl.search_results = [];
 
-    $scope.jump = function (res)
+    ctrl.jump = function (time)
     {
         var video = document.getElementById("currentVideo");
-        video.currentTime = res.startTime;
+        video.currentTime = time;
     };
-    $scope.searchInVid = function ()
+    ctrl.searchInVid = function ()
     {
-        $scope.search_results = $scope.dummyDict[$scope.searchVal];
+        ctrl.search_results = JSON.parse(ctrl.invertedIndex[ctrl.searchVal]);
     };
 
 }]);
