@@ -6,7 +6,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.hello = 'watchVidCtrl is up';
-    ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId + ".mp4";
+    ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
 
     $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (index)
     {
@@ -19,10 +19,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     ctrl.searchVal = "";
     ctrl.search_results = [];
 
-    ctrl.jump = function (res)
+    ctrl.jump = function (time)
     {
         var video = document.getElementById("currentVideo");
-        video.currentTime = res.startTime;
+        video.currentTime = time;
     };
     ctrl.searchInVid = function ()
     {

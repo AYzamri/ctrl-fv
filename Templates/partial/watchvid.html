@@ -14,9 +14,8 @@
             <th>Time</th>
             <th>Paragraph</th>
         </tr>
-        <tr ng-repeat="(time,paragraph) in ctrl.search_results" ng-click="ctrl.jump(res)">
-            <!--<td>[[res.startTime | secondsToDateTime | date:'HH:mm:ss']]</td>-->
-            <td>[[time]]</td>
+        <tr ng-repeat="(time,paragraph) in ctrl.search_results" ng-click="ctrl.jump(time)">
+            <td>[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
             <td>[[paragraph]]</td>
         </tr>
     </table>

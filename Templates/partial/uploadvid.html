@@ -12,7 +12,7 @@
     <input type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray">
     <br>
     <p>Upload transcript:</p>
-    <input type="file" files-input ng-model="ctrl.transArray">
+    <input type="file" files-input accept="text/txt" ng-model="ctrl.transArray">
     <button ng-click="ctrl.doUpload()">Upload</button>
     <div ng-repeat="file in ctrl.fileArray">
         [[file.name]]
