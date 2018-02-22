@@ -32,6 +32,13 @@ def uploadvideo():
     return '', 200
 
 
+@app.route('/invertedIndex', methods=['GET'])
+def getInvertedIndex():
+    vid_id = request.args.get('vidid')
+    index_json = server_logic.get_inverted_index_json(vid_id)
+    return index_json, 200
+
+
 def handle_error(status_code, error):
     response = jsonify({'code': status_code, 'message': error})
     response.status_code = status_code
@@ -41,7 +48,10 @@ def handle_error(status_code, error):
 @app.route('/searchvid', methods=['GET'])
 def searchvid():
     try:
-        search_term = urllib.quote_plus(request.search_term)
+        search_term = urllib.quote_plus(request.args.get('search_term'))
+        server_logic.get_videos_by_term(search_term)
+
+
 
         # get dictionary of video for each term the timestamp
     except Exception as e:

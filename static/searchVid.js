@@ -4,6 +4,9 @@ var server = app.config['server'];
 app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 {
     var ctrl = this;
+    ctrl.url = server+'/searchvid';
+    $scope.searchVal= "";
+
     var dummyDict = {
     hello: [
         {startTime: 10, paragraph:"hello shaked hazon"},
@@ -26,24 +29,21 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 
     ];
 
-    $scope.chooseVid = function (vid)
+    $scope.searchForVid = function ()
     {
-    this.
-    console.log("test");
-        //$scope.$emit('videoChosen', vid,dummyDict);
-//        choose({
-//            url: ctrl.url,
-//            method: 'POST',
-//            data: {
-//                videoId: vid.id
-//            }
-//        }).then(function ()
-//        {
-//
-//        }).catch(function (error)
-//        {
-//            window.alert(error.message)
-//        })
+        $http({
+            url: ctrl.url,
+            method: 'GET',
+            params: {
+                search_term: $scope.searchVal
+            }
+        }).then(function (response)
+        {
+
+        }).catch(function (error)
+        {
+            window.alert(error.message)
+        })
     }
 
 
