@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib
+
 app = Flask(__name__, template_folder='Templates')
 
 
@@ -28,14 +29,17 @@ def uploadvideo():
         server_logic.enqueue_message(qname='indexq', message=vid_id)
         server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
     except Exception as e:
-        return handle_error(501, e)
+        return 'Error', 501
     return '', 200
 
 
 @app.route('/invertedIndex', methods=['GET'])
 def getInvertedIndex():
-    vid_id = request.args.get('vidid')
-    index_json = server_logic.get_inverted_index_json(vid_id)
+    try:
+        vid_id = request.args.get('vidid')
+        index_json = server_logic.get_inverted_index_json(vid_id)
+    except Exception as e:
+        return 'Error', 501
     return index_json, 200
 
 
@@ -43,18 +47,18 @@ def getInvertedIndex():
 def searchForVideo():
     try:
         search_term = request.args.get('search_term')
-        videosids= server_logic.get_videos_by_term(search_term)
+        videosids = server_logic.get_videos_by_term(search_term)
         return videosids
         # get dictionary of video for each term the timestamp
     except Exception as e:
-        return handle_error(501, e)
+        return 'Error', 501
     return '', 200
 
 
-def handle_error(status_code, error):
-    response = jsonify({'code': status_code, 'message': error})
-    response.status_code = status_code
-    return response
+# def handle_error(status_code, error):
+#     response = jsonify({'code': status_code, 'message': error})
+#     response.status_code = status_code
+#     return response
 
 
 @app.after_request
