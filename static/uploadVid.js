@@ -24,7 +24,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $
             window.alert('added video to archive')
         }).catch(function (error)
         {
-            window.alert(error.message)
+            window.alert(error)
         })
     }
 }]);
