@@ -9,7 +9,7 @@ app.controller('loginCtrl', ['$http', '$location', 'userService', function ($htt
     {
         userService.login(ctrl.email, ctrl.password).then(function ()
         {
-            $location.path('/#')
+            $location.path('/')
         })
     }
 }]);
