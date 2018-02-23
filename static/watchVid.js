@@ -7,10 +7,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     ctrl.vidId = $routeParams.vidId;
     ctrl.hello = 'watchVidCtrl is up';
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
+    ctrl.indexLoaded = false;
 
     $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (index)
     {
         ctrl.invertedIndex = index.data;
+        ctrl.indexLoaded = true;
     }).catch(function (err)
     {
         window.alert(err);
