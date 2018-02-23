@@ -5,7 +5,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 {
     var ctrl = this;
     ctrl.url = server + '/searchvid';
-    $scope.searchVal = "";
+    $scope.searchVal = "change";
 
     var dummyDict = {
         hello: [
@@ -24,15 +24,15 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
     $scope.vid_search_results = [
         {
             name: "Climate Change",
-            id: "ClimateChange"
+            id: "elec_22022018_1126.mp4"
         }
 
     ];
     ctrl.searchForVid = function ()
     {
-        $http.get(server + '/searchForVideo').then(function (index)
+        $http.get(server + '/searchForVideo?searchterm=change').then(function (index)
         {
-            ctrl.invertedIndex = index.data;
+            ctrl.test = index.data;
         }).catch(function (err)
         {
             window.alert(err);

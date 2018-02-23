@@ -65,7 +65,8 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
 
 def get_videos_by_term(search_term):
     vid_ids = get_video_ids_by_term(search_term)
-    return vid_ids
+    video_info = get_video_info_by_vid_ids(vid_ids)
+    return video_info
 
 
 def get_video_ids_by_term(search_term):
@@ -75,5 +76,27 @@ def get_video_ids_by_term(search_term):
                                    select='RowKey')
     if not vid_ids.items:
         raise Exception('Corpus Inverted index for search term {} not found'.format(search_term))
-    return vid_ids.items
+    video_ids = {record['RowKey'] for record in vid_ids.items}
+    return video_ids
+
+def get_video_info_by_vid_ids(vid_ids):
+    server = 'cfvtest.database.windows.net'
+    database = 'cfvtest'
+    username = 'drasco'
+    password = 'testTest1'
+    driver = '{ODBC Driver 13 for SQL Server}'
+    table = 'VideosMetaData'
+    cnxn = pyodbc.connect(
+        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+    cursor = cnxn.cursor()
+    list_vid_ids = list(vid_ids)
+    query = "SELECT * FROM {0} WHERE vid_id in ({1})"
+    query = query.format(table, list_vid_ids)
+    cursor.execute(query)
+    cnxn.commit()
+    results = cursor.fetchone()
+    cnxn.close()
+    return results
+
+
 
