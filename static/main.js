@@ -26,6 +26,11 @@ app.config(['$routeProvider', function ($routeProvider)
         controller: "searchVidCtrl",
         controllerAs: "ctrl"
     });
+    $routeProvider.when("/login", {
+        templateUrl: "../partial/login.html",
+        controller: "loginCtrl",
+        controllerAs: "ctrl"
+    })
 }]);
 
 app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http)

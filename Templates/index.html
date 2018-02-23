@@ -1,6 +1,7 @@
 <html lang="en" ng-app="myApp">
 
 <head>
+    // Outer Scripts:
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular.min.js') }}"></script>
     <script type="text/javascript"
@@ -11,14 +12,21 @@
             src="{{ url_for('static', filename='packages/angular-route.min.js.map') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular-upload.min.js') }}"></script>
+    // App scripts:
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='user.service.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='app_config.js') }}"></script>
+    // Controllers:
     <script type="text/javascript" src="{{ url_for('static', filename='uploadvid.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='watchVid.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='searchVid.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='login.js') }}"></script>
+    // Views:
     <link rel="import" href="partial/uploadvid.html">
     <link rel="import" href="partial/watchvid.html">
     <link rel="import" href="partial/searchvid.html">
+    <link rel="import" href="partial/login.html">
+    // Others:
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Ctrl-FV Beta</title>
 </head>
@@ -30,7 +38,6 @@
         <br>
     </div>
     <a href="#upload">Go to upload</a>
-    <!--<a href="#watch">Go to watch video</a>-->
     <a href="#search">Go to search video</a>
     <ng-view></ng-view>
 </body>
