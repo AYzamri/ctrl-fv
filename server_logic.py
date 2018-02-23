@@ -71,6 +71,8 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
 
 def get_videos_by_term(search_term):
     vid_ids = get_video_ids_by_term(search_term)
+    if len(vid_ids) == 0:
+        return {}
     video_info = get_video_info_by_vid_ids(vid_ids)
     return video_info
 
@@ -80,8 +82,8 @@ def get_video_ids_by_term(search_term):
     vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
                                      filter='PartitionKey eq \'' + search_term + '\'',
                                      select='RowKey')
-    if not vid_ids.items:
-        raise Exception('Corpus Inverted index for search term {} not found'.format(search_term))
+    if not vid_ids.items or len(vid_ids.items) == 0:
+        return []
     video_ids = {record['RowKey'] for record in vid_ids.items}
     return video_ids
 
@@ -96,6 +98,8 @@ def get_video_info_by_vid_ids(vid_ids):
     cursor.execute(query)
     columns = [column[0] for column in cursor.description]
     data = cursor.fetchall()
+    if not data or len(data) == 0:
+        return {}
     results = [dict(zip(columns, row)) for row in data]
     return results
 
