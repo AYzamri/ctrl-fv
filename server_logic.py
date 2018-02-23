@@ -62,3 +62,18 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
     query = query.format(table, blobname, videoname, videodescription, user_id)
     cursor.execute(query)
     cnxn.commit()
+
+def get_videos_by_term(search_term):
+    vid_ids = get_video_ids_by_term(search_term)
+    return vid_ids
+
+
+def get_video_ids_by_term(search_term):
+    service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
+    vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
+                                   filter='PartitionKey eq \'' + search_term + '\'',
+                                   select='RowKey')
+    if not vid_ids.items:
+        raise Exception('Corpus Inverted index for search term {} not found'.format(search_term))
+    return vid_ids.items
+
