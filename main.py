@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, render_template, request, jsonify
 import server_logic
-import urllib
+import urllib.parse
 
 app = Flask(__name__, template_folder='Templates')
 
@@ -51,6 +51,7 @@ def getInvertedIndex():
 def searchForVideo():
     try:
         search_term = request.args.get('searchterm')
+        search_term = urllib.parse.unquote(search_term)
         videos = server_logic.get_videos_by_term(search_term)
         return json.dumps(videos), 200
     except Exception as e:

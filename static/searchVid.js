@@ -10,7 +10,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 
     ctrl.searchForVid = function ()
     {
-        $http.get(server + '/searchForVideo?searchterm=' + ctrl.searchVal).then(function (results)
+        $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
         {
             ctrl.vid_search_results = results.data;
         }).catch(function (err)
