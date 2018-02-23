@@ -4,7 +4,8 @@ var server = app.config['server'];
 app.factory('userService', ['$http', function ($http)
 {
     var service = {};
-    service.User = {};
+    service.User = {username: 'Guest'};
+    service.model = {};
     service.model.loggedIn = false;
     var url = server;
 

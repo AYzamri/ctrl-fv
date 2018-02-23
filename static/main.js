@@ -33,10 +33,10 @@ app.config(['$routeProvider', function ($routeProvider)
     })
 }]);
 
-app.controller('mainCtrl', ['$scope', '$http', function ($scope, $http)
+app.controller('mainCtrl', ['$scope', '$http', 'userService', function ($scope, $http, userService)
 {
     var ctrl = this;
-    ctrl.name = 'Ctrl-FV!';
+    ctrl.userService = userService;
 }]);
 
 angular.module("myApp").directive("filesInput", function ()
