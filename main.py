@@ -70,6 +70,16 @@ def login():
         return 'Error', 501
 
 
+@app.route('/signup', methods=['POST'])
+def sigunp():
+    try:
+        user = request.json
+        server_logic.signup(user)
+        return 'OK', 200
+    except Exception as e:
+        return e, 501
+
+
 # def handle_error(status_code, error):
 #     response = jsonify({'code': status_code, 'message': error})
 #     response.status_code = status_code

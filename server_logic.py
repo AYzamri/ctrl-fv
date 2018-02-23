@@ -11,6 +11,17 @@ storage_acc_name = 'cfvtes9c07'
 storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
 
 
+def get_sql_cnxn():
+    server = 'cfvtest.database.windows.net'
+    database = 'cfvtest'
+    username = 'drasco'
+    server_password = 'testTest1'
+    driver = '{ODBC Driver 13 for SQL Server}'
+    cnxn = pyodbc.connect(
+        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
+    return cnxn
+
+
 def create_id_by_name(name):
     date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H%M')
     name = '{}_{}.mp4'.format(name, date_time_str)
@@ -49,15 +60,9 @@ def get_inverted_index_json(vid_id):
 
 
 def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
-    server = 'cfvtest.database.windows.net'
-    database = 'cfvtest'
-    username = 'drasco'
-    password = 'testTest1'
-    driver = '{ODBC Driver 13 for SQL Server}'
-    table = 'VideosMetaData'
-    cnxn = pyodbc.connect(
-        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+    cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
+    table = "VideosMetaData"
     query = "INSERT INTO {0} (vid_id,title,description,userID) VALUES('{1}','{2}','{3}','{4}')"
     query = query.format(table, blobname, videoname, videodescription, user_id)
     cursor.execute(query)
@@ -80,15 +85,9 @@ def get_video_ids_by_term(search_term):
 
 
 def login(email, password):
-    server = 'cfvtest.database.windows.net'
-    database = 'cfvtest'
-    username = 'drasco'
-    server_password = 'testTest1'
-    driver = '{ODBC Driver 13 for SQL Server}'
-    table = 'Users'
-    cnxn = pyodbc.connect(
-        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
+    cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
+    table = 'Users'
     query = "SELECT * FROM {0} WHERE email = '{1}' AND password = '{2}'"
     query = query.format(table, email, password)
     cursor.execute(query)
@@ -106,3 +105,14 @@ def login(email, password):
     vids = [dict(zip(videos_columns, row)) for row in vids_data]
     user['videosData'] = vids
     return user
+
+
+def signup(user):
+    cnxn = get_sql_cnxn()
+    cursor = cnxn.cursor()
+    query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
+            "VALUES ('{0}','{1}','{2}','{3}','{4}')"
+    query = query.format(user['email'], user['username'], user['password'], user['firstName']
+                         , user['lastName'])
+    cursor.execute(query)
+    cnxn.commit()

@@ -12,12 +12,7 @@ app.factory('userService', ['$http', function ($http)
 
     service.signup = function (user)
     {
-        var body = {
-            username: user.username, password: user.password,
-            firstName: user.firstName, lastName: user.lastName,
-            email: user.email
-        };
-        return $http.post(url + '/register', body).then(function ()
+        return $http.post(url + '/signup', user).then(function ()
         {
             service.User = user;
             service.mode.logggedIn = true;
