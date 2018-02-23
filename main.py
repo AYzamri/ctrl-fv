@@ -42,7 +42,7 @@ def getInvertedIndex():
 @app.route('/searchForVideo', methods=['GET'])
 def searchForVideo():
     try:
-        search_term = urllib.quote_plus(request.args.get('search_term'))
+        search_term = request.args.get('search_term')
         videosids= server_logic.get_videos_by_term(search_term)
         return videosids
         # get dictionary of video for each term the timestamp
