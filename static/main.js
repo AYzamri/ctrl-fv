@@ -35,6 +35,11 @@ app.config(['$routeProvider', function ($routeProvider)
         templateUrl: "../partial/signup.html",
         controller: "signupCtrl",
         controllerAs: "ctrl"
+    });
+    $routeProvider.when("/myVids", {
+        templateUrl: "../partial/myVids.html",
+        controller: "myVidsCtrl",
+        controllerAs: "ctrl"
     })
 }]);
 

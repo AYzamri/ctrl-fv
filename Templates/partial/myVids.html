@@ -1,0 +1,19 @@
+<div>
+    <h4> Videos uploaded by [[ctrl.User.username]]</h4>
+    <table>
+        <tr>
+            <th>Video Name</th>
+            <th>Description</th>
+            <th>Go To Video</th>
+        </tr>
+        <tr ng-repeat="vid in ctrl.getVideos()">
+            <td>[[vid.title]]</td>
+            <td>[[vid.description]]</td>
+            <td>
+                <a ng-href="#/watch/[[vid.vid_id]]">
+                    <h5>watch</h5></a>
+            </td>
+
+        </tr>
+    </table>
+</div>
