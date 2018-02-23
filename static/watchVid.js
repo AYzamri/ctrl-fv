@@ -15,7 +15,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         ctrl.indexLoaded = true;
     }).catch(function (err)
     {
-        window.alert(err);
+        window.alert('Error importing inverted index');
     });
 
     ctrl.searchVal = "";

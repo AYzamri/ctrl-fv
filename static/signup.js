@@ -11,7 +11,10 @@ app.controller('signupCtrl', ['$http', '$location', 'userService', function ($ht
     {
         userService.signup(ctrl.user).then(function ()
         {
-
+            $location.path('/')
+        }).catch(function ()
+        {
+            window.alert('Error signing up')
         });
     };
 }]);

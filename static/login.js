@@ -10,6 +10,9 @@ app.controller('loginCtrl', ['$http', '$location', 'userService', function ($htt
         userService.login(ctrl.email, ctrl.password).then(function ()
         {
             $location.path('/')
-        })
+        }).catch(function ()
+        {
+           window.alert('Error logging in')
+        });
     }
 }]);
