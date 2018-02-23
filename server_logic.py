@@ -85,26 +85,19 @@ def get_video_ids_by_term(search_term):
     video_ids = {record['RowKey'] for record in vid_ids.items}
     return video_ids
 
+
 def get_video_info_by_vid_ids(vid_ids):
-    server = 'cfvtest.database.windows.net'
-    database = 'cfvtest'
-    username = 'drasco'
-    password = 'testTest1'
-    driver = '{ODBC Driver 13 for SQL Server}'
-    table = 'VideosMetaData'
-    cnxn = pyodbc.connect(
-        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+    cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     list_vid_ids = list(vid_ids)
+    ids_as_string = ','.join('\'{0}\''.format(id) for id in list_vid_ids)
     query = "SELECT * FROM {0} WHERE vid_id in ({1})"
-    query = query.format(table, list_vid_ids)
+    query = query.format('VideosMetaData', ids_as_string)
     cursor.execute(query)
-    cnxn.commit()
-    results = cursor.fetchone()
-    cnxn.close()
+    columns = [column[0] for column in cursor.description]
+    data = cursor.fetchall()
+    results = [dict(zip(columns, row)) for row in data]
     return results
-
-
 
 
 def login(email, password):

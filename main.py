@@ -51,12 +51,10 @@ def getInvertedIndex():
 def searchForVideo():
     try:
         search_term = request.args.get('searchterm')
-        videosids = server_logic.get_videos_by_term(search_term)
-        return videosids
-        # get dictionary of video for each term the timestamp
+        videos = server_logic.get_videos_by_term(search_term)
+        return json.dumps(videos), 200
     except Exception as e:
         return 'Error', 501
-    return '', 200
 
 
 @app.route('/login', methods=['POST'])

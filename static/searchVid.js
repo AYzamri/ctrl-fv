@@ -4,38 +4,18 @@ var server = app.config['server'];
 app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 {
     var ctrl = this;
-    ctrl.url = server + '/searchvid';
-    $scope.searchVal = "change";
+    ctrl.searchVal = "";
 
-    var dummyDict = {
-        hello: [
-            {startTime: 10, paragraph: "hello shaked hazon"},
-            {startTime: 30, paragraph: "hello ron michaeli "},
-            {startTime: 20, paragraph: "hello dan gleyzer "},
-            {startTime: 250, paragraph: " Adam Zamri"}
-        ],
-        test: [
-            {startTime: 30, paragraph: "shaked test  hazon"},
-            {startTime: 50, paragraph: "ron test  michaeli "},
-            {startTime: 70, paragraph: "dan test  gleyzer "},
-            {startTime: 90, paragraph: "hello Adam Zamri"}
-        ]
-    };
-    $scope.vid_search_results = [
-        {
-            name: "Climate Change",
-            id: "elec_22022018_1126.mp4"
-        }
+    ctrl.vid_search_results = [];
 
-    ];
     ctrl.searchForVid = function ()
     {
-        $http.get(server + '/searchForVideo?searchterm=change').then(function (index)
+        $http.get(server + '/searchForVideo?searchterm=' + ctrl.searchVal).then(function (results)
         {
-            ctrl.test = index.data;
+            ctrl.vid_search_results = results.data;
         }).catch(function (err)
         {
-            window.alert(err);
+            window.alert('Error finding videos');
         });
     };
 
