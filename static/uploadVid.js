@@ -1,7 +1,7 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $scope, upload)
+app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', 'userService', function ($http, $scope, upload, userService)
 {
     var ctrl = this;
     ctrl.url = server + '/video';
@@ -17,7 +17,8 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', function ($http, $
                 video: ctrl.vidArray[0],
                 videoName: ctrl.videoName,
                 videoDescription: ctrl.videoDescription,
-                transcript: ctrl.transArray[0]
+                transcript: ctrl.transArray[0],
+                user: userService.User.email
             }
         }).then(function ()
         {

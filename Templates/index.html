@@ -41,7 +41,8 @@
     <a href="#login">Login</a>
     <a href="#signup">Sign up</a>
     <br><br>
-    <a href="#upload">Go to upload</a>
+    <p ng-if="!ctrl.userService.model.loggedIn">Login or sign up to upload video</p>
+    <a href="#upload" ng-if="ctrl.userService.model.loggedIn">Go to upload</a>
     <a href="#search">Go to search video</a>
     <ng-view></ng-view>
 </body>
