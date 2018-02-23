@@ -63,6 +63,7 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
     cursor.execute(query)
     cnxn.commit()
 
+
 def get_videos_by_term(search_term):
     vid_ids = get_video_ids_by_term(search_term)
     return vid_ids
@@ -71,9 +72,37 @@ def get_videos_by_term(search_term):
 def get_video_ids_by_term(search_term):
     service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
     vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
-                                   filter='PartitionKey eq \'' + search_term + '\'',
-                                   select='RowKey')
+                                     filter='PartitionKey eq \'' + search_term + '\'',
+                                     select='RowKey')
     if not vid_ids.items:
         raise Exception('Corpus Inverted index for search term {} not found'.format(search_term))
     return vid_ids.items
 
+
+def login(email, password):
+    server = 'cfvtest.database.windows.net'
+    database = 'cfvtest'
+    username = 'drasco'
+    server_password = 'testTest1'
+    driver = '{ODBC Driver 13 for SQL Server}'
+    table = 'Users'
+    cnxn = pyodbc.connect(
+        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
+    cursor = cnxn.cursor()
+    query = "SELECT * FROM {0} WHERE email = '{1}' AND password = '{2}'"
+    query = query.format(table, email, password)
+    cursor.execute(query)
+    user_columns = [column[0] for column in cursor.description]
+    user_data = cursor.fetchone()
+    if not user_data:
+        return None
+    user = dict(zip(user_columns, user_data))
+    query = "SELECT * FROM VideosMetaData WHERE userID = '{0}'"
+    query = query.format(email)
+    cursor = cnxn.cursor()
+    cursor.execute(query)
+    videos_columns = [column[0] for column in cursor.description]
+    vids_data = cursor.fetchall()
+    vids = [dict(zip(videos_columns, row)) for row in vids_data]
+    user['videosData'] = vids
+    return user

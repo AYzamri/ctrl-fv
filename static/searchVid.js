@@ -30,7 +30,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
     ];
     ctrl.searchForVid = function ()
     {
-        $http.get(server + '/searchForVideo').then(function (index)
+        $http.get(server + '/searchForVideo?searchterm=change').then(function (index)
         {
             ctrl.invertedIndex = index.data;
         }).catch(function (err)

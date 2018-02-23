@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib
@@ -46,13 +48,26 @@ def getInvertedIndex():
 @app.route('/searchForVideo', methods=['GET'])
 def searchForVideo():
     try:
-        search_term = request.args.get('search_term')
-        videosids = server_logic.get_videos_by_term(search_term)
-        return videosids
-        # get dictionary of video for each term the timestamp
+        vid = 'searchterm'
+        # videosids = server_logic.get_videos_by_term(search_term)
     except Exception as e:
         return 'Error', 501
-    return '', 200
+    return 'videosids', 200
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.json
+        email = data['email']
+        password = data['password']
+
+        user = server_logic.login(email, password)
+        if not user:
+            return 'Wrong username or password', 403
+        return json.dumps(user), 200
+    except Exception as e:
+        return 'Error', 501
 
 
 # def handle_error(status_code, error):
