@@ -28,23 +28,16 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
         }
 
     ];
-
-    $scope.searchForVid = function ()
+    ctrl.searchForVid =function() {
+    $http.get(server + '/searchForVideo' ).then(function (index)
     {
-        $http({
-            url: ctrl.url,
-            method: 'GET',
-            params: {
-                search_term: $scope.searchVal
-            }
-        }).then(function (response)
-        {
+        ctrl.invertedIndex = index.data;
+    }).catch(function (err)
+    {
+        window.alert(err);
+    });
+    };
 
-        }).catch(function (error)
-        {
-            window.alert(error.message)
-        })
-    }
 
 
 }]);

@@ -39,24 +39,22 @@ def getInvertedIndex():
     return index_json, 200
 
 
-def handle_error(status_code, error):
-    response = jsonify({'code': status_code, 'message': error})
-    response.status_code = status_code
-    return response
-
-
-@app.route('/searchvid', methods=['GET'])
-def searchvid():
+@app.route('/searchForVideo', methods=['GET'])
+def searchForVideo():
     try:
-        search_term = urllib.quote_plus(request.args.get('search_term'))
-        server_logic.get_videos_by_term(search_term)
-
-
-
+        return 'hello'
+        # search_term = urllib.quote_plus(request.args.get('search_term'))
+        # server_logic.get_videos_by_term(search_term)
         # get dictionary of video for each term the timestamp
     except Exception as e:
         return handle_error(501, e)
     return '', 200
+
+
+def handle_error(status_code, error):
+    response = jsonify({'code': status_code, 'message': error})
+    response.status_code = status_code
+    return response
 
 
 @app.after_request
