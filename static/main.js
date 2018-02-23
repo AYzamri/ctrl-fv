@@ -30,6 +30,16 @@ app.config(['$routeProvider', function ($routeProvider)
         templateUrl: "../partial/login.html",
         controller: "loginCtrl",
         controllerAs: "ctrl"
+    });
+    $routeProvider.when("/signup", {
+        templateUrl: "../partial/signup.html",
+        controller: "signupCtrl",
+        controllerAs: "ctrl"
+    });
+    $routeProvider.when("/myVids", {
+        templateUrl: "../partial/myVids.html",
+        controller: "myVidsCtrl",
+        controllerAs: "ctrl"
     })
 }]);
 

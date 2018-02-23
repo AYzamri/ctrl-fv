@@ -21,24 +21,43 @@
     <script type="text/javascript" src="{{ url_for('static', filename='watchVid.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='searchVid.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='login.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='signup.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='myVids.js') }}"></script>
     <!--Views:-->
     <!--<link rel="import" href="partial/uploadvid.html">-->
     <link rel="import" href="partial/watchvid.html">
     <link rel="import" href="partial/searchvid.html">
     <link rel="import" href="partial/login.html">
+    <link rel="import" href="partial/signup.html">
+    <link rel="import" href="partial/myVids.html">
     <!--Others:-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Ctrl-FV Beta</title>
+    <style>
+        .center {
+            margin: auto;
+            width: 50%;
+            border: 3px solid green;
+            padding: 10px;
+        }
+    </style>
 </head>
 
 <body ng-controller="mainCtrl as ctrl">
-    <div>
-        <h5>Hello!</h5>
-        <span> [[ctrl.userService.User.username]]</span>
+    <div class="center">
+        <div>
+            <h5>Hello, [[ctrl.userService.User.username]]!</h5>
+            <br>
+        </div>
+        <a href="#login">Login</a>
+        <a href="#signup">Sign up</a>
         <br>
+        <a ng-if="ctrl.userService.model.loggedIn" href="#myVids">My Videos</a>
+        <br><br>
+        <p ng-if="!ctrl.userService.model.loggedIn">Login or sign up to upload video</p>
+        <a href="#upload" ng-if="ctrl.userService.model.loggedIn">Go to upload</a>
+        <a href="#search">Go to search video</a>
+        <ng-view></ng-view>
     </div>
-    <a href="#upload">Go to upload</a>
-    <a href="#search">Go to search video</a>
-    <ng-view></ng-view>
 </body>
 </html>

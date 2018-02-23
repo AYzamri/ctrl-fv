@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib
@@ -22,12 +24,14 @@ def uploadvideo():
         transcript = request.files['transcript']
         video_name = request.form['videoName']
         video_description = request.form['videoDescription']
+        user_email = request.form['user']
         vid_id = server_logic.create_id_by_name(video_name)
 
         server_logic.upload_file_to_blob(name=vid_id, file=video, container_name='videoscontainer')
         server_logic.upload_file_to_blob(name=vid_id, file=transcript, container_name='transcriptscontainer')
         server_logic.enqueue_message(qname='indexq', message=vid_id)
-        server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description)
+        server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description,
+                                          user_id=user_email)
     except Exception as e:
         return 'Error', 501
     return '', 200
@@ -53,6 +57,31 @@ def searchForVideo():
     except Exception as e:
         return 'Error', 501
     return '', 200
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.json
+        email = data['email']
+        password = data['password']
+
+        user = server_logic.login(email, password)
+        if not user:
+            return 'Wrong username or password', 403
+        return json.dumps(user), 200
+    except Exception as e:
+        return 'Error', 501
+
+
+@app.route('/signup', methods=['POST'])
+def sigunp():
+    try:
+        user = request.json
+        server_logic.signup(user)
+        return 'OK', 200
+    except Exception as e:
+        return e, 501
 
 
 # def handle_error(status_code, error):
