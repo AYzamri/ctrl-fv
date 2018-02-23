@@ -41,7 +41,7 @@ def get_inverted_index(vid_id):
     return index
 
 
-def get_inderted_index_json(vid_id):
+def get_inverted_index_json(vid_id):
     inverted = get_inverted_index(vid_id)
     json_text = json.dumps(inverted)
     parsed = urllib.parse.unquote(json_text)
