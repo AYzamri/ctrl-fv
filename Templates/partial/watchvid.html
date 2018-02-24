@@ -19,12 +19,12 @@
     <div>
         <form ng-if="ctrl.indexLoaded"
               ng-submit="ctrl.searchInVid()">
-            <input type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
-            <input type="submit" id="submit" value="Search "/>
+            <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
+            <input class="btn" type="submit" id="submit" value="Search "/>
         </form>
         <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
     </div>
-    <video id="currentVideo" controls>
+    <video id="currentVideo" controls style="margin-left: auto;margin-right: auto; display: block">
         <source ng-src="[[ctrl.currentVideoPath]]">
     </video>
 
