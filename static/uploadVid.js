@@ -7,7 +7,33 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', 'userService', fun
     ctrl.url = server + '/video';
 
     ctrl.hello = 'uploadVidCtrl is up';
+    $scope.validateVidFile = function(element) {
+        $scope.$apply($scope.validateFile(".mp4",element));
+    };
+    $scope.validateTranscriptFile = function(element) {
+        $scope.$apply($scope.validateFile(".txt",element));
+    };
+    $scope.validateFile = function(fileExtension,element) {
+                            $scope.theFile = element.files[0];
+                            var FileMessage = '';
+                            var filename = $scope.theFile.name;
+                            var index = filename.lastIndexOf(".");
+                            var strsubstring = filename.substring(index, filename.length);
+                            if (strsubstring !== fileExtension ){
+                                $scope.theFile = '';
+                                FileMessage = 'Please upload correct File, File extension should be '+fileExtension;
+                            }
+                            else{
+                                $scope.FileMessage = '';
+                            }
+                            if(fileExtension==".mp4"){
+                                $scope.VideoFileMessage = FileMessage;
+                            }
+                            if(fileExtension==".txt"){
+                                $scope.TranscriptFileMessage = FileMessage;
+                            }
 
+    };
     ctrl.doUpload = function ()
     {
         upload({
