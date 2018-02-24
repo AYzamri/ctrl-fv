@@ -129,10 +129,21 @@ def login(email, password):
 
 def signup(user):
     cnxn = get_sql_cnxn()
+    table = 'Users'
+    query = "SELECT email FROM {0} WHERE email = '{1}'"
+    query = query.format(table, user['email'])
     cursor = cnxn.cursor()
-    query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
-            "VALUES ('{0}','{1}','{2}','{3}','{4}')"
-    query = query.format(user['email'], user['username'], user['password'], user['firstName']
-                         , user['lastName'])
     cursor.execute(query)
-    cnxn.commit()
+    data = cursor.fetchall()
+    if not data or len(data) == 0:
+        query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
+            "VALUES ('{0}','{1}','{2}','{3}','{4}')"
+        query = query.format(user['email'], user['username'], user['password'], user['firstName']
+                         , user['lastName'])
+        cursor.execute(query)
+        cnxn.commit()
+        return True
+    else:
+        return False
+            #raise ValueError('The email is allready in use!')
+

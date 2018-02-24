@@ -9,10 +9,16 @@ app.controller('signupCtrl', ['$http', '$location', 'userService', function ($ht
 
     ctrl.signup = function ()
     {
-        userService.signup(ctrl.user).then(function ()
+        userService.signup(ctrl.user).then(function (isEmailUnique)
         {
+        if(isEmailUnique.data=="true"){
             $location.path('/')
-        }).catch(function ()
+        }
+        else{
+            window.alert('Email allready exists')
+        }
+
+        }).catch(function (err)
         {
             window.alert('Error signing up')
         });
