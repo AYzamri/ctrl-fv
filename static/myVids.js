@@ -6,6 +6,12 @@ app.controller('myVidsCtrl', ['$http', '$location', 'userService', function ($ht
 
     ctrl.User = userService.User;
 
+    ctrl.init = function ()
+    {
+        // Refresh user data:
+        ctrl.userService.login(ctrl.User.email, ctrl.User.password);
+    };
+
     ctrl.getVideos = function ()
     {
         return ctrl.User.videosData;
