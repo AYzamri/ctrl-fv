@@ -9,12 +9,15 @@
         <input class="btn" type="submit" id="submit" value="Search "/>
     </form>
 
-    <table>
+    <table class="table table-hover table-condensed ">
+        <thead>
         <tr>
             <th>Video Name</th>
             <th>Description</th>
-            <th>Go To Video</th>
+            <th>Watch</th>
         </tr>
+        </thead>
+        <tbody>
         <tr ng-repeat="vid in ctrl.vid_search_results">
             <td>[[vid.title]]</td>
             <td>[[vid.description]]</td>
@@ -22,7 +25,7 @@
                 <a ng-href="#/watch/[[vid.vid_id]]">
                     <h5>watch</h5></a>
             </td>
-
         </tr>
+        </tbody>
     </table>
 </div>
