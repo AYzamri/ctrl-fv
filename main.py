@@ -77,8 +77,8 @@ def login():
 def sigunp():
     try:
         user = request.json
-        server_logic.signup(user)
-        return 'OK', 200
+        isUnique= server_logic.signup(user)
+        return json.dumps(isUnique), 200
     except Exception as e:
         return e, 501
 

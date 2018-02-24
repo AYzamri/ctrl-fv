@@ -12,11 +12,13 @@ app.factory('userService', ['$http', function ($http)
 
     service.signup = function (user)
     {
-        return $http.post(url + '/signup', user).then(function ()
+        return $http.post(url + '/signup', user).then(function (isUnique)
         {
-            service.User = user;
-            service.mode.logggedIn = true;
-            return Promise.resolve();
+            if(isUnique.data=="true"){
+                service.User = user;
+                service.mode.logggedIn = true;
+            }
+            return Promise.resolve(isUnique);
         }).catch(function (err)
         {
             return Promise.reject(err);
