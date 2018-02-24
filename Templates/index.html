@@ -1,7 +1,7 @@
 <html lang="en" ng-app="myApp">
 
 <head>
-    <!--Outer Scripts:-->
+    <!--Packages Scripts:-->
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular.min.js') }}"></script>
     <script type="text/javascript"
@@ -32,31 +32,63 @@
     <link rel="import" href="partial/myVids.html">
     <!--Others:-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>Ctrl-FV Beta</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
-        .center {
+        .center .view {
             margin: auto;
-            width: 50%;
-            border: 3px solid green;
+            width: 80%;
             padding: 10px;
         }
+
+        .green_border {
+            border: 3px solid green;
+        }
     </style>
+    <title>Ctrl-FV Beta</title>
 </head>
 
 <body ng-controller="mainCtrl as ctrl">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Ctrl-FV</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#search">Search<span class="sr-only">(current)</span></a></li>
+                    <li ng-if="ctrl.userService.model.loggedIn"><a href="#upload">Upload</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!ctrl.userService.model.loggedIn"><a href="#login">Login</a></li>
+                    <li ng-if="!ctrl.userService.model.loggedIn"><a href="#signup">Sign up</a></li>
+                    <li ng-if="ctrl.userService.model.loggedIn"><a>Hello, [[ctrl.userService.User.username]]!</a></li>
+                    <li ng-if="ctrl.userService.model.loggedIn"><a href="#myVids">My Videos</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <!--<div>-->
+    <!--<h5>Hello, [[ctrl.userService.User.username]]!</h5>-->
+    <!--<br>-->
+    <!--</div>-->
+    <!--<a ng-if="!ctrl.userService.model.loggedIn" href="#login">Login</a>-->
+    <!--<a ng-if="!ctrl.userService.model.loggedIn" href="#signup">Sign up</a>-->
+    <!--<br>-->
+    <!--<a ng-if="ctrl.userService.model.loggedIn" href="#myVids">My Videos</a>-->
+    <!--<br><br>-->
+    <!--<p ng-if="!ctrl.userService.model.loggedIn">Login or sign up to upload video</p>-->
+    <!--<a href="#upload" ng-if="ctrl.userService.model.loggedIn">Go to upload</a>-->
+    <!--<a href="#search">Go to search video</a>-->
     <div class="center">
-        <div>
-            <h5>Hello, [[ctrl.userService.User.username]]!</h5>
-            <br>
-        </div>
-        <a ng-if="!ctrl.userService.model.loggedIn" href="#login">Login</a>
-        <a ng-if="!ctrl.userService.model.loggedIn" href="#signup">Sign up</a>
-        <br>
-        <a ng-if="ctrl.userService.model.loggedIn" href="#myVids">My Videos</a>
-        <br><br>
-        <p ng-if="!ctrl.userService.model.loggedIn">Login or sign up to upload video</p>
-        <a href="#upload" ng-if="ctrl.userService.model.loggedIn">Go to upload</a>
-        <a href="#search">Go to search video</a>
         <ng-view></ng-view>
     </div>
 </body>
