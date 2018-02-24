@@ -1,26 +1,26 @@
 <div class="view">
-    <h3>Upload Video</h3>
-    <br>
-    <form name="uploadform" ng-submit="ctrl.doUpload()">
-    <p>Video Name:</p>
-    <input type="text" ng-model="ctrl.videoName" required>
-    <br>
-    <p>Video Description:</p>
-    <input type="text" ng-model="ctrl.videoDescription" >
-    <br>
-    <p>Upload video:</p>
-    <input type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray" onchange="angular.element(this).scope().validateVidFile(this)" required>
-    [[VideoFileMessage]]
-        [[showMessage]]
-    <br>
-    <p>Upload transcript:</p>
-    <input type="file" files-input accept="text/txt" ng-model="ctrl.transArray" onchange="angular.element(this).scope().validateTranscriptFile(this)" required>
-        [[TranscriptFileMessage]]
-    <br>
-    <br>
-    <input type="submit" value="Upload">
-    </form>
-    <div ng-repeat="file in ctrl.fileArray">
-        [[file.name]]
+    <div class="section-title text-center">
+        <h3>Upload Video</h3>
     </div>
+    <form name="uploadform" ng-submit="ctrl.doUpload()">
+        <p>Video Name:</p>
+        <input class="form-control" type="text" ng-model="ctrl.videoName" required>
+        <br>
+        <p>Video Description:</p>
+        <input class="form-control" type="text" ng-model="ctrl.videoDescription">
+        <br>
+        <p>Upload video:</p>
+        <input class="form-control" type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray"
+               onchange="angular.element(this).scope().validateVidFile(this)" required>
+        [[VideoFileMessage]]
+        [[showMessage]]
+        <br>
+        <p>Upload transcript:</p>
+        <input class="form-control" type="file" files-input accept="text/txt" ng-model="ctrl.transArray"
+               onchange="angular.element(this).scope().validateTranscriptFile(this)" required>
+        [[TranscriptFileMessage]]
+        <br>
+        <br>
+        <input class="btn" type="submit" value="Upload">
+    </form>
 </div>

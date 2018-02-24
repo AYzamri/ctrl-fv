@@ -1,9 +1,12 @@
 <div class="view">
-    <h3>Welcome to search video</h3>
+    <div class="section-title text-center">
+        <h3>Search video</h3>
+    </div>
     <form
             ng-submit="ctrl.searchForVid()">
-        <input type="text" placeholder="search for a video" ng-model=ctrl.searchVal>
-        <input type="submit" id="submit" value="Search "/>
+        <input class="form-control" type="text" placeholder="search for a video" ng-model=ctrl.searchVal>
+        <br>
+        <input class="btn" type="submit" id="submit" value="Search "/>
     </form>
 
     <table>
