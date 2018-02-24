@@ -49,8 +49,8 @@
             <h5>Hello, [[ctrl.userService.User.username]]!</h5>
             <br>
         </div>
-        <a href="#login">Login</a>
-        <a href="#signup">Sign up</a>
+        <a ng-if="!ctrl.userService.model.loggedIn" href="#login">Login</a>
+        <a ng-if="!ctrl.userService.model.loggedIn" href="#signup">Sign up</a>
         <br>
         <a ng-if="ctrl.userService.model.loggedIn" href="#myVids">My Videos</a>
         <br><br>
