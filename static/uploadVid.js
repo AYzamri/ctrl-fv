@@ -23,7 +23,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', 'userService', fun
         }).then(function ()
         {
             window.alert('added video to archive')
-        }).catch(function (error)
+        }, function (error)
         {
             window.alert('Error uploading video')
         })
