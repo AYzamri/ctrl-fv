@@ -33,7 +33,7 @@ def uploadvideo():
         server_logic.upload_vid_meta_data(blobname=vid_id, videoname=video_name, videodescription=video_description,
                                           user_id=user_email)
     except Exception as e:
-        return 'Error', 501
+        return e, 501
     return '', 200
 
 
@@ -43,7 +43,7 @@ def getInvertedIndex():
         vid_id = request.args.get('vidid')
         index_json = server_logic.get_inverted_index_json(vid_id)
     except Exception as e:
-        return 'Error', 501
+        return e, 501
     return index_json, 200
 
 
@@ -55,7 +55,7 @@ def searchForVideo():
         videos = server_logic.get_videos_by_term(search_term)
         return json.dumps(videos), 200
     except Exception as e:
-        return 'Error', 501
+        return e, 501
 
 
 @app.route('/login', methods=['POST'])
@@ -70,7 +70,7 @@ def login():
             return 'Wrong username or password', 403
         return json.dumps(user), 200
     except Exception as e:
-        return 'Error', 501
+        return e, 501
 
 
 @app.route('/signup', methods=['POST'])
