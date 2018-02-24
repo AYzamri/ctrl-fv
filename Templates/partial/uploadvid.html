@@ -2,18 +2,25 @@
     <h3>Welcome to upload page</h3>
     <h5>[[ctrl.hello]]</h5>
     <br>
+    <form name="uploadform" ng-submit="ctrl.doUpload()">
     <p>Video Name:</p>
-    <input type="text" ng-model="ctrl.videoName">
+    <input type="text" ng-model="ctrl.videoName" required>
     <br>
     <p>Video Description:</p>
-    <input type="text" ng-model="ctrl.videoDescription">
+    <input type="text" ng-model="ctrl.videoDescription" >
     <br>
     <p>Upload video:</p>
-    <input type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray">
+    <input type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray" onchange="angular.element(this).scope().validateVidFile(this)" required>
+    [[VideoFileMessage]]
+        [[showMessage]]
     <br>
     <p>Upload transcript:</p>
-    <input type="file" files-input accept="text/txt" ng-model="ctrl.transArray">
-    <button ng-click="ctrl.doUpload()">Upload</button>
+    <input type="file" files-input accept="text/txt" ng-model="ctrl.transArray" onchange="angular.element(this).scope().validateTranscriptFile(this)" required>
+        [[TranscriptFileMessage]]
+    <br>
+    <br>
+    <input type="submit" value="Upload">
+    </form>
     <div ng-repeat="file in ctrl.fileArray">
         [[file.name]]
     </div>

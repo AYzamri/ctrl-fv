@@ -1,15 +1,26 @@
 <div>
     <h5>Sign Up</h5>
+    <form name="signUpForm" ng-submit="ctrl.signup()">
     <p>E-mail:</p>
-    <input type="text" ng-model="ctrl.user.email">
+    <input name="email" ng-model="ctrl.user.email" type="email" required>
+    <span style="color:red" ng-show="signUpForm.email.$dirty && signUpForm.email.$invalid">
+    <span ng-show="signUpForm.email.$error.required">Email is required.</span>
+    <span ng-show="signUpForm.email.$error.email">Invalid email address.</span>
+    </span>
     <p>Password:</p>
-    <input type="password" ng-model="ctrl.user.password">
+    <input type="password" name="password" ng-model="ctrl.user.password" required>
+    <span style="color:red" ng-show="signUpForm.password.$dirty && signUpForm.password.$invalid">
+    <span ng-show="signUpForm.password.$error.required">Password is required.</span>
+    </span>
     <p>User name:</p>
-    <input type="text" ng-model="ctrl.user.username">
+    <input type="text" name="username" ng-model="ctrl.user.username" required>
+    <span style="color:red" ng-show="signUpForm.username.$dirty && signUpForm.username.$invalid">
+    <span ng-show="signUpForm.username.$error.required">Username is required.</span>
+    </span>
     <p>First name:</p>
     <input type="text" ng-model="ctrl.user.firstName">
     <p>Last name:</p>
     <input type="text" ng-model="ctrl.user.lastName">
-
-    <button ng-click="ctrl.signup()">Login</button>
+    <input type="submit" value="Sign up" />
+    </form>
 </div>
