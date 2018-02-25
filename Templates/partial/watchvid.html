@@ -24,9 +24,12 @@
         </form>
         <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
     </div>
-    <video id="currentVideo" controls style="margin-left: auto;margin-right: auto; display: block">
+    <div style="height:45%">
+    <video id="currentVideo" controls style="margin-left: auto;margin-right: auto; display: block ; height: auto; width:40%" >
         <source ng-src="[[ctrl.currentVideoPath]]">
     </video>
+    </div>
+
 
     <div class="container">
         <table class="table table-hover table-condensed ">
