@@ -11,6 +11,9 @@ app.config(['$locationProvider', function ($locationProvider)
 
 app.config(['$routeProvider', function ($routeProvider)
 {
+    $routeProvider.when("/", {
+        templateUrl: "../partial/home.html"
+    });
     $routeProvider.when("/upload", {
         templateUrl: "../partial/uploadvid.html",
         controller: "uploadVidCtrl",
