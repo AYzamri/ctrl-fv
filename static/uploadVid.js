@@ -40,7 +40,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', 'upload', 'userService', 'az
     ctrl.doUpload = function () {
         var name = 'testBlob';
         var config = {
-            baseUrl: 'http://cfvtes9c07.blob.core.windows.net/videoscontainer/' + name,
+            baseUrl: 'https://cfvtes9c07.blob.core.windows.net/videoscontainer/' + name,
             sasToken: '?sv=2017-07-29&ss=b&srt=sco&sp=rwdac&se=2018-03-20T00:37:06Z&st=2018-03-19T16:37:06Z&spr=https&sig=c7eYQgZ6KCCKWxBx%2FtiisayNE7k1PrQoj2K82NSDqWg%3D',// Shared access signature querystring key/value prefixed with ?,
             file: ctrl.vidArray[0]// File object using the HTML5 File API,
             // progress: 'a',// progress callback function,
