@@ -24,7 +24,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     ctrl.jump = function (time)
     {
         var video = document.getElementById("currentVideo");
-        video.currentTime = Math.max(time - 2, 0);
+        video.currentTime = time;
     };
     ctrl.searchInVid = function ()
     {
