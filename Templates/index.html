@@ -12,6 +12,8 @@
             src="{{ url_for('static', filename='packages/angular-route.min.js.map') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular-upload.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-azure-blob-upload.js') }}"></script>
     <!--App scripts:-->
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='user.service.js') }}"></script>
@@ -46,10 +48,10 @@
             border: 3px solid green;
         }
 
-{#        .background {#}
-{#            background: url("../static/home_BG.jpg") no-repeat center center;#}
-{#            background-size: 100% 100%;#}
-{#        }#}
+        {#        .background {#}
+        {#            background: url("../static/home_BG.jpg") no-repeat center center;#}
+        {#            background-size: 100% 100%;#}
+        {#        }#}
     </style>
     <title>Ctrl-FV Beta</title>
 </head>

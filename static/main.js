@@ -1,16 +1,13 @@
-var app = angular.module('myApp', ['ngRoute', 'lr.upload']);
-app.config(['$interpolateProvider', function ($interpolateProvider)
-{
+var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'azureBlobUpload']);
+app.config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 }]);
-app.config(['$locationProvider', function ($locationProvider)
-{
+app.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.hashPrefix('');
 }]);
 
-app.config(['$routeProvider', function ($routeProvider)
-{
+app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when("/", {
         templateUrl: "../partial/home.html"
     });
@@ -46,20 +43,16 @@ app.config(['$routeProvider', function ($routeProvider)
     })
 }]);
 
-app.controller('mainCtrl', ['$scope', '$http', 'userService', function ($scope, $http, userService)
-{
+app.controller('mainCtrl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
     var ctrl = this;
     ctrl.userService = userService;
 }]);
 
-angular.module("myApp").directive("filesInput", function ()
-{
+angular.module("myApp").directive("filesInput", function () {
     return {
         require: "ngModel",
-        link: function postLink(scope, elem, attrs, ngModel)
-        {
-            elem.on("change", function (e)
-            {
+        link: function postLink(scope, elem, attrs, ngModel) {
+            elem.on("change", function (e) {
                 var files = elem[0].files;
                 ngModel.$setViewValue(files);
             })
