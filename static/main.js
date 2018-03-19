@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'azureBlobUpload']);
+var app = angular.module('myApp', ['ngRoute', 'lr.upload']);
 app.config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
