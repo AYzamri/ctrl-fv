@@ -15,12 +15,6 @@
         [[VideoFileMessage]]
         [[showMessage]]
         <br>
-        <p>Upload transcript:</p>
-        <input class="form-control" type="file" files-input accept="text/txt" ng-model="ctrl.transArray"
-               onchange="angular.element(this).scope().validateTranscriptFile(this)" required>
-        [[TranscriptFileMessage]]
-        <br>
-        <br>
         <input class="btn" type="submit" value="Upload">
         <h4 ng-if="ctrl.isUploading">Strarted Uploading [[ctrl.videoName]]</h4>
         <p ng-if="ctrl.isUploading">Progress: [[ctrl.progress]]%</p>

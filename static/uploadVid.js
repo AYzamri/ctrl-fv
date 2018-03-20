@@ -10,9 +10,6 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
     $scope.validateVidFile = function (element) {
         $scope.$apply($scope.validateFile(".mp4", element));
     };
-    $scope.validateTranscriptFile = function (element) {
-        $scope.$apply($scope.validateFile(".txt", element));
-    };
     $scope.validateFile = function (fileExtension, element) {
         $scope.theFile = element.files[0];
         var FileMessage = '';
@@ -28,11 +25,11 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
         {
             $scope.FileMessage = '';
         }
-        if (fileExtension == ".mp4")
+        if (fileExtension === ".mp4")
         {
             $scope.VideoFileMessage = FileMessage;
         }
-        if (fileExtension == ".txt")
+        if (fileExtension === ".txt")
         {
             $scope.TranscriptFileMessage = FileMessage;
         }
@@ -65,34 +62,14 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
         var customBlockSize = file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
         blobService.singleBlobPutThresholdInBytes = customBlockSize;
 
-        var finishedOrError = false;
         ctrl.isUploading = true;
         var speedSummary = blobService.createBlockBlobFromBrowserFile('videoscontainer', fileName, file, {blockSize: customBlockSize}, function (error, result, response) {
             ctrl.isUploading = false;
             if (error)
-            {
-                window.alert(error)
-            }
+                window.alert(error);
             else
-            {
-                window.alert('success!')
-            }
+                window.alert('Finished uploading!')
         });
         refreshProgress();
-        // upload({
-        //     url: ctrl.url,
-        //     method: 'POST',
-        //     data: {
-        //         video: ctrl.vidArray[0],
-        //         videoName: ctrl.videoName,
-        //         videoDescription: ctrl.videoDescription,
-        //         transcript: ctrl.transArray[0],
-        //         user: userService.User.email
-        //     }
-        // }).then(function () {
-        //     window.alert('added video to archive')
-        // }, function (error) {
-        //     window.alert('Error uploading video')
-        // })
     }
 }]);
