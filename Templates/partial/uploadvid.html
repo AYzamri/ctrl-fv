@@ -22,5 +22,7 @@
         <br>
         <br>
         <input class="btn" type="submit" value="Upload">
+        <p ng-if="ctrl.isUploading">[[ctrl.videoName]]</p>
+        <p ng-if="ctrl.isUploading">[[ctrl.progress]]</p>
     </form>
 </div>
