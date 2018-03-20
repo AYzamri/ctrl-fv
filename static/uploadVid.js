@@ -47,7 +47,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
                 if (ctrl.isUploading)
                 {
                     var progress = speedSummary.getCompletePercent();
-                    ctrl.progress = progress;
+                    ctrl.progress = Math.ceil(progress);
                 }
                 else
                     $interval.cancel();
