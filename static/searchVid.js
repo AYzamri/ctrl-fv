@@ -24,7 +24,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
     {
         //var searchDetails = {searchKey: ctrl.searchVal};
         var searchDetails = {"name": "Dan Hagever"};
-        var url = "https://cfvtes.azurewebsites.net/api/Searcher?code=bk9rMU8Yv2bpvm97YDImhffQdLcmu1E/ksj7RFG1BJ3YeMRCZpaTQg==&name=dan"
+        var url = "https://cfvtes.azurewebsites.net/api/Searcher?code=bk9rMU8Yv2bpvm97YDImhffQdLcmu1E/ksj7RFG1BJ3YeMRCZpaTQg=="
         return $http.post(url, searchDetails).then(function (response)
         {
             window.alert(response.data);
