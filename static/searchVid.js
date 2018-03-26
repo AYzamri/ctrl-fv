@@ -8,16 +8,36 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 
     ctrl.vid_search_results = [];
 
+    // ctrl.searchForVid = function ()
+    // {
+    //     $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
+    //     {
+    //         ctrl.vid_search_results = results.data;
+    //     }).catch(function (err)
+    //     {
+    //         window.alert('Error finding videos');
+    //     });
+    // };
+
+
     ctrl.searchForVid = function ()
     {
-        $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
+        //var searchDetails = {searchKey: ctrl.searchVal};
+        var searchDetails = {"name": "Dan Hagever"};
+        var url = "https://cfvtes.azurewebsites.net/api/Searcher?code=bk9rMU8Yv2bpvm97YDImhffQdLcmu1E/ksj7RFG1BJ3YeMRCZpaTQg==&name=dan"
+        return $http.post(url, searchDetails).then(function (response)
         {
-            ctrl.vid_search_results = results.data;
+            window.alert(response.data);
         }).catch(function (err)
         {
             window.alert('Error finding videos');
         });
     };
+
+
+
+
+
 
 
 }]);
