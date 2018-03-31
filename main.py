@@ -41,15 +41,15 @@ def getInvertedIndex():
     return index_json, 200
 
 
-@app.route('/searchForVideo', methods=['GET'])
-def searchForVideo():
-    try:
-        search_term = request.args.get('searchterm')
-        search_term = urllib.parse.unquote(search_term)
-        videos = server_logic.get_videos_by_term(search_term)
-        return json.dumps(videos), 200
-    except Exception as e:
-        return e, 501
+# @app.route('/searchForVideo', methods=['GET'])
+# def searchForVideo():
+#     try:
+#         search_term = request.args.get('searchterm')
+#         search_term = urllib.parse.unquote(search_term)
+#         videos = server_logic.get_videos_by_term(search_term)
+#         return json.dumps(videos), 200
+#     except Exception as e:
+#         return e, 501
 
 
 @app.route('/login', methods=['POST'])
