@@ -26,6 +26,7 @@ def uploadvideo():
         user_email = data['user']
         server_logic.upload_vid_meta_data(blobname=video_id, videoname=video_name, videodescription=video_description,
                                           user_id=user_email)
+        server_logic.enqueue_message('video-to-extractor-q', video_id)
     except Exception as e:
         return e, 501
     return '', 200
