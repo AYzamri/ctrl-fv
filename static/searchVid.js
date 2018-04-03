@@ -8,25 +8,9 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
 
     ctrl.vid_search_results = [];
 
-    // ctrl.searchForVid = function ()
-    // {
-    //     $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
-    //     {
-    //         ctrl.vid_search_results = results.data;
-    //     }).catch(function (err)
-    //     {
-    //         window.alert('Error finding videos');
-    //     });
-    // };
-
     ctrl.searchForVid = function ()
     {
-        var searchDetails = {
-                                searchKey: ctrl.searchVal
-                            };
-        var search_func_app_url = 'https://cfvtes.azurewebsites.net/api/Searcher?code=bk9rMU8Yv2bpvm97YDImhffQdLcmu1E' +
-                                   '/ksj7RFG1BJ3YeMRCZpaTQg=='
-        $http.post(search_func_app_url, searchDetails).then(function (results)
+        $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
         {
             ctrl.vid_search_results = results.data;
         }).catch(function (err)
@@ -36,10 +20,22 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope)
     };
 
 
-
-
-
-
+    // func app trigger
+    // ctrl.searchForVid = function ()
+    // {
+    //     var searchDetails = {
+    //                             searchKey: ctrl.searchVal
+    //                         };
+    //     var search_func_app_url = 'https://cfvtes.azurewebsites.net/api/Searcher?code=bk9rMU8Yv2bpvm97YDImhffQdLcmu1E' +
+    //                                '/ksj7RFG1BJ3YeMRCZpaTQg=='
+    //     $http.post(search_func_app_url, searchDetails).then(function (results)
+    //     {
+    //         ctrl.vid_search_results = results.data;
+    //     }).catch(function (err)
+    //     {
+    //         window.alert('Error finding videos');
+    //     });
+    // };
 
 }]);
 app.filter('secondsToDateTime', [function ()

@@ -69,39 +69,39 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
     cnxn.commit()
 
 
-# def get_videos_by_term(search_term):
-#     vid_ids = get_video_ids_by_term(search_term)
-#     if len(vid_ids) == 0:
-#         return {}
-#     video_info = get_video_info_by_vid_ids(vid_ids)
-#     return video_info
-#
-#
-# def get_video_ids_by_term(search_term):
-#     service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
-#     vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
-#                                      filter='PartitionKey eq \'' + search_term + '\'',
-#                                      select='RowKey')
-#     if not vid_ids.items or len(vid_ids.items) == 0:
-#         return []
-#     video_ids = {record['RowKey'] for record in vid_ids.items}
-#     return video_ids
-#
-#
-# def get_video_info_by_vid_ids(vid_ids):
-#     cnxn = get_sql_cnxn()
-#     cursor = cnxn.cursor()
-#     list_vid_ids = list(vid_ids)
-#     ids_as_string = ','.join('\'{0}\''.format(id) for id in list_vid_ids)
-#     query = "SELECT * FROM {0} WHERE vid_id in ({1})"
-#     query = query.format('VideosMetaData', ids_as_string)
-#     cursor.execute(query)
-#     columns = [column[0] for column in cursor.description]
-#     data = cursor.fetchall()
-#     if not data or len(data) == 0:
-#         return {}
-#     results = [dict(zip(columns, row)) for row in data]
-#     return results
+def get_videos_by_term(search_term):
+    vid_ids = get_video_ids_by_term(search_term)
+    if len(vid_ids) == 0:
+        return {}
+    video_info = get_video_info_by_vid_ids(vid_ids)
+    return video_info
+
+
+def get_video_ids_by_term(search_term):
+    service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
+    vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
+                                     filter='PartitionKey eq \'' + search_term + '\'',
+                                     select='RowKey')
+    if not vid_ids.items or len(vid_ids.items) == 0:
+        return []
+    video_ids = {record['RowKey'] for record in vid_ids.items}
+    return video_ids
+
+
+def get_video_info_by_vid_ids(vid_ids):
+    cnxn = get_sql_cnxn()
+    cursor = cnxn.cursor()
+    list_vid_ids = list(vid_ids)
+    ids_as_string = ','.join('\'{0}\''.format(id) for id in list_vid_ids)
+    query = "SELECT * FROM {0} WHERE vid_id in ({1})"
+    query = query.format('VideosMetaData', ids_as_string)
+    cursor.execute(query)
+    columns = [column[0] for column in cursor.description]
+    data = cursor.fetchall()
+    if not data or len(data) == 0:
+        return {}
+    results = [dict(zip(columns, row)) for row in data]
+    return results
 
 
 def login(email, password):
