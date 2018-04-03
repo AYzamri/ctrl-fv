@@ -70,7 +70,7 @@ def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
 
 
 def get_videos_by_term(search_term):
-    vid_ids = get_video_ids_by_term(search_term)
+    vid_ids = get_video_ids_by_term(search_term.lower())
     if len(vid_ids) == 0:
         return {}
     video_info = get_video_info_by_vid_ids(vid_ids)
