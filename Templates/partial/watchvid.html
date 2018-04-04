@@ -12,6 +12,10 @@
         td {
             width: 50%;
         }
+
+        .highlight {
+            font-weight: bold;
+        }
     </style>
     <div class="section-title text-center">
         <h3>Watch video</h3>
@@ -25,9 +29,10 @@
         <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
     </div>
     <div style="height:45%">
-    <video id="currentVideo" controls style="margin-left: auto;margin-right: auto; display: block ; height: auto; width:40%" >
-        <source ng-src="[[ctrl.currentVideoPath]]">
-    </video>
+        <video id="currentVideo" controls
+               style="margin-left: auto;margin-right: auto; display: block ; height: auto; width:40%">
+            <source ng-src="[[ctrl.currentVideoPath]]">
+        </video>
     </div>
 
 
@@ -42,7 +47,10 @@
             <tbody>
             <tr ng-repeat="(time,paragraph) in ctrl.search_results" ng-click="ctrl.jump(time)">
                 <td>[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
-                <td>[[paragraph]]</td>
+                <td>
+                    <span ng-repeat="word in paragraph.split(' ')" md-highlight-text="[[' '+ctrl.searchVal+' ' ]]"
+                          md-highlight-flags="gi"> [[' '+ word.split('.').join("")+ ' ']]</span>
+                </td>
             </tr>
             </tbody>
         </table>
