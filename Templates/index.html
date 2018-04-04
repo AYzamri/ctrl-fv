@@ -34,6 +34,17 @@
     <link rel="import" href="partial/signup.html">
     <link rel="import" href="partial/myVids.html">
     <!--Others:-->
+    <!--Material Design:-->
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-animate.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-aria.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-messages.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-material.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='packages/angular-material.min.css') }}">
+    <!--Bootstrap:-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <style>
@@ -53,7 +64,6 @@
 <body ng-controller="mainCtrl as ctrl" class="background">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">

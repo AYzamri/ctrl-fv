@@ -92,5 +92,5 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
                 });
         });
         refreshProgress();
-    }
+    };
 }]);

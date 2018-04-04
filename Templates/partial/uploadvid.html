@@ -16,7 +16,9 @@
         [[showMessage]]
         <br>
         <input class="btn" type="submit" value="Upload">
-        <h4 ng-if="ctrl.isUploading">Strarted Uploading [[ctrl.videoName]]</h4>
-        <p ng-if="ctrl.isUploading">Progress: [[ctrl.progress]]%</p>
     </form>
+    <h4 ng-if="ctrl.isUploading">Uploading [[ctrl.videoName]]</h4>
+    <div ng-if="ctrl.isUploading" layout="row" layout-sm="column" layout-align="space-around">
+        <md-progress-linear md-mode="determinate" value="[[ctrl.progress]]"></md-progress-linear>
+    </div>
 </div>
