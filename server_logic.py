@@ -44,11 +44,17 @@ def enqueue_message(qname, message):
 def get_inverted_index(vid_id):
     service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
     terms = service.query_entities(table_name='VideosInvertedIndexes',
-                                   filter='PartitionKey eq \'' + vid_id + '\'',
-                                   select='RowKey,Appearances')
+                                   filter='PartitionKey eq \'' + vid_id + '\'')
     if not terms.items:
         raise Exception('Inverted index for Video ID {} not found'.format(vid_id))
-    index = {record['RowKey']: record['Appearances'] for record in terms.items}
+    index = {}
+    for entry in terms.items:
+        word = entry['RowKey']
+        index[word] = {}
+        for prop in entry:
+            if prop.startswith('t_'):
+                time = prop.replace('t_', '').replace('_', '.')
+                index[word][time] = entry[prop]
     return index
 
 
@@ -137,13 +143,12 @@ def signup(user):
     data = cursor.fetchall()
     if not data or len(data) == 0:
         query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
-            "VALUES ('{0}','{1}','{2}','{3}','{4}')"
+                "VALUES ('{0}','{1}','{2}','{3}','{4}')"
         query = query.format(user['email'], user['username'], user['password'], user['firstName']
-                         , user['lastName'])
+                             , user['lastName'])
         cursor.execute(query)
         cnxn.commit()
         return True
     else:
         return False
-            #raise ValueError('The email is allready in use!')
-
+        # raise ValueError('The email is allready in use!')
