@@ -48,7 +48,7 @@
             <tr ng-repeat="(time,paragraph) in ctrl.search_results" ng-click="ctrl.jump(time)">
                 <td>[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
                 <td>
-                    <span ng-repeat="word in paragraph.split(' ')" md-highlight-text="[[' '+ctrl.searchVal+' ' ]]"
+                    <span ng-repeat="word in paragraph.split(' ') track by $index" md-highlight-text="[[' '+ctrl.searchVal+' ' ]]"
                           md-highlight-flags="gi"> [[' '+ word.split('.').join("")+ ' ']]</span>
                 </td>
             </tr>
