@@ -14,6 +14,8 @@
             src="{{ url_for('static', filename='packages/angular-upload.min.js') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/azure-storage.blob.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/angular-local-storage.js') }}"></script>
     <!--App scripts:-->
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='user.service.js') }}"></script>
@@ -84,6 +86,9 @@
                     <li ng-if="!ctrl.userService.model.loggedIn"><a href="#login">Login</a></li>
                     <li ng-if="!ctrl.userService.model.loggedIn"><a href="#signup">Sign up</a></li>
                     <li ng-if="ctrl.userService.model.loggedIn"><a>Hello, [[ctrl.userService.User.username]]!</a></li>
+                    <li ng-if="ctrl.userService.model.loggedIn">
+                        <button ng-click="ctrl.logout()">Log out</button>
+                    </li>
                     <li ng-if="ctrl.userService.model.loggedIn"><a href="#myVids">My Videos</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->

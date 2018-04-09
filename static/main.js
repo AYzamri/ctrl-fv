@@ -1,4 +1,7 @@
-var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'ngMaterial']);
+var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'ngMaterial', 'LocalStorageModule']);
+app.config(function (localStorageServiceProvider) {
+    localStorageServiceProvider.setPrefix('yourAppName');
+});
 app.config(['$interpolateProvider', function ($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
@@ -46,6 +49,10 @@ app.config(['$routeProvider', function ($routeProvider) {
 app.controller('mainCtrl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
     var ctrl = this;
     ctrl.userService = userService;
+
+    ctrl.logout = function () {
+        ctrl.userService.logout();
+    };
 }]);
 
 angular.module("myApp").directive("filesInput", function () {
