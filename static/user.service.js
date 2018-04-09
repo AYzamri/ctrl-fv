@@ -14,7 +14,7 @@ app.factory('userService', ['$http', function ($http)
     {
         return $http.post(url + '/signup', user).then(function (isUnique)
         {
-            if(isUnique.data=="true"){
+            if(isUnique.data==="true"){
                 service.User = user;
                 service.mode.logggedIn = true;
             }
