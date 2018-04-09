@@ -10,7 +10,7 @@
         <input class="form-control" type="text" ng-model="ctrl.videoDescription">
         <br>
         <p>Upload video:</p>
-        <input class="form-control" type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray"
+        <input id="videoFile" class="form-control" type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray"
                onchange="angular.element(this).scope().validateVidFile(this)" required>
         [[VideoFileMessage]]
         [[showMessage]]
