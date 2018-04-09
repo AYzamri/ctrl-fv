@@ -8,7 +8,7 @@ app.controller('myVidsCtrl', ['$http', '$location', 'userService', function ($ht
 
     ctrl.init = function () {
         // Refresh user data:
-        ctrl.Service.login(ctrl.User.email, ctrl.User.password);
+        ctrl.Service.login(ctrl.Service.User.email, ctrl.Service.User.password);
     };
 
     ctrl.getVideos = function () {
