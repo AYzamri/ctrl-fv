@@ -17,7 +17,6 @@
         <br>
         <input class="btn" type="submit" value="Upload">
     </form>
-    <button ng-click="ctrl.test()">Test</button>
     <h4 ng-if="ctrl.isUploading">Uploading [[ctrl.videoName]]</h4>
     <div ng-if="ctrl.isUploading" layout="row" layout-sm="column" layout-align="space-around">
         <md-progress-linear md-mode="determinate" value="[[ctrl.progress]]"></md-progress-linear>
