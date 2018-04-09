@@ -86,8 +86,8 @@
                     <li ng-if="!ctrl.userService.model.loggedIn"><a href="#login">Login</a></li>
                     <li ng-if="!ctrl.userService.model.loggedIn"><a href="#signup">Sign up</a></li>
                     <li ng-if="ctrl.userService.model.loggedIn"><a>Hello, [[ctrl.userService.User.username]]!</a></li>
-                    <li ng-if="ctrl.userService.model.loggedIn">
-                        <button ng-click="ctrl.logout()">Log out</button>
+                    <li ng-if="ctrl.userService.model.loggedIn"><a onmouseover="" style="cursor: pointer;"
+                                                                   ng-click="ctrl.logout()">Log Out</a>
                     </li>
                     <li ng-if="ctrl.userService.model.loggedIn"><a href="#myVids">My Videos</a></li>
                 </ul>
