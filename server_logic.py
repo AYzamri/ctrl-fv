@@ -65,12 +65,12 @@ def get_inverted_index_json(vid_id):
     return parsed
 
 
-def upload_vid_meta_data(blobname, videoname, videodescription, user_id='none'):
+def upload_vid_meta_data(blobname, videoname, videodescription, duration, user_id='none'):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     table = "VideosMetaData"
-    query = "INSERT INTO {0} (vid_id,title,description,userID) VALUES('{1}','{2}','{3}','{4}')"
-    query = query.format(table, blobname, videoname, videodescription, user_id)
+    query = "INSERT INTO {0} (vid_id,title,description,userID,duration) VALUES('{1}','{2}','{3}','{4}',{5})"
+    query = query.format(table, blobname, videoname, videodescription, user_id, duration)
     cursor.execute(query)
     cnxn.commit()
 
