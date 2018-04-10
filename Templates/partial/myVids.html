@@ -15,7 +15,7 @@
         <tr ng-repeat="vid in ctrl.getVideos()">
             <td>[[vid.title]]</td>
             <td>[[vid.description]]</td>
-            <td>[[vid.duration]]</td>
+            <td>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</td>
             <td>
                 <a ng-href="#/watch/[[vid.vid_id]]">
                     <h5>watch</h5></a>
