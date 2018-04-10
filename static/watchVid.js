@@ -31,7 +31,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         if (!ctrl.invertedIndex[ctrl.searchVal])
             ctrl.search_results = {};
         else
-            ctrl.search_results = JSON.parse(ctrl.invertedIndex[ctrl.searchVal]);
+            ctrl.search_results = ctrl.invertedIndex[ctrl.searchVal];
     };
 
 }]);

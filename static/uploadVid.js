@@ -47,6 +47,20 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
 
     };
 
+    ctrl.getDuration = function () {
+        window.URL = window.URL || window.webkitURL;
+        var file = document.getElementById('videoFile').files[0];
+        var video = document.createElement('video');
+        video.preload = 'metadata';
+
+        video.onloadedmetadata = function () {
+            window.URL.revokeObjectURL(video.src);
+            ctrl.duration = video.duration;
+        };
+
+        video.src = URL.createObjectURL(file);
+    };
+
     ctrl.doUpload = function () {
         ctrl.progress = 0;
 
@@ -71,15 +85,16 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
             videoID: videoID,
             videoName: ctrl.videoName,
             videoDescription: ctrl.videoDescription,
-            user: userService.User.email
+            user: userService.User.email,
+            duration: ctrl.duration
         };
 
-        var sas = '?sv=2017-07-29&ss=b&srt=sco&sp=rwac&se=2018-03-20T18:02:46Z&st=2018-03-20T10:02:46Z&spr=https&sig=YVrkCOS7ynYhLTG2GBJjEhUH9ff1%2FPPQ1rlhWhxnLvM%3D';
+        var sas = '?sv=2017-07-29&ss=bfqt&srt=co&sp=rwacup&se=2018-06-30T17:44:01Z&st=2018-04-03T09:44:01Z&spr=https&sig=cjTWXrIh5yrImi%2FddvbXyvxlk%2F0DVTbJPxJHqj%2BoGt0%3D';
         var blobService = AzureStorage.Blob.createBlobServiceWithSas(ctrl.storageUrl, sas);
         var customBlockSize = file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
         blobService.singleBlobPutThresholdInBytes = customBlockSize;
         ctrl.isUploading = true;
-        
+
         var speedSummary = blobService.createBlockBlobFromBrowserFile('videoscontainer', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
             if (error)
                 window.alert(error);
@@ -92,5 +107,5 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
                 });
         });
         refreshProgress();
-    }
+    };
 }]);

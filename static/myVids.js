@@ -1,20 +1,18 @@
+var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('myVidsCtrl', ['$http', '$location', 'userService', function ($http, $location, userService)
-{
+app.controller('myVidsCtrl', ['$http', '$location', 'userService', function ($http, $location, userService) {
     var ctrl = this;
 
-    ctrl.User = userService.User;
+    ctrl.Service = userService;
 
-    ctrl.init = function ()
-    {
+    ctrl.init = function () {
         // Refresh user data:
-        ctrl.userService.login(ctrl.User.email, ctrl.User.password);
+        ctrl.Service.login(ctrl.Service.User.email, ctrl.Service.User.password);
     };
 
-    ctrl.getVideos = function ()
-    {
-        return ctrl.User.videosData;
+    ctrl.getVideos = function () {
+        return ctrl.Service.User.videosData;
     }
 
 }]);
