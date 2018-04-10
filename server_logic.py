@@ -1,6 +1,6 @@
 from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.storage.queue import QueueService
-from azure.storage.table import TableService, Entity
+from azure.storage.table import TableService
 import pyodbc
 import datetime
 import urllib.parse
@@ -46,7 +46,7 @@ def get_inverted_index(vid_id):
     terms = service.query_entities(table_name='VideosInvertedIndexes',
                                    filter='PartitionKey eq \'' + vid_id + '\'')
     if not terms.items:
-        raise Exception('Inverted index for Video ID {} not found'.format(vid_id))
+        return {}
     index = {}
     for entry in terms.items:
         word = entry['RowKey']
