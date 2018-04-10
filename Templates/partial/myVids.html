@@ -7,6 +7,7 @@
         <tr>
             <th>Video Name</th>
             <th>Description</th>
+            <th>Duration</th>
             <th>Watch</th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
         <tr ng-repeat="vid in ctrl.getVideos()">
             <td>[[vid.title]]</td>
             <td>[[vid.description]]</td>
+            <td>[[vid.duration]]</td>
             <td>
                 <a ng-href="#/watch/[[vid.vid_id]]">
                     <h5>watch</h5></a>
