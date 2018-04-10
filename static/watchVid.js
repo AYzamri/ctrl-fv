@@ -35,17 +35,3 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     };
 
 }]);
-app.filter('secondsToDateTime', [function ()
-{
-    return function (seconds)
-    {
-        return new Date(1970, 0, 1).setSeconds(seconds);
-    };
-}]);
-app.filter("trustUrl", ['$sce', function ($sce)
-{
-    return function (recordingUrl)
-    {
-        return $sce.trustAsResourceUrl(recordingUrl);
-    };
-}]);
