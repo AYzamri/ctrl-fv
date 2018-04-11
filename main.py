@@ -1,7 +1,10 @@
+import os
 import json
 from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib.parse
+from whoosh.index import *
+from whoosh.fields import *
 
 app = Flask(__name__, template_folder='Templates')
 
@@ -54,6 +57,33 @@ def searchForVideo():
         return e, 501
 
 
+@app.route('/createUpdateWhooshIndex', methods=['POST'])
+def create_update_whoosh_index():
+    from azure.storage.blob import BlockBlobService
+    try:
+        account_name = 'cfvtes9c07'
+        account_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
+        container_name = "corpus-container"
+        block_blob_service = BlockBlobService(account_name, account_key)
+        index_dir = "CorpusIndex"
+
+        data = json.loads(request.data.decode())
+        video_id = data["videoID"]
+        video_content = block_blob_service.get_blob_to_text(container_name, video_id, encoding="utf-16").content    # TODO: Deal with the encoding shit
+
+        if not os.path.exists(index_dir):
+            os.mkdir(index_dir)
+            schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
+            index = create_in(index_dir, schema)
+        else:
+            index = open_dir(index_dir)
+        index_writer = index.writer()
+        index_writer.add_document(title=video_id, content=video_content)
+        index_writer.commit()
+    except Exception as e:
+        return e, 501
+
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -93,4 +123,4 @@ def allow_cross_domain(response):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)
