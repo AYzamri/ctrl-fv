@@ -30,10 +30,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
                     ctrl.range.push(i);
             }
 
-            if (window.location.pathname.includes(ctrl.vidId) &&
+            if (window.location.pathname.includes(ctrl.vidId) && (
                 !('totalSegments' in ctrl.progress) ||
                 !('analyzedSegments' in ctrl.progress) ||
-                ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length)
+                ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length))
                 return setTimeout(ctrl.updateInvertedIndex_Recursive, 3000)
         }).catch(function (err) {
             window.alert('Error importing inverted index');
