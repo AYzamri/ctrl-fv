@@ -22,7 +22,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$location', 
             if (Object.keys(ctrl.invertedIndex).length > 0)
                 ctrl.indexLoaded = true;
 
-            if ('totalSegments' in ctrl.progress)
+            if ('totalSegments' in ctrl.progress && !('range' in ctrl))
             {
                 ctrl.range = [];
                 // I honestly couldn't find a better way to calculate range
