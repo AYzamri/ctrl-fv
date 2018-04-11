@@ -61,6 +61,7 @@ def create_update_whoosh_index():
         data = json.loads(request.data.decode())
         video_id = data["videoID"]
         server_logic.create_update_whoosh_index(video_id)
+        return '', 200
     except Exception as e:
         return e, 501
 
