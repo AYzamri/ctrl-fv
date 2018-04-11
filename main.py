@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib.parse
 
+
 app = Flask(__name__, template_folder='Templates')
 
 
@@ -54,6 +55,17 @@ def searchForVideo():
         return e, 501
 
 
+@app.route('/createUpdateWhooshIndex', methods=['POST'])
+def create_update_whoosh_index():
+    try:
+        data = json.loads(request.data.decode())
+        video_id = data["videoID"]
+        server_logic.create_update_whoosh_index(video_id)
+        return '', 200
+    except Exception as e:
+        return e, 501
+
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -93,4 +105,4 @@ def allow_cross_domain(response):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True)
