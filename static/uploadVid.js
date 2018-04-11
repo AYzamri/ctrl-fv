@@ -80,7 +80,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
         // If one file has been selected in the HTML file input element
         var file = ctrl.vidArray[0];
         var currentTime = new Date();
-        var videoID = ctrl.videoName + '_' + currentTime.idFormat() + '.mp4';
+        var videoID = ctrl.videoName.replace(/ /g,"_") + '_' + currentTime.idFormat() + '.mp4';
         var req_body = {
             videoID: videoID,
             videoName: ctrl.videoName,
