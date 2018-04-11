@@ -31,7 +31,7 @@
     <uib-progress ng-if="ctrl.indexLoaded"
                   max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
-        <uib-bar ng-if="ctrl.progress.analyzedSegments.indexOf(segNum) >= 0" value="1">[[segNum]]</uib-bar>
+        <uib-bar ng-if="ctrl.progress.analyzedSegments.indexOf(segNum) >= 0" value="1"></uib-bar>
             <uib-bar ng-if="ctrl.progress.analyzedSegments.indexOf(segNum) < 0" style="opacity: 0" value="1"></uib-bar>
             </span>
     </uib-progress>
