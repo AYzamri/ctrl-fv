@@ -4,6 +4,8 @@ import pyodbc
 import datetime
 import urllib.parse
 from base64 import b64encode
+from whoosh import scoring
+from whoosh.qparser import QueryParser
 from whoosh.fields import Schema, TEXT
 from whoosh.index import create_in, open_dir
 from whoosh.analysis import StemmingAnalyzer
@@ -14,6 +16,7 @@ from azure.storage.blob import BlockBlobService, PublicAccess
 storage_acc_name = 'cfvtes9c07'
 storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
 table_service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
+corpus_index_dir = "CorpusIndex"
 
 
 def get_sql_cnxn():
@@ -40,10 +43,10 @@ def upload_file_to_blob(name, file, container_name):
     block_blob_service.create_blob_from_stream(container_name=container_name, blob_name=name, stream=file)
 
 
-def enqueue_message(qname, message):
+def enqueue_message(q_name, message):
     message = b64encode(message.encode('ascii')).decode()
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
-    queue_service.put_message(qname, message)
+    queue_service.put_message(q_name, message)
 
 
 def get_inverted_index(vid_id):
@@ -82,12 +85,12 @@ def get_inverted_index_json(vid_id):
     return parsed
 
 
-def upload_vid_meta_data(blobname, videoname, videodescription, duration, user_id='none'):
+def upload_vid_meta_data(blob_name, video_name, video_description, duration, user_id='none'):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     table = "VideosMetaData"
     query = "INSERT INTO {0} (vid_id,title,description,userID,duration) VALUES('{1}','{2}','{3}','{4}',{5})"
-    query = query.format(table, blobname, videoname, videodescription, user_id, duration)
+    query = query.format(table, blob_name, video_name, video_description, user_id, duration)
     cursor.execute(query)
     cnxn.commit()
 
@@ -101,13 +104,25 @@ def get_videos_by_term(search_term):
 
 
 def get_video_ids_by_term(search_term):
-    service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
-    vid_ids = service.query_entities(table_name='CorpusInvertedIndex',
-                                     filter='PartitionKey eq \'' + search_term + '\'',
-                                     select='RowKey')
+    # region Whoosh search
+    # index = open_dir(corpus_index_dir)
+    # with index.searcher(weighting=scoring.TF_IDF()) as searcher:
+    #     query_object = QueryParser("content", index.schema).parse(search_term)
+    #     results = searcher.search(query_object, limit=None)
+    #     # keywords = results.key_terms("content")
+    #     # suggestion = searcher.correct_query(query_object, search_term).string
+    # video_ids = {result.fields()["title"] for result in results}
+    # endregion
+
+    # region Naive search
+    vid_ids = table_service.query_entities(table_name='CorpusInvertedIndex',
+                                           filter='PartitionKey eq \'' + search_term + '\'',
+                                           select='RowKey')
     if not vid_ids.items or len(vid_ids.items) == 0:
         return []
     video_ids = {record['RowKey'] for record in vid_ids.items}
+    # endregion
+
     return video_ids
 
 
@@ -128,18 +143,19 @@ def get_video_info_by_vid_ids(vid_ids):
 
 
 def create_update_whoosh_index(video_id):
-    index_dir = "CorpusIndex"
     container_name = "corpus-container"
+    video_id_no_txt_extension = os.path.splitext(video_id)[0]
     block_blob_service = BlockBlobService(storage_acc_name, storage_acc_key)
     video_content = block_blob_service.get_blob_to_text(container_name, video_id).content
-    if not os.path.exists(index_dir):
-        os.mkdir(index_dir)
+    if not os.path.exists(corpus_index_dir):
+        os.mkdir(corpus_index_dir)
         schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
-        index = create_in(index_dir, schema)
+        # TODO: why do we need stored=True for "content"? Loads memory and reduces performance
+        index = create_in(corpus_index_dir, schema)
     else:
-        index = open_dir(index_dir)
+        index = open_dir(corpus_index_dir)
     index_writer = index.writer()
-    index_writer.add_document(title=video_id, content=video_content)
+    index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
     index_writer.commit()
 
 

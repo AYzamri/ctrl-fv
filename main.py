@@ -18,7 +18,7 @@ def serve_partial(path):
 
 
 @app.route('/videoData', methods=['POST'])
-def uploadvideo():
+def upload_video():
     try:
         data = json.loads(request.data.decode())
         video_id = data['videoID']
@@ -26,7 +26,7 @@ def uploadvideo():
         video_description = data['videoDescription']
         user_email = data['user']
         duration = data['duration']
-        server_logic.upload_vid_meta_data(blobname=video_id, videoname=video_name, videodescription=video_description,
+        server_logic.upload_vid_meta_data(blob_name=video_id, video_name=video_name, video_description=video_description,
                                           duration=duration, user_id=user_email)
         server_logic.enqueue_message('video-to-extractor-q', video_id)
     except Exception as e:
@@ -35,7 +35,7 @@ def uploadvideo():
 
 
 @app.route('/invertedIndex', methods=['GET'])
-def getInvertedIndex():
+def get_inverted_index():
     try:
         vid_id = request.args.get('vidid')
         index_json = server_logic.get_inverted_index_json(vid_id)
@@ -45,7 +45,7 @@ def getInvertedIndex():
 
 
 @app.route('/searchForVideo', methods=['GET'])
-def searchForVideo():
+def search_for_video():
     try:
         search_term = request.args.get('searchterm')
         search_term = urllib.parse.unquote(search_term)
@@ -82,7 +82,7 @@ def login():
 
 
 @app.route('/signup', methods=['POST'])
-def sigunp():
+def signup():
     try:
         user = request.json
         isUnique = server_logic.signup(user)
