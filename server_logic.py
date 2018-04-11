@@ -150,7 +150,7 @@ def create_update_whoosh_index(video_id):
     if not os.path.exists(corpus_index_dir):
         os.mkdir(corpus_index_dir)
         schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
-        # TODO: why do we need stored=True for "content"? Loads memory and reduces performance
+        # TODO: stored=True for "content" because (http://whoosh.readthedocs.io/en/latest/keywords.html). Reduces performance, really needed?
         index = create_in(corpus_index_dir, schema)
     else:
         index = open_dir(corpus_index_dir)
