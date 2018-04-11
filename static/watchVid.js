@@ -7,6 +7,14 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
     ctrl.indexLoaded = false;
 
+    // Start updating until all index up-to-date:
+    ctrl.init = function () {
+        ctrl.vidId = $routeParams.vidId;
+        ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
+        ctrl.indexLoaded = false;
+        ctrl.updateInvertedIndex_Recursive();
+    };
+
     ctrl.updateInvertedIndex_Recursive = function () {
         return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.invertedIndex = res.data.index;
@@ -30,9 +38,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             window.alert('Error importing inverted index');
         });
     };
-
-    // Start updating until all index up-to-date:
-    ctrl.updateInvertedIndex_Recursive();
 
     ctrl.searchVal = "";
     ctrl.search_results = [];
