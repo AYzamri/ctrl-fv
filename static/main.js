@@ -1,4 +1,4 @@
-var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'ngMaterial', 'LocalStorageModule']);
+var app = angular.module('myApp', ['ngRoute', 'lr.upload', 'ngMaterial', 'LocalStorageModule', 'ui.bootstrap']);
 app.config(function (localStorageServiceProvider) {
     localStorageServiceProvider.setPrefix('yourAppName');
 });
@@ -66,4 +66,15 @@ angular.module("myApp").directive("filesInput", function () {
         }
     }
 });
+
+app.filter('secondsToDateTime', [function () {
+    return function (seconds) {
+        return new Date(1970, 0, 1).setSeconds(seconds);
+    };
+}]);
+app.filter("trustUrl", ['$sce', function ($sce) {
+    return function (recordingUrl) {
+        return $sce.trustAsResourceUrl(recordingUrl);
+    };
+}]);
 

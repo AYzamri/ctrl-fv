@@ -1,6 +1,6 @@
 from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.storage.queue import QueueService
-from azure.storage.table import TableService, Entity
+from azure.storage.table import TableService
 import pyodbc
 import datetime
 import urllib.parse
@@ -9,6 +9,7 @@ from base64 import b64encode
 
 storage_acc_name = 'cfvtes9c07'
 storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
+table_service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
 
 
 def get_sql_cnxn():
@@ -42,11 +43,10 @@ def enqueue_message(qname, message):
 
 
 def get_inverted_index(vid_id):
-    service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
-    terms = service.query_entities(table_name='VideosInvertedIndexes',
-                                   filter='PartitionKey eq \'' + vid_id + '\'')
+    terms = table_service.query_entities(table_name='VideosInvertedIndexes',
+                                         filter='PartitionKey eq \'' + vid_id + '\'')
     if not terms.items:
-        raise Exception('Inverted index for Video ID {} not found'.format(vid_id))
+        return {}
     index = {}
     for entry in terms.items:
         word = entry['RowKey']
@@ -58,9 +58,22 @@ def get_inverted_index(vid_id):
     return index
 
 
+def get_progress_data(vid_id):
+    data_returned = table_service.query_entities(table_name='VideosIndexProgress',
+                                                 filter='PartitionKey eq \'' + vid_id + '\'')
+    if not data_returned.items:
+        return {}
+    entry = data_returned.items[0]
+    progress = {"ID": entry['PartitionKey'], "totalSegments": float(entry['RowKey']),
+                'analyzedSegments': sorted([entry[prop] for prop in entry if prop.startswith('t_')])}
+    return progress
+
+
 def get_inverted_index_json(vid_id):
     inverted = get_inverted_index(vid_id)
-    json_text = json.dumps(inverted)
+    progress_data = get_progress_data(vid_id)
+    data = {"index": inverted, "progress": progress_data}
+    json_text = json.dumps(data)
     parsed = urllib.parse.unquote(json_text)
     return parsed
 
