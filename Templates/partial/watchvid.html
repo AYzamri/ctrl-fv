@@ -16,6 +16,10 @@
         .highlight {
             font-weight: bold;
         }
+
+        .progress-bar-transparent {
+            background-color: transparent;
+        }
     </style>
     <div class="section-title text-center">
         <h3>Watch video</h3>
@@ -32,9 +36,8 @@
                   max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
             <uib-bar
-                    type=[[ctrl.progress.analyzedSegments.indexOf(segNum)>= 0 ? "success":"warning" ]] value="1"></uib-bar>
-{#        <uib-bar ng-if="ctrl.progress.analyzedSegments.indexOf(segNum) >= 0" value="1"></uib-bar>#}
-{#            <uib-bar ng-if="ctrl.progress.analyzedSegments.indexOf(segNum) < 0" style="opacity: 0" value="1"></uib-bar>#}
+                    type="[[ctrl.progress.analyzedSegments.indexOf(segNum)>=0 ? 'info':'transparent']]"
+                    value="1"></uib-bar>
             </span>
     </uib-progress>
     <div style="height:45%">
