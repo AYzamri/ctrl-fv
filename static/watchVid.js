@@ -4,7 +4,6 @@ var server = app.config['server'];
 app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($http, $scope, $routeParams) {
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
-    ctrl.hello = 'watchVidCtrl is up';
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
     ctrl.indexLoaded = false;
 
@@ -13,10 +12,16 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             ctrl.invertedIndex = res.data.index;
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
-            {
                 ctrl.indexLoaded = true;
-                ctrl.range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+
+            if ('totalSegments' in ctrl.progress)
+            {
+                ctrl.range = [];
+                // I honestly couldn't find a better way to calculate range
+                for (var i = 0; i < ctrl.progress.totalSegments; i++)
+                    ctrl.range.push(i);
             }
+
             if (!('totalSegments' in ctrl.progress) ||
                 !('analyzedSegments' in ctrl.progress) ||
                 ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length)
@@ -25,11 +30,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             window.alert('Error importing inverted index');
         });
     };
-
-    ctrl.isSegmentAnalyzed = function (segNum) {
-        return ctrl.progress.analyzedSegments.indexOf(segNum) >= 0;
-    };
-
 
     // Start updating until all index up-to-date:
     ctrl.updateInvertedIndex_Recursive();
