@@ -13,7 +13,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             ctrl.invertedIndex = res.data.index;
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
+            {
                 ctrl.indexLoaded = true;
+                ctrl.range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+            }
             if (!('totalSegments' in ctrl.progress) ||
                 !('analyzedSegments' in ctrl.progress) ||
                 ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length)
@@ -21,6 +24,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         }).catch(function (err) {
             window.alert('Error importing inverted index');
         });
+    };
+
+    ctrl.isSegmentAnalyzed = function (segNum) {
+        return ctrl.progress.analyzedSegments.indexOf(segNum) >= 0;
     };
 
 
