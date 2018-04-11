@@ -9,16 +9,20 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     ctrl.indexLoaded = false;
 
     ctrl.updateInvertedIndex_Recursive = function () {
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (index) {
-            ctrl.invertedIndex = index.data;
-            if (ctrl.invertedIndex.size() > 0)
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
+            ctrl.invertedIndex = res.data.index;
+            ctrl.progress = res.data.progress;
+            if (Object.keys(ctrl.invertedIndex).length > 0)
                 ctrl.indexLoaded = true;
-            // ToDo Add stop when index is complete
-            return setTimeout(ctrl.updateInvertedIndex_Recursive(), 1000);
+            if (!('totalSegments' in ctrl.progress) ||
+                !('analyzedSegments' in ctrl.progress) ||
+                ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length)
+                return setTimeout(ctrl.updateInvertedIndex_Recursive, 3000)
         }).catch(function (err) {
             window.alert('Error importing inverted index');
         });
     };
+
 
     // Start updating until all index up-to-date:
     ctrl.updateInvertedIndex_Recursive();
