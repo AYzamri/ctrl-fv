@@ -1,11 +1,15 @@
-from azure.storage.blob import BlockBlobService, PublicAccess
-from azure.storage.queue import QueueService
-from azure.storage.table import TableService
+import os
+import json
 import pyodbc
 import datetime
 import urllib.parse
-import json
 from base64 import b64encode
+from whoosh.fields import Schema, TEXT
+from whoosh.index import create_in, open_dir
+from whoosh.analysis import StemmingAnalyzer
+from azure.storage.queue import QueueService
+from azure.storage.table import TableService
+from azure.storage.blob import BlockBlobService, PublicAccess
 
 storage_acc_name = 'cfvtes9c07'
 storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
@@ -121,6 +125,22 @@ def get_video_info_by_vid_ids(vid_ids):
         return {}
     results = [dict(zip(columns, row)) for row in data]
     return results
+
+
+def create_update_whoosh_index(video_id):
+    index_dir = "CorpusIndex"
+    container_name = "corpus-container"
+    block_blob_service = BlockBlobService(storage_acc_name, storage_acc_key)
+    video_content = block_blob_service.get_blob_to_text(container_name, video_id).content
+    if not os.path.exists(index_dir):
+        os.mkdir(index_dir)
+        schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
+        index = create_in(index_dir, schema)
+    else:
+        index = open_dir(index_dir)
+    index_writer = index.writer()
+    index_writer.add_document(title=video_id, content=video_content)
+    index_writer.commit()
 
 
 def login(email, password):
