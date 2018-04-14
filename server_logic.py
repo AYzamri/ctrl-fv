@@ -5,6 +5,7 @@ import datetime
 import urllib.parse
 from base64 import b64encode
 from whoosh import scoring
+from whoosh import qparser
 from whoosh.qparser import QueryParser
 from whoosh.fields import Schema, TEXT
 from whoosh.index import create_in, open_dir
@@ -105,22 +106,24 @@ def get_videos_by_term(search_term):
 
 def get_video_ids_by_term(search_term):
     # region Whoosh search
-    # index = open_dir(corpus_index_dir)
-    # with index.searcher(weighting=scoring.TF_IDF()) as searcher:
-    #     query_object = QueryParser("content", index.schema).parse(search_term)
-    #     results = searcher.search(query_object, limit=None)
-    #     # keywords = results.key_terms("content")
-    #     # suggestion = searcher.correct_query(query_object, search_term).string
-    # video_ids = {result.fields()["title"] for result in results}
+    index = open_dir(corpus_index_dir)
+    with index.searcher(weighting=scoring.TF_IDF()) as searcher:
+        query_object = QueryParser("content", index.schema, group=qparser.OrGroup).parse(search_term)
+        results = searcher.search(query_object, limit=None)
+        # keywords = results.key_terms("content")
+        # suggestion = searcher.correct_query(query_object, search_term).string
+        # for result in results:
+        #     print("Title:", result.fields()["title"])
+        video_ids = [result.fields()["title"] for result in results]
     # endregion
 
     # region Naive search
-    vid_ids = table_service.query_entities(table_name='CorpusInvertedIndex',
-                                           filter='PartitionKey eq \'' + search_term + '\'',
-                                           select='RowKey')
-    if not vid_ids.items or len(vid_ids.items) == 0:
-        return []
-    video_ids = {record['RowKey'] for record in vid_ids.items}
+    # vid_ids = table_service.query_entities(table_name='CorpusInvertedIndex',
+    #                                        filter='PartitionKey eq \'' + search_term + '\'',
+    #                                        select='RowKey')
+    # if not vid_ids.items or len(vid_ids.items) == 0:
+    #     return []
+    # video_ids = {record['RowKey'] for record in vid_ids.items}
     # endregion
 
     return video_ids
@@ -193,8 +196,7 @@ def signup(user):
     if not data or len(data) == 0:
         query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
                 "VALUES ('{0}','{1}','{2}','{3}','{4}')"
-        query = query.format(user['email'], user['username'], user['password'], user['firstName']
-                             , user['lastName'])
+        query = query.format(user['email'], user['username'], user['password'], user['firstName'], user['lastName'])
         cursor.execute(query)
         cnxn.commit()
         return True
