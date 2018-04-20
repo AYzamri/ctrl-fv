@@ -1,15 +1,27 @@
 <div class="view">
+    <style>
+        .container {
+            width: 40%;
+        }
+    </style>
     <div class="section-title text-center">
         <h3>Login</h3>
     </div>
-    <form name="login" ng-submit="ctrl.login()">
-        <p>E-mail:</p>
-        <input class="form-control" type="email" ng-model="ctrl.email" required>
-        <p>Password:</p>
-        <input class="form-control" type="password" ng-model="ctrl.password" required>
-        <br>
-        <br>
-        <input type="submit" value="Login" class="btn"/>
-    </form>
+    <div class="container">
+        <form name="login" ng-submit="ctrl.login()">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                <input class="form-control" type="email" ng-model="ctrl.email" required>
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input class="form-control" type="password" ng-model="ctrl.password" required>
+            </div>
+            <br>
+            <input type="submit" value="Login" class="btn btn-success"/>
+        </form>
 
+
+    </div>
 </div>

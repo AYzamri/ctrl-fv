@@ -24,14 +24,18 @@
     <div class="section-title text-center">
         <h3>Watch video</h3>
     </div>
-    <div>
+    <div class="container">
         <form ng-if="ctrl.indexLoaded"
               ng-submit="ctrl.searchInVid()">
-            <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
-            <input class="btn" type="submit" id="submit" value="Search "/>
+            <div class="input-group input-group-lg">
+                 <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
+                 <div class="input-group-btn">
+                <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                 </div>
+            </div>
         </form>
+            </div>
         <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
-    </div>
     <uib-progress ng-if="ctrl.indexLoaded"
                   max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
@@ -40,16 +44,8 @@
                     value="1"></uib-bar>
             </span>
     </uib-progress>
-    <div style="height:45%">
-        <video id="currentVideo" controls
-               style="margin-left: auto;margin-right: auto; display: block ; height: auto; width:40%">
-            <source ng-src="[[ctrl.currentVideoPath]]">
-        </video>
-    </div>
-
-
-    <div class="container">
-        <table class="table table-hover table-condensed ">
+        <div class="container" style = "width:45%; float:right">
+        <table class="table table-hover table-condensed" >
             <thead>
             <tr>
                 <th>Time</th>
@@ -69,4 +65,13 @@
             </tbody>
         </table>
     </div>
+    <div style="height:45%">
+        <video id="currentVideo" controls
+               style="margin-right: 50%; display: block ; height: auto; width:50%">
+            <source ng-src="[[ctrl.currentVideoPath]]">
+        </video>
+    </div>
+
+
+
 </div>

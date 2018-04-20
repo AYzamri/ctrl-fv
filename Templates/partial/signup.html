@@ -1,29 +1,51 @@
 <div class="view">
     <div class="section-title text-center">
+
         <h3>Sign Up</h3>
     </div>
-    <form name="signUpForm" ng-submit="ctrl.signup()">
-        <p>E-mail:</p>
-        <input class="form-control" name="email" ng-model="ctrl.user.email" type="email" required>
-        <span style="color:red" ng-show="signUpForm.email.$dirty && signUpForm.email.$invalid">
-    <span ng-show="signUpForm.email.$error.required">Email is required.</span>
+    <style>
+        .container {
+            width: 40%;
+        }
+    </style>
+    <div class="container">
+        <form name="signUpForm" ng-submit="ctrl.signup()">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                <input class="form-control" name="email" ng-model="ctrl.user.email" type="email" placeholder="E-Mail" required>
+                <span style="color:red" ng-show="signUpForm.email.$dirty && signUpForm.email.$invalid">
+            <br>
+                <span ng-show="signUpForm.email.$error.required">Email is required.</span>
     <span ng-show="signUpForm.email.$error.email">Invalid email address.</span>
     </span>
-        <p>Password:</p>
-        <input class="form-control" type="password" name="password" ng-model="ctrl.user.password" required>
-        <span style="color:red" ng-show="signUpForm.password.$dirty && signUpForm.password.$invalid">
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input class="form-control" type="password" name="password" placeholder="Password" ng-model="ctrl.user.password" required>
+                <span style="color:red" ng-show="signUpForm.password.$dirty && signUpForm.password.$invalid">
     <span ng-show="signUpForm.password.$error.required">Password is required.</span>
     </span>
-        <p>User name:</p>
-        <input class="form-control" type="text" name="username" ng-model="ctrl.user.username" required>
-        <span style="color:red" ng-show="signUpForm.username.$dirty && signUpForm.username.$invalid">
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input class="form-control" type="text" name="username" ng-model="ctrl.user.username" required>
+                <span style="color:red" ng-show="signUpForm.username.$dirty && signUpForm.username.$invalid">
     <span ng-show="signUpForm.username.$error.required">Username is required.</span>
     </span>
-        <p>First name:</p>
-        <input class="form-control" type="text" ng-model="ctrl.user.firstName">
-        <p>Last name:</p>
-        <input class="form-control" type="text" ng-model="ctrl.user.lastName">
-        <br><br>
-        <input class="btn" type="submit" value="Sign up"/>
-    </form>
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <input class="form-control" type="text" ng-model="ctrl.user.firstName" placeholder="First Name">
+            </div>
+            <br>
+            <div class="input-group input-group-lg">
+                <input class="form-control" type="text" ng-model="ctrl.user.lastName" placeholder="Last Name">
+            </div>
+            <br><br>
+            <input class="btn btn-success btn-lg" type="submit" value="Sign up"/>
+        </form>
+    </div>
+
 </div>
