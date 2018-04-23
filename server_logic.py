@@ -175,11 +175,11 @@ def create_update_whoosh_index(video_id):
 def update_video_keywords(video_id, keywords):
     keywords_str = ", ".join([kw_tuple[0] for kw_tuple in keywords])
     sql_command = "UPDATE VideosMetaData " \
-                  "SET keywords = '{0}' " \
-                  "WHERE vid_id = '{1}'".format(keywords_str, video_id)
+                  "SET keywords = ? " \
+                  "WHERE vid_id = ?"
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
-    cursor.execute(sql_command)
+    cursor.execute(sql_command, (keywords_str, video_id))
     cnxn.commit()
 
 
