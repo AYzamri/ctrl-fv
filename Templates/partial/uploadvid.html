@@ -4,8 +4,8 @@
             width: 40%;
         }
     </style>
-    <div class="section-title text-center">
-        <h3>Upload Video</h3>
+    <div class="pageHeader text-center">
+        <h1>Upload Video</h1>
     </div>
     <div class="container">
         <form id="uploadform" name="uploadform" ng-submit="ctrl.doUpload()">
@@ -29,7 +29,7 @@
                 [[showMessage]]
             </div>
             <br>
-            <input class="btn btn-success btn-lg" type="submit" value="Upload"></input>
+            <input class="btn btn-success btn-lg" type="submit" value="Upload" ng-disabled="ctrl.isUploading"></input>
         </form>
     </div>
 

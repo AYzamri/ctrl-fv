@@ -12,7 +12,9 @@ app.config(['$locationProvider', function ($locationProvider) {
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when("/", {
-        templateUrl: "../partial/home.html"
+        templateUrl: "../partial/home.html",
+        controller: "searchVidCtrl",
+        controllerAs: "ctrl"
     });
     $routeProvider.when("/upload", {
         templateUrl: "../partial/uploadvid.html",
@@ -22,11 +24,6 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when("/watch/:vidId", {
         templateUrl: "../partial/watchvid.html",
         controller: "watchVidCtrl",
-        controllerAs: "ctrl"
-    });
-    $routeProvider.when("/search", {
-        templateUrl: "../partial/searchvid.html",
-        controller: "searchVidCtrl",
         controllerAs: "ctrl"
     });
     $routeProvider.when("/login", {

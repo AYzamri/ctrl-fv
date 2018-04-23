@@ -12,6 +12,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         ctrl.vidId = $routeParams.vidId;
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
+        ctrl.showRealTimeProgress = false;
         ctrl.updateInvertedIndex_Recursive();
     };
 
@@ -33,25 +34,36 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             if (window.location.href.includes(ctrl.vidId) && (
                 !('totalSegments' in ctrl.progress) ||
                 !('analyzedSegments' in ctrl.progress) ||
-                ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length))
-                return setTimeout(ctrl.updateInvertedIndex_Recursive, 1000)
+                ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length)){
+                    ctrl.showRealTimeProgress = true;
+                    return setTimeout(ctrl.updateInvertedIndex_Recursive, 1000)
+                }
+                else{
+                ctrl.showRealTimeProgress = false;
+                }
+
         }).catch(function (err) {
             window.alert('Error importing inverted index');
         });
     };
 
     ctrl.searchVal = "";
-    ctrl.search_results = [];
-
+    ctrl.searchValCurrentTerm = "";
+    ctrl.search_results = null;
     ctrl.jump = function (time) {
         var video = document.getElementById("currentVideo");
         video.currentTime = Math.max(time - 2, 0);
     };
     ctrl.searchInVid = function () {
-        if (!ctrl.invertedIndex[ctrl.searchVal])
-            ctrl.search_results = {};
-        else
+        if (!ctrl.invertedIndex[ctrl.searchVal]){
+              ctrl.search_results = null;
+            ctrl.searchValCurrentTerm = "";
+        }
+        else{
             ctrl.search_results = ctrl.invertedIndex[ctrl.searchVal];
+            ctrl.searchValCurrentTerm = ctrl.searchVal;
+        }
+
     };
 
 }]);

@@ -12,7 +12,7 @@ Date.prototype.idFormat = function () {
     ].join('') + '_' + this.getHours() + this.getMinutes();
 };
 
-app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'userService', function ($http, $scope, $interval, upload, userService) {
+app.controller('uploadVidCtrl', ['$http', '$scope', '$interval','$location', 'upload', 'userService', function ($http, $scope, $interval, $location, upload, userService) {
     var ctrl = this;
     ctrl.isUploading = false;
     ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
@@ -102,6 +102,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', 'upload', 'user
                 $http.post(ctrl.serverUrl, req_body).then(function () {
                     ctrl.isUploading = false;
                     window.alert('Finished Upload!');
+                    $location.url('/watch/'+videoID);
                 }, function (reason) {
                     window.alert(reason);
                 });

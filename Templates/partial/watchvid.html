@@ -21,10 +21,10 @@
             background-color: transparent;
         }
     </style>
-    <div class="section-title text-center">
-        <h3>Watch video</h3>
+    <div class="pageHeader text-center">
+        <h1>Watch Video</h1>
     </div>
-    <div class="container">
+    <div class="container" style="margin-left:65%; width:35%">
         <form ng-if="ctrl.indexLoaded"
               ng-submit="ctrl.searchInVid()">
             <div class="input-group input-group-lg">
@@ -36,7 +36,8 @@
         </form>
             </div>
         <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
-    <uib-progress ng-if="ctrl.indexLoaded"
+    <div ng-show="ctrl.showRealTimeProgress">
+           <uib-progress ng-if="ctrl.indexLoaded"
                   max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
             <uib-bar
@@ -44,21 +45,23 @@
                     value="1"></uib-bar>
             </span>
     </uib-progress>
-        <div class="container" style = "width:45%; float:right">
+    </div>
+
+        <div class="container" style = "width:40%; float:right" ng-show="ctrl.search_results ">
         <table class="table table-hover table-condensed" >
             <thead>
             <tr>
-                <th>Time</th>
+                <th style="width:20%">Time</th>
                 <th>Sentence</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="(time,paragraph) in ctrl.search_results track by $index
 " ng-click="ctrl.jump(time)">
-                <td>[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
+                <td style="width:20%">[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
                 <td>
                     <span ng-repeat="word in paragraph.split(' ') track by $index"
-                          md-highlight-text="[[' '+ctrl.searchVal+' ' ]]"
+                          md-highlight-text="[[' '+ctrl.searchValCurrentTerm+' ' ]]"
                           md-highlight-flags="gi"> [[' '+ word.split('.').join("")+ ' ']]</span>
                 </td>
             </tr>
@@ -67,7 +70,7 @@
     </div>
     <div style="height:45%">
         <video id="currentVideo" controls
-               style="margin-right: 50%; display: block ; height: auto; width:50%">
+               style="margin-right: 60%; display: block ; height: auto; width:60%">
             <source ng-src="[[ctrl.currentVideoPath]]">
         </video>
     </div>

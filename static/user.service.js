@@ -1,7 +1,7 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.factory('userService', ['$http', 'localStorageService', function ($http, localStorageService) {
+app.factory('userService', ['$http','$location' ,'localStorageService', function ($http, $location,  localStorageService) {
     var service = {};
     service.User = {username: 'Guest'};
     service.model = {};
@@ -39,6 +39,7 @@ app.factory('userService', ['$http', 'localStorageService', function ($http, loc
         deleteDataFromLocalStorage();
         service.User = {username: 'Guest'};
         service.model.loggedIn = false;
+        $location.path('/')
     };
 
     var registerDataToLocalStorage = function () {
