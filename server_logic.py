@@ -161,7 +161,7 @@ def create_update_whoosh_index(video_id):
     else:
         index = open_dir(corpus_index_dir)
     index_writer = index.writer()
-    # index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
+    index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
     index_writer.commit()
 
     # Extract video keywords
