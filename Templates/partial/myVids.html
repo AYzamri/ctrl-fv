@@ -2,25 +2,32 @@
     <div class="section-title text-center">
         <h3> Videos uploaded by [[ctrl.Service.User.username]]</h3>
     </div>
-    <table class="table table-hover table-condensed ">
-        <thead>
-        <tr>
-            <th>Video Name</th>
-            <th>Description</th>
-            <th>Duration</th>
-            <th>Watch</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="vid in ctrl.getVideos()">
-            <td>[[vid.title]]</td>
-            <td>[[vid.description]]</td>
-            <td>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</td>
-            <td>
-                <a ng-href="#/watch/[[vid.vid_id]]">
-                    <h5>watch</h5></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <!--<table class="table table-hover table-condensed ">-->
+        <!--<thead>-->
+        <!--<tr>-->
+            <!--<th>Video Name</th>-->
+            <!--<th>Description</th>-->
+            <!--<th>Duration</th>-->
+            <!--<th>Watch</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr ng-repeat="vid in ctrl.getVideos()">-->
+            <!--<td>[[vid.title]]</td>-->
+            <!--<td>[[vid.description]]</td>-->
+            <!--<td>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</td>-->
+            <!--<td>-->
+                <!--<a ng-href="#/watch/[[vid.vid_id]]">-->
+                    <!--<h5>watch</h5></a>-->
+            <!--</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+    <!--</table>-->
+       <div class="container" ng-repeat="vid in ctrl.getVideos()">
+           <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><h2><strong>[[vid.title]]</strong> <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small></h2></a> <br/>
+        <p>[[vid.description]]</p>
+
+
+
+    </div>
 </div>
