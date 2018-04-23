@@ -4,6 +4,7 @@ import pyodbc
 import datetime
 import urllib.parse
 from base64 import b64encode
+from rake_nltk import Rake
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
@@ -27,7 +28,7 @@ def get_sql_cnxn():
     server_password = 'testTest1'
     driver = '{ODBC Driver 13 for SQL Server}'
     cnxn = pyodbc.connect(
-        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';PORT=1443;DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
+        'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
     return cnxn
 
 
@@ -112,10 +113,7 @@ def get_video_ids_by_term(search_term):
     query_object = Or([and_query_object, or_query_object])
     with index.searcher(weighting=scoring.TF_IDF()) as searcher:
         results = searcher.search(query_object, limit=None)
-        keywords = results.key_terms("content")
         suggestion = searcher.correct_query(query_object, search_term).string
-        # for result in results:
-        #     print("Title:", result.fields()["title"])
         video_ids = [result.fields()["title"] for result in results]
     # endregion
 
@@ -135,9 +133,13 @@ def get_video_info_by_vid_ids(vid_ids):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     list_vid_ids = list(vid_ids)
-    ids_as_string = ','.join('\'{0}\''.format(id) for id in list_vid_ids)
-    query = "SELECT * FROM {0} WHERE vid_id in ({1})"
-    query = query.format('VideosMetaData', ids_as_string)
+    vid_ids_in_clause = ', '.join('\'{0}\''.format(id) for id in list_vid_ids)
+    vid_ids_order_by_clause = ', '.join('{0}'.format(id) for id in list_vid_ids)
+    query = "SELECT * " \
+            "FROM {0} " \
+            "WHERE vid_id in ({1}) " \
+            "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{2}')"
+    query = query.format('VideosMetaData', vid_ids_in_clause, vid_ids_order_by_clause)
     cursor.execute(query)
     columns = [column[0] for column in cursor.description]
     data = cursor.fetchall()
@@ -155,20 +157,39 @@ def create_update_whoosh_index(video_id):
     if not os.path.exists(corpus_index_dir):
         os.mkdir(corpus_index_dir)
         schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
-        # TODO: stored=True for "content" because (http://whoosh.readthedocs.io/en/latest/keywords.html). Reduces performance, really needed?
         index = create_in(corpus_index_dir, schema)
     else:
         index = open_dir(corpus_index_dir)
     index_writer = index.writer()
-    index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
+    # index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
     index_writer.commit()
+
+    # Extract video keywords
+    n = 5
+    rake = Rake()
+    rake.extract_keywords_from_text(video_content)
+    top_n_keywords_list = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
+    update_video_keywords(video_id_no_txt_extension, top_n_keywords_list)
+
+
+def update_video_keywords(video_id, keywords):
+    keywords_str = ", ".join([kw_tuple[0] for kw_tuple in keywords])
+    sql_command = "UPDATE VideosMetaData " \
+                  "SET keywords = '{0}' " \
+                  "WHERE vid_id = '{1}'".format(keywords_str, video_id)
+    cnxn = get_sql_cnxn()
+    cursor = cnxn.cursor()
+    cursor.execute(sql_command)
+    cnxn.commit()
 
 
 def login(email, password):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     table = 'Users'
-    query = "SELECT * FROM {0} WHERE email = '{1}' AND password = '{2}'"
+    query = "SELECT * " \
+            "FROM {0} " \
+            "WHERE email = '{1}' AND password = '{2}'"
     query = query.format(table, email, password)
     cursor.execute(query)
     user_columns = [column[0] for column in cursor.description]
@@ -176,7 +197,9 @@ def login(email, password):
     if not user_data:
         return None
     user = dict(zip(user_columns, user_data))
-    query = "SELECT * FROM VideosMetaData WHERE userID = '{0}'"
+    query = "SELECT * " \
+            "FROM VideosMetaData " \
+            "WHERE userID = '{0}'"
     query = query.format(email)
     cursor = cnxn.cursor()
     cursor.execute(query)
