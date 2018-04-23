@@ -6,7 +6,7 @@ import urllib.parse
 from base64 import b64encode
 from whoosh import scoring
 from whoosh import qparser
-from whoosh.qparser import QueryParser
+from whoosh.query import Or
 from whoosh.fields import Schema, TEXT
 from whoosh.index import create_in, open_dir
 from whoosh.analysis import StemmingAnalyzer
@@ -107,11 +107,13 @@ def get_videos_by_term(search_term):
 def get_video_ids_by_term(search_term):
     # region Whoosh search
     index = open_dir(corpus_index_dir)
+    or_query_object = qparser.QueryParser("content", index.schema, group=qparser.OrGroup).parse(search_term)
+    and_query_object = qparser.QueryParser("content", index.schema, group=qparser.AndGroup).parse(search_term)
+    query_object = Or([and_query_object, or_query_object])
     with index.searcher(weighting=scoring.TF_IDF()) as searcher:
-        query_object = QueryParser("content", index.schema, group=qparser.OrGroup).parse(search_term)
         results = searcher.search(query_object, limit=None)
-        # keywords = results.key_terms("content")
-        # suggestion = searcher.correct_query(query_object, search_term).string
+        keywords = results.key_terms("content")
+        suggestion = searcher.correct_query(query_object, search_term).string
         # for result in results:
         #     print("Title:", result.fields()["title"])
         video_ids = [result.fields()["title"] for result in results]
