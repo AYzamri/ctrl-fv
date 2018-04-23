@@ -1,3 +1,4 @@
+rake-nltk
 azure==2.0.0
 Flask==0.12.1
 pyodbc
