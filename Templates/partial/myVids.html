@@ -3,6 +3,7 @@
         <h1 class="pageHeader"> Videos Uploaded by [[ctrl.Service.User.username]]</h1>
     </div>
        <div class="container" ng-repeat="vid in ctrl.getVideos()">
+           <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]" /></a>
            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><h3><strong>[[vid.title]]</strong> <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small></h3></a>
         <p>[[vid.description]]</p>
     </div>

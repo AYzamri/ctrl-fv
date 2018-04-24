@@ -1,6 +1,15 @@
       @font-face { font-family: Dinova; font-weight: bold; src: url('DINOBL.TTF'); }
       pageHeader {
-         font-family: dinova;
+         font-family: Dinova;
          font-weight: bold;
          color: #ff4d01;
+      }
+      .thumbnail {
+    float: left;
+    height: 15%;
+    margin-right: 2%;
+    border-radius: 3px;
+    border: 2px solid #021a40;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+    background-color: white;
       }
