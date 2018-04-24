@@ -18,6 +18,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval','$location', 'up
     ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
     ctrl.serverUrl = server + '/videoData';
     ctrl.videoDescription= "";
+    ctrl.progress = 0;
     $scope.validateVidFile = function (element) {
         $scope.$apply($scope.validateFile(".mp4", element));
     };
@@ -60,7 +61,9 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval','$location', 'up
 
         video.src = URL.createObjectURL(file);
     };
-
+//    $interval(function () {
+//                    ctrl.progress = ctrl.progress+1;
+//            }, 200);
     ctrl.doUpload = function () {
         ctrl.progress = 0;
 
@@ -74,7 +77,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval','$location', 'up
                 }
                 else
                     $interval.cancel();
-            }, 3000);
+            }, 200);
         }
 
         // If one file has been selected in the HTML file input element

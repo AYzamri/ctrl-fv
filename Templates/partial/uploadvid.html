@@ -29,12 +29,20 @@
                 [[showMessage]]
             </div>
             <br>
-            <input class="btn btn-success btn-lg" type="submit" value="Upload" ng-disabled="ctrl.isUploading"></input>
+            <input class="btn btn-success btn-lg" type="submit" value="Upload" ng-disabled="ctrl.isUploading" style="margin-left:35%"></input>
         </form>
     </div>
+    <div ng-show="ctrl.isUploading">
+        <img   src="../../static/uploading.gif" style="margin-left: 45%; height: 10%;">
+        <div class="progress" style="width:50%;margin-left:25% ">
+            <div  class="progress-bar progress-bar-striped active" role="progressbar"
+                  aria-valuenow="[[ctrl.progress]]" aria-valuemin="0" aria-valuemax="100" style="width:[[ctrl.progress]]%">
+                [[ctrl.progress]]%
+            </div>
 
-    <h4 ng-if="ctrl.isUploading">Uploading [[ctrl.videoName]]</h4>
-    <div ng-if="ctrl.isUploading" layout="row" layout-sm="column" layout-align="space-around">
-        <md-progress-linear md-mode="determinate" value="[[ctrl.progress]]"></md-progress-linear>
+        </div>
+
     </div>
+
+
 </div>
