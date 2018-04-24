@@ -17,7 +17,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval','$location', 'up
     ctrl.isUploading = false;
     ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
     ctrl.serverUrl = server + '/videoData';
-
+    ctrl.videoDescription= "";
     $scope.validateVidFile = function (element) {
         $scope.$apply($scope.validateFile(".mp4", element));
     };
