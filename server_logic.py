@@ -105,15 +105,27 @@ def get_videos_by_term(search_term):
     return video_info
 
 
-def get_video_ids_by_term(search_term):
+def get_video_ids_by_term(query):
     # region Whoosh search
+    levenshtein_distance = 2
     index = open_dir(corpus_index_dir)
-    or_query_object = qparser.QueryParser("content", index.schema, group=qparser.OrGroup).parse(search_term)
-    and_query_object = qparser.QueryParser("content", index.schema, group=qparser.AndGroup).parse(search_term)
-    query_object = Or([and_query_object, or_query_object])
+
+    query_terms = query.split(" ")
+    fuzzy_query_terms = ["{0}~{1}".format(qt, levenshtein_distance) for qt in query_terms]
+    fuzzy_query_terms = " ".join(fuzzy_query_terms)
+
+    fuzzy_or_query_parser = qparser.QueryParser("content", index.schema, group=qparser.OrGroup)
+    fuzzy_or_query_parser.add_plugin(qparser.FuzzyTermPlugin())
+    fuzzy_parsed_or_query = fuzzy_or_query_parser.parse(fuzzy_query_terms)
+
+    fuzzy_and_query_parser = qparser.QueryParser("content", index.schema, group=qparser.AndGroup)
+    fuzzy_and_query_parser.add_plugin(qparser.FuzzyTermPlugin())
+    fuzzy_parsed_and_query = fuzzy_and_query_parser.parse(fuzzy_query_terms)
+
+    fuzzy_query_parser = Or([fuzzy_parsed_or_query, fuzzy_parsed_and_query])
+
     with index.searcher(weighting=scoring.TF_IDF()) as searcher:
-        results = searcher.search(query_object, limit=None)
-        suggestion = searcher.correct_query(query_object, search_term).string
+        results = searcher.search(fuzzy_query_parser, limit=None)
         video_ids = [result.fields()["title"] for result in results]
     # endregion
 
@@ -168,8 +180,8 @@ def create_update_whoosh_index(video_id):
     n = 5
     rake = Rake()
     rake.extract_keywords_from_text(video_content)
-    top_n_keywords_list = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
-    update_video_keywords(video_id_no_txt_extension, top_n_keywords_list)
+    top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
+    update_video_keywords(video_id_no_txt_extension, top_n_keywords)
 
 
 def update_video_keywords(video_id, keywords):
