@@ -105,6 +105,7 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, use
     cnxn.commit()
 
 
+# region Search For Video
 def get_videos_by_term(search_term):
     vid_ids = get_video_ids_by_term(search_term.lower())
     if len(vid_ids) == 0:
@@ -168,6 +169,8 @@ def get_video_info_by_vid_ids(vid_ids):
     results = [dict(zip(columns, row)) for row in data]
     return results
 
+
+# endregion
 
 def create_update_whoosh_index(video_id):
     container_name = "corpus-container"
