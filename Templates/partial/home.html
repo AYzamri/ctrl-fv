@@ -22,9 +22,9 @@
 
 
     <div class="container">
-        <h5 ng-if="ctrl.searchFinished && ctrl.vid_search_results.length > 0">Found
+        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
             [[ctrl.vid_search_results.length]] relevant videos</h5>
-        <h5 ng-if="ctrl.searchFinished && ctrl.vid_search_results.length === 0">No relevant video was found</h5>
+        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No relevant video was found</h5>
     </div>
     <div class="container" ng-repeat="vid in ctrl.vid_search_results">
         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"

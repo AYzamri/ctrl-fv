@@ -18,7 +18,11 @@ app.controller('searchVidCtrl', ['$http', '$scope', function ($http, $scope) {
     ctrl.getVideoThumbNail = function (video_id) {
         var img_id = video_id.replace(".mp4", ".png");
         return "https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id
-    }
+    };
+    ctrl.getNumberOfResults = function () {
+      return Object.keys(ctrl.vid_search_results).length;
+    };
+
 
     // func app trigger
     // ctrl.searchForVid = function ()
