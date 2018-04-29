@@ -100,7 +100,9 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                     if (error)
                     {
                         var alert = $mdDialog.alert().clickOutsideToClose(false).title('Error while uploading').textContent('An error has occurred while uploading video. The error: ' + error).ariaLabel('Error uploading').ok('OK');
-                        $mdDialog.show(alert);
+                        $mdDialog.show(alert).then(function () {
+                            location.reload();
+                        });
                     }
                     else
                         $http.post(ctrl.serverUrl, req_body).then(function () {
