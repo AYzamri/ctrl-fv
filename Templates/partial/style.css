@@ -1,11 +1,11 @@
-@font-face {
-    font-family: Dinova;
-    font-weight: bold;
-    src: url('DINOBL.TTF');
-}
+/*@font-face {*/
+/*font-family: Dinova;*/
+/*font-weight: bold;*/
+/*src: url('DINOBL.TTF');*/
+/*}*/
 
 .pageHeader {
-    font-family: Dinova;
+    /*font-family: Dinova;*/
     font-weight: bold;
     color: #ff4d01;
 }

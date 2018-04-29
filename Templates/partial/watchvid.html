@@ -30,7 +30,8 @@
             <div class="input-group input-group-lg">
                 <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
                 <div class="input-group-btn">
-                    <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i>
+                    </button>
                 </div>
             </div>
         </form>
@@ -47,8 +48,10 @@
         </uib-progress>
     </div>
 
-    <div class="container" style="width:40%; float:right" ng-show="ctrl.search_results ">
-        <table class="table table-hover table-condensed">
+    <div class="container" style="width:40%; float:right">
+        <h4 ng-if="ctrl.search_results && ctrl.numberOfResults() === 0 ">Found no results </h4>
+        <table class="table table-hover table-condensed"
+               ng-if="ctrl.search_results &&  ctrl.numberOfResults() > 0 ">
             <thead>
             <tr>
                 <th style="width:20%">Time</th>
