@@ -21,6 +21,7 @@ table_service = TableService(account_name=storage_acc_name, account_key=storage_
 corpus_index_dir = "CorpusIndex"
 
 
+# region Helper Functions
 def get_sql_cnxn():
     server = 'cfvtest.database.windows.net'
     database = 'cfvtest'
@@ -50,6 +51,10 @@ def enqueue_message(q_name, message):
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
     queue_service.put_message(q_name, message)
 
+
+# endregion
+
+# region Video Inverted Index & Progress
 
 def get_inverted_index(vid_id):
     terms = table_service.query_entities(table_name='VideosInvertedIndexes',
@@ -85,6 +90,9 @@ def get_inverted_index_json(vid_id):
     json_text = json.dumps(data)
     parsed = urllib.parse.unquote(json_text)
     return parsed
+
+
+# endregion
 
 
 def upload_vid_meta_data(blob_name, video_name, video_description, duration, user_id='none'):
@@ -180,7 +188,8 @@ def create_update_whoosh_index(video_id):
     n = 5
     rake = Rake()
     rake.extract_keywords_from_text(video_content)
-    top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
+    top_n_keywords = rake.get_word_frequency_distribution().most_common(
+        n)  # list of tuples (word, count) ordered by 'count' desc
     update_video_keywords(video_id_no_txt_extension, top_n_keywords)
 
 
@@ -195,6 +204,7 @@ def update_video_keywords(video_id, keywords):
     cnxn.commit()
 
 
+# region User Functions
 def login(email, password):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
@@ -240,3 +250,4 @@ def signup(user):
     else:
         return False
         # raise ValueError('The email is allready in use!')
+# endregion
