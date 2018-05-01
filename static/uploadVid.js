@@ -132,7 +132,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                                 controllerAs: "ctrl",
                                 clickOutsideToClose: false,
                                 bindToController: true,
-                                locals: {error: reason}
+                                locals: {error: reason.data}
                             }).then(function () {
                                 location.reload();
                             });
