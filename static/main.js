@@ -9,6 +9,10 @@ app.config(['$interpolateProvider', function ($interpolateProvider) {
 app.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.hashPrefix('');
 }]);
+app.config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('red').primaryPalette('red');
+    $mdThemingProvider.theme('blue').primaryPalette('blue');
+});
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when("/", {
