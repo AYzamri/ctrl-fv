@@ -10,6 +10,7 @@ app.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.hashPrefix('');
 }]);
 app.config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('default').primaryPalette('blue-grey');
     $mdThemingProvider.theme('red').primaryPalette('red');
     $mdThemingProvider.theme('blue').primaryPalette('blue');
 });
