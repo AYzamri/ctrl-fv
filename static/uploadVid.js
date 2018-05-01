@@ -20,9 +20,11 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
         ctrl.serverUrl = server + '/videoData';
         ctrl.videoDescription = "";
         ctrl.progress = 0;
+
         $scope.validateVidFile = function (element) {
             $scope.$apply($scope.validateFile(".mp4", element));
         };
+
         $scope.validateFile = function (fileExtension, element) {
             $scope.theFile = element.files[0];
             var FileMessage = '';
@@ -62,6 +64,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
 
             video.src = URL.createObjectURL(file);
         };
+
         ctrl.doUpload = function () {
             ctrl.progress = 0;
 
@@ -99,27 +102,100 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
             var speedSummary = blobService.createBlockBlobFromBrowserFile('videoscontainer', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
                     if (error)
                     {
-                        var alert = $mdDialog.alert().clickOutsideToClose(false).title('Error while uploading').textContent('An error has occurred while uploading video. The error: ' + error).ariaLabel('Error uploading').ok('OK');
-                        $mdDialog.show(alert).then(function () {
+                        $mdDialog.show({
+                            template: alertDialogTemplate,
+                            controller: DialogController,
+                            controllerAs: "ctrl",
+                            clickOutsideToClose: false,
+                            bindToController: true,
+                            locals: {error: error}
+                        }).then(function () {
                             location.reload();
                         });
                     }
                     else
                         $http.post(ctrl.serverUrl, req_body).then(function () {
                             ctrl.isUploading = false;
-                            var confirm = $mdDialog.confirm().title('Finished Uploading Video').textContent('You can now watch your video and in a few moments you will be able to search inside it').ariaLabel('Finished Uploading').ok('Go to video');
-
-                            $mdDialog.show(confirm).then(function () {
+                            $mdDialog.show({
+                                template: successDialogTemplate,
+                                controller: DialogController,
+                                controllerAs: "ctrl",
+                                clickOutsideToClose: false,
+                                bindToController: true
+                            }).then(function () {
                                 $location.url('/watch/' + videoID)
-                            }, function () {
                             });
                         }, function (reason) {
-                            window.alert(reason);
+                            $mdDialog.show({
+                                template: alertDialogTemplate,
+                                controller: DialogController,
+                                controllerAs: "ctrl",
+                                clickOutsideToClose: false,
+                                bindToController: true,
+                                locals: {error: reason}
+                            }).then(function () {
+                                location.reload();
+                            });
                         });
                 }
             );
             refreshProgress();
-        }
-        ;
-    }])
-;
+        };
+    }]);
+
+//region Dialogs region
+function DialogController($scope, $mdDialog)
+{
+    $scope.hide = function () {
+        $mdDialog.hide();
+    };
+}
+
+var successDialogTemplate = "<md-dialog aria-label=\"Upload Finished\">\n" +
+    "  <form ng-cloak>\n" +
+    "    <md-toolbar md-theme='blue'>\n" +
+    "      <div class=\"md-toolbar-tools\">\n" +
+    "        <h2>Finished Uploading Video</h2>\n" +
+    "      </div>\n" +
+    "    </md-toolbar>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "      <div class=\"md-dialog-content\">\n" +
+    "        <h4>\n" +
+    "          You can now watch your video and in a few moments you will be able to search inside it" +
+    "        </h4>\n" +
+    "      </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "    <md-dialog-actions layout=\"row\">\n" +
+    "      <md-button ng-click=\"hide()\">\n" +
+    "        Go To Video\n" +
+    "      </md-button>\n" +
+    "    </md-dialog-actions>\n" +
+    "  </form>\n" +
+    "</md-dialog>";
+
+var alertDialogTemplate = "<md-dialog aria-label=\"Upload Failed\">\n" +
+    "  <form ng-cloak>\n" +
+    "    <md-toolbar md-theme='red'>\n" +
+    "      <div class=\"md-toolbar-tools\">\n" +
+    "        <h2>Error while uploading</h2>\n" +
+    "      </div>\n" +
+    "    </md-toolbar>\n" +
+    "\n" +
+    "    <md-dialog-content>\n" +
+    "      <div class=\"md-dialog-content\">\n" +
+    "        <h4>\n" +
+    "          An error has occurred while uploading video. The error: [[ctrl.error]]\n" +
+    "        </h4>\n" +
+    "      </div>\n" +
+    "    </md-dialog-content>\n" +
+    "\n" +
+    "    <md-dialog-actions layout=\"row\">\n" +
+    "      <md-button ng-click=\"hide()\">\n" +
+    "        OK\n" +
+    "      </md-button>\n" +
+    "    </md-dialog-actions>\n" +
+    "  </form>\n" +
+    "</md-dialog>";
+// endregion
