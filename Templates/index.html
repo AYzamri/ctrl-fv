@@ -140,9 +140,10 @@
                 <md-menu-content width="4">
                     <md-menu-item>
                         <div layout="row" flex>
-                            <p flex>Welcome, [[ctrl.userService.User.username]]</p>
+                            <p flex style="font-weight:bold">Welcome, [[ctrl.userService.User.username]]</p>
                         </div>
                     </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
                     <md-menu-item>
                         <md-button ng-click="" href="#myVids">
                             <div layout="row" flex>
@@ -150,7 +151,6 @@
                             </div>
                         </md-button>
                     </md-menu-item>
-                    <md-menu-divider></md-menu-divider>
                     <md-menu-item>
                         <md-button ng-click="ctrl.logout()">
                             <div layout="row" flex>
