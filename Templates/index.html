@@ -111,7 +111,7 @@
                 <img src="../../static/upload.png" style=" height:35px;">
             </md-button>
             <md-menu ng-if="!ctrl.userService.model.loggedIn" md-position-mode="target-right bottom">
-                <md-button class=" md-no-focus md-primary" aria-label="User" ng-click="$mdMenu.open($event)">
+                <md-button class=" md-no-focus md-primary" style="min-width: 1%" aria-label="User" ng-click="$mdMenu.open($event)">
                     <md-tooltip md-direction="bottom">User Actions</md-tooltip>
                     <img src="../../static/unkownUser.png" style=" height:35px;">
                 </md-button>
@@ -133,7 +133,7 @@
                 </md-menu-content>
             </md-menu>
             <md-menu ng-if="ctrl.userService.model.loggedIn" md-position-mode="target-right bottom">
-                <md-button class=" md-no-focus md-primary" aria-label="User" ng-click="$mdMenu.open($event)">
+                <md-button class=" md-no-focus md-primary" style="min-width: 1%" aria-label="User" ng-click="$mdMenu.open($event)">
                     <md-tooltip md-direction="bottom">User Actions</md-tooltip>
                     <img src="../../static/user.png" style=" height:35px;">
                 </md-button>
