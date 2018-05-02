@@ -16,7 +16,16 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
         ctrl.showRealTimeProgress = false;
+        ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
+    };
+
+    ctrl.getVideoData = function () {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
+            ctrl.videoData = res.data;
+        }, function (reason) {
+            window.alert('Failed retrieving video data');
+        });
     };
 
     ctrl.updateInvertedIndex_Recursive = function () {
@@ -28,6 +37,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
 
             if ('totalSegments' in ctrl.progress && !('range' in ctrl))
             {
+                // Update video details to get the confidence
+                ctrl.getVideoData();
                 ctrl.range = [];
                 // I honestly couldn't find a better way to calculate range
                 for (var i = 0; i < ctrl.progress.totalSegments; i++)
