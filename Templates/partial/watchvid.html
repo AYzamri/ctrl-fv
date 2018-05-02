@@ -24,9 +24,8 @@
     <div class="pageHeader text-center">
         <h1>[[ctrl.videoData.title]]</h1>
     </div>
-    <div class="container" style="margin-left:65%; width:35%">
-        <form ng-if="ctrl.indexLoaded"
-              ng-submit="ctrl.searchInVid()">
+    <div class="container" ng-if="ctrl.indexLoaded" style="margin-left:65%; width:35%">
+        <form ng-submit="ctrl.searchInVid()">
             <div class="input-group input-group-lg">
                 <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
                 <div class="input-group-btn">
@@ -35,6 +34,8 @@
                 </div>
             </div>
         </form>
+        <h5 class="text-center" ng-if="ctrl.videoData.confidence">Transcript confidence:
+            [[ctrl.videoData.confidence*100|number:2]]%</h5>
     </div>
     <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
     <div ng-show="ctrl.showRealTimeProgress">

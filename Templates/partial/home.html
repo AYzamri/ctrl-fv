@@ -30,11 +30,10 @@
         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"
                                                                                ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]"/></a>
         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
-            <h3 style="margin-top: 0"><strong>[[vid.title]]</strong>
+            <h3><strong>[[vid.title]]</strong>
                 <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>
             </h3>
         </a>
         <p>[[vid.description]]</p>
-        <p ng-if="vid.confidence">[[vid.confidence*100|number:2]]% precision</p>
     </div>
 </div>
