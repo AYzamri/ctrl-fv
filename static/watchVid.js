@@ -1,7 +1,7 @@
 var app = angular.module('myApp');
 var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($http, $scope, $routeParams) {
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast) {
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
@@ -24,7 +24,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.videoData = res.data;
         }, function (reason) {
-            window.alert('Failed retrieving video data');
+            var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
+
+            $mdToast.show(toast).then(function (response) {
+                if (response === 'ok')
+                    $mdDialog.hide()
+            });
         });
     };
 
@@ -59,7 +64,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             }
 
         }).catch(function (err) {
-            window.alert('Error importing inverted index');
+            var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
+
+            $mdToast.show(toast).then(function (response) {
+                if (response === 'ok')
+                    $mdDialog.hide()
+            });
         });
     };
 
