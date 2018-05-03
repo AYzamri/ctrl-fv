@@ -8,7 +8,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
     ctrl.indexLoaded = false;
     ctrl.searchVal = "";
-    ctrl.searchValCurrentTerm = "";
+    ctrl.searchValCurrentTerms = [];
     ctrl.search_results = null;
 
     // Start updating until all index up-to-date:
@@ -91,7 +91,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
 
     ctrl.searchInVid = function ()
     {
-        ctrl.searchValCurrentTerm = "";
+        ctrl.searchValCurrentTerms = [];
         var searchResults = {};
         var searchTerms = ctrl.searchVal.split(" ");
         for (var i = 0; i < searchTerms.length; i++)
@@ -102,16 +102,18 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
             // Fuzz 'term' here - Levenshtein distance = 2
             if (!ctrl.invertedIndex[term])
                 continue;
-            ctrl.searchValCurrentTerm += term + " ";
+            ctrl.searchValCurrentTerms.push(term);
             searchResults = Object.assign(searchResults, ctrl.invertedIndex[term]);
         }
         if (searchResults.length === 0)
             ctrl.search_results = {};
         else
-        {
-            ctrl.searchValCurrentTerm = ctrl.searchValCurrentTerm.trim();
             ctrl.search_results = sortAndCleanSearchResults(searchResults, 1);
-        }
+    };
+
+    ctrl.numberOfResults = function ()
+    {
+        return Object.keys(ctrl.search_results).length;
     };
 
     var sortAndCleanSearchResults = function (searchResults, threshold)
@@ -129,9 +131,4 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         });
         return sortedSearchResults;
     };
-
-    ctrl.numberOfResults = function ()
-    {
-        return Object.keys(ctrl.search_results).length;
-    }
 }]);

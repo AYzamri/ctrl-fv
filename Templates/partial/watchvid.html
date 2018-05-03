@@ -63,12 +63,10 @@
             <tr ng-repeat="(time,paragraph) in ctrl.search_results track by $index" ng-click="ctrl.jump(time)">
                 <td style="width:20%">[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
                 <td>
-                    <span
-                            md-highlight-text="[[ctrl.searchValCurrentTerm]]"
-                            md-highlight-flags="gi">[[paragraph]]</span>
-{#                    <span ng-repeat="word in paragraph.split(' ') track by $index"#}
-{#                          md-highlight-text="[[' ' + ctrl.searchValCurrentTerm + ' ']]"#}
-{#                          md-highlight-flags="gi"> [[' ' + word.split('.').join("") + ' ']]</span>#}
+                    <span ng-repeat="word in paragraph.split(' ') track by $index" style="display: inline-block">
+                        <p ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</p>
+                        <p ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><b>[[word]]&nbsp;</b></p>
+                    </span>
                 </td>
             </tr>
             </tbody>
