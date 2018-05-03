@@ -99,16 +99,13 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
             var term = searchTerms[i];
             term = term.toLowerCase();
             term = term.replace(/[^\w]|_/g, "");   // remove punctuation
-            // Fuzz 'term' here - Levenshtein distance = 2
+            // Fuzz 'term' here
             if (!ctrl.invertedIndex[term])
                 continue;
             ctrl.searchValCurrentTerms.push(term);
             searchResults = Object.assign(searchResults, ctrl.invertedIndex[term]);
         }
-        if (searchResults.length === 0)
-            ctrl.search_results = {};
-        else
-            ctrl.search_results = sortAndCleanSearchResults(searchResults, 1);
+        ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
     ctrl.numberOfResults = function ()
