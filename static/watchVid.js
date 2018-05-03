@@ -1,7 +1,8 @@
 var app = angular.module('myApp');
 var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast) {
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
+{
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
@@ -11,7 +12,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.search_results = null;
 
     // Start updating until all index up-to-date:
-    ctrl.init = function () {
+    ctrl.init = function ()
+    {
         ctrl.vidId = $routeParams.vidId;
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
@@ -20,21 +22,27 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.updateInvertedIndex_Recursive();
     };
 
-    ctrl.getVideoData = function () {
-        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
+    ctrl.getVideoData = function ()
+    {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
+        {
             ctrl.videoData = res.data;
-        }, function (reason) {
+        }, function (reason)
+        {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.updateInvertedIndex_Recursive = function () {
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
+    ctrl.updateInvertedIndex_Recursive = function ()
+    {
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
+        {
             ctrl.invertedIndex = res.data.index;
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
@@ -63,22 +71,26 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                 ctrl.showRealTimeProgress = false;
             }
 
-        }).catch(function (err) {
+        }).catch(function (err)
+        {
             var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.jump = function (time) {
+    ctrl.jump = function (time)
+    {
         var video = document.getElementById("currentVideo");
         video.currentTime = Math.max(time - 2, 0);
     };
 
-    ctrl.searchInVid = function () {
+    ctrl.searchInVid = function ()
+    {
         ctrl.searchValCurrentTerm = "";
         var searchResults = {};
         var searchTerms = ctrl.searchVal.split(" ");
@@ -102,12 +114,15 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         }
     };
 
-    var sortAndCleanSearchResults = function (searchResults, threshold) {
+    var sortAndCleanSearchResults = function (searchResults, threshold)
+    {
         var sortedSearchResults = {};
         var prevKey = -1;
-        Object.keys(searchResults).sort(function (key1, key2) {
+        Object.keys(searchResults).sort(function (key1, key2)
+        {
             return key1.localeCompare(key2, "kn", {numeric: true})
-        }).forEach(function (key) {
+        }).forEach(function (key)
+        {
             if (prevKey === -1 || (key - prevKey) > threshold)
                 sortedSearchResults[key] = searchResults[key];
             prevKey = key;
@@ -115,7 +130,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         return sortedSearchResults;
     };
 
-    ctrl.numberOfResults = function () {
+    ctrl.numberOfResults = function ()
+    {
         return Object.keys(ctrl.search_results).length;
     }
 }]);
