@@ -3,16 +3,6 @@
         .container {
             width: 75%;
         }
-
-        table {
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        td {
-            width: 50%;
-        }
-
         .highlight {
             font-weight: bold;
         }
@@ -50,24 +40,25 @@
     </div>
     <div>
         <div class="video" style="float:left;">
-            <video id="currentVideo" controls style="height : 50%">
+            <video id="currentVideo" controls style="height : 60%">
                 <source ng-src="[[ctrl.currentVideoPath]]">
             </video>
         </div>
-        <div style="float:left; margin-left:20%">
+        <div style="float:left;">
             <canvas id="my_canvas">
             </canvas>
         </div>
-        <div style="float:left;width: 40%;
-    margin-left: 7%;" ng-show="ctrl.search_results ">
+        <div style="float:left;width: 35%;" ng-show="ctrl.search_results ">
 
             <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index
 " ng-click="ctrl.jump(time)">
                 <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
                     <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
-                    <span ng-repeat="word in paragraph.split(' ') track by $index"
-                          md-highlight-text="[[' '+ctrl.searchValCurrentTerm+' ' ]]"
-                          md-highlight-flags="gi"> [[' '+ word.split('.').join("")+ ' ']]</span>
+                    <span ng-repeat="word in paragraph.split(' ') track by $index">
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
+                            [[word]]&nbsp;</mark></strong></span>
+                    </span>
                     <br/>
                 </div>
             </div>

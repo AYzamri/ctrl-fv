@@ -46,19 +46,21 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         {
             ctrl.invertedIndex = res.data.index;
             var wordCloudCanvas = document.getElementById('my_canvas');
-            wordCloudCanvas.width = 300;
-             wordCloudCanvas.height = 200;
+            wordCloudCanvas.width = 400;
+             wordCloudCanvas.height = 300;
              var maxWordCount=0;
-             ctrl.wordCloudList=Object.entries(ctrl.invertedIndex).map(function(term){
+             ctrl.wordCloudList=Object.entries(ctrl.invertedIndex).filter(function(term){
+             return (Object.keys(term[1]).length>1);
+             }).map(function(term){
              var wordCount = Object.keys(term[1]).length;
              maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
               return [term[0],wordCount]});
              WordCloud(wordCloudCanvas,
               { list: ctrl.wordCloudList,
               weightFactor: function(size) {
-                    return  Math.pow(scaleBetween(size, 1, 10, 1 , maxWordCount), 2.3) *  wordCloudCanvas.width / 1024;
+                    return  Math.pow(scaleBetween(size, 3, 10, 1 , maxWordCount), 2.3) *  wordCloudCanvas.width / 1024;
                 },
- shape: 'circle',  gridSize: Math.round(20 *  wordCloudCanvas.width / 1024),  click: (data) => {
+ shape: 'circle',  gridSize: Math.round(25 *  wordCloudCanvas.width / 1024),  click: (data) => {
             console.log(this);
             ctrl.searchVal=data[0];
             ctrl.searchInVid();
@@ -104,8 +106,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerm = "";
     ctrl.search_results = null;
-    ctrl.jump = function (time) {
-
     ctrl.jump = function (time)
     {
         var video = document.getElementById("currentVideo");
