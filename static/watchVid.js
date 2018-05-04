@@ -13,12 +13,31 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
         ctrl.showRealTimeProgress = false;
+        ctrl.wordCloudList=[];
         ctrl.updateInvertedIndex_Recursive();
     };
 
     ctrl.updateInvertedIndex_Recursive = function () {
         return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.invertedIndex = res.data.index;
+            var wordCloudCanvas = document.getElementById('my_canvas');
+            wordCloudCanvas.width = 300;
+             wordCloudCanvas.height = 200;
+             var maxWordCount=0;
+             ctrl.wordCloudList=Object.entries(ctrl.invertedIndex).map(function(term){
+             var wordCount = Object.keys(term[1]).length;
+             maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
+              return [term[0],wordCount]});
+             WordCloud(wordCloudCanvas,
+              { list: ctrl.wordCloudList,
+              weightFactor: function(size) {
+                    return  Math.pow(scaleBetween(size, 1, 10, 1 , maxWordCount), 2.3) *  wordCloudCanvas.width / 1024;
+                },
+ shape: 'circle',  gridSize: Math.round(20 *  wordCloudCanvas.width / 1024),  click: (data) => {
+            console.log(this);
+            ctrl.searchVal=data[0];
+            ctrl.searchInVid();
+             $scope.$apply();}} );
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
                 ctrl.indexLoaded = true;
@@ -46,7 +65,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
             window.alert('Error importing inverted index');
         });
     };
-
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerm = "";
     ctrl.search_results = null;
@@ -67,3 +85,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', function ($ht
     };
 
 }]);
+function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max) {
+  return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+}
