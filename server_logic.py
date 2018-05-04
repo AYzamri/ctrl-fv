@@ -21,6 +21,7 @@ table_service = TableService(account_name=storage_acc_name, account_key=storage_
 corpus_index_dir = "CorpusIndex"
 
 
+# region Helper Functions
 def get_sql_cnxn():
     server = 'cfvtest.database.windows.net'
     database = 'cfvtest'
@@ -50,6 +51,10 @@ def enqueue_message(q_name, message):
     queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
     queue_service.put_message(q_name, message)
 
+
+# endregion
+
+# region Video Inverted Index & Progress
 
 def get_inverted_index(vid_id):
     terms = table_service.query_entities(table_name='VideosInvertedIndexes',
@@ -87,6 +92,9 @@ def get_inverted_index_json(vid_id):
     return parsed
 
 
+# endregion
+
+
 def upload_vid_meta_data(blob_name, video_name, video_description, duration, user_id='none'):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
@@ -97,6 +105,7 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, use
     cnxn.commit()
 
 
+# region Search For Video
 def get_videos_by_term(search_term):
     vid_ids = get_video_ids_by_term(search_term.lower())
     if len(vid_ids) == 0:
@@ -105,15 +114,27 @@ def get_videos_by_term(search_term):
     return video_info
 
 
-def get_video_ids_by_term(search_term):
+def get_video_ids_by_term(query):
     # region Whoosh search
+    levenshtein_distance = 2
     index = open_dir(corpus_index_dir)
-    or_query_object = qparser.QueryParser("content", index.schema, group=qparser.OrGroup).parse(search_term)
-    and_query_object = qparser.QueryParser("content", index.schema, group=qparser.AndGroup).parse(search_term)
-    query_object = Or([and_query_object, or_query_object])
+
+    query_terms = query.split(" ")
+    fuzzy_query_terms = ["{0}~{1}".format(qt, levenshtein_distance) for qt in query_terms]
+    fuzzy_query_terms = " ".join(fuzzy_query_terms)
+
+    fuzzy_or_query_parser = qparser.QueryParser("content", index.schema, group=qparser.OrGroup)
+    fuzzy_or_query_parser.add_plugin(qparser.FuzzyTermPlugin())
+    fuzzy_parsed_or_query = fuzzy_or_query_parser.parse(fuzzy_query_terms)
+
+    fuzzy_and_query_parser = qparser.QueryParser("content", index.schema, group=qparser.AndGroup)
+    fuzzy_and_query_parser.add_plugin(qparser.FuzzyTermPlugin())
+    fuzzy_parsed_and_query = fuzzy_and_query_parser.parse(fuzzy_query_terms)
+
+    fuzzy_query_parser = Or([fuzzy_parsed_or_query, fuzzy_parsed_and_query])
+
     with index.searcher(weighting=scoring.TF_IDF()) as searcher:
-        results = searcher.search(query_object, limit=None)
-        suggestion = searcher.correct_query(query_object, search_term).string
+        results = searcher.search(fuzzy_query_parser, limit=None)
         video_ids = [result.fields()["title"] for result in results]
     # endregion
 
@@ -149,6 +170,8 @@ def get_video_info_by_vid_ids(vid_ids):
     return results
 
 
+# endregion
+
 def create_update_whoosh_index(video_id):
     container_name = "corpus-container"
     video_id_no_txt_extension = os.path.splitext(video_id)[0]
@@ -168,8 +191,9 @@ def create_update_whoosh_index(video_id):
     n = 5
     rake = Rake()
     rake.extract_keywords_from_text(video_content)
-    top_n_keywords_list = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
-    update_video_keywords(video_id_no_txt_extension, top_n_keywords_list)
+    top_n_keywords = rake.get_word_frequency_distribution().most_common(
+        n)  # list of tuples (word, count) ordered by 'count' desc
+    update_video_keywords(video_id_no_txt_extension, top_n_keywords)
 
 
 def update_video_keywords(video_id, keywords):
@@ -183,6 +207,7 @@ def update_video_keywords(video_id, keywords):
     cnxn.commit()
 
 
+# region User Functions
 def login(email, password):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
@@ -228,3 +253,4 @@ def signup(user):
     else:
         return False
         # raise ValueError('The email is allready in use!')
+# endregion

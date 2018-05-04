@@ -1,28 +1,39 @@
 <div class="view">
-        <style>
+    <style>
         .container {
             width: 55%;
         }
     </style>
-    <img src="../../static/headerBar.jpg" alt="Responsive image" style=" height:130px;text-align: center; margin-left:30%;">
+    <img src="../../static/headerBar.jpg" alt="Responsive image"
+         style=" height:130px;text-align: center; margin-left:30%;">
     <!!class="img-responsive">
-        <div class="container" >
+    <div class="container">
         <form
-              ng-submit="ctrl.searchForVid()">
+                ng-submit="ctrl.searchForVid()">
             <div class="input-group input-group-lg">
-                 <input class="form-control" type="text" placeholder="Search for a video" ng-model=ctrl.searchVal>
-                 <div class="input-group-btn">
-                <button class="btn btn-default" id="submit" value="Search" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                 </div>
+                <input class="form-control" type="text" placeholder="Search for a video" ng-model=ctrl.searchVal>
+                <div class="input-group-btn">
+                    <button class="btn btn-default" id="submit" value="Search" type="submit"><i
+                            class="glyphicon glyphicon-search"></i></button>
+                </div>
             </div>
         </form>
-            </div>
+    </div>
 
 
-
+    <div class="container">
+        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
+            [[ctrl.vid_search_results.length]] relevant videos</h5>
+        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No relevant video was found</h5>
+    </div>
     <div class="container" ng-repeat="vid in ctrl.vid_search_results">
-         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]" /></a>
-        <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><h3><strong>[[vid.title]]</strong> <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small></h3></a>
+        <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"
+                                                                               ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]"/></a>
+        <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
+            <h3><strong>[[vid.title]]</strong>
+                <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>
+            </h3>
+        </a>
         <p>[[vid.description]]</p>
     </div>
 </div>

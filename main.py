@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, jsonify
 import server_logic
 import urllib.parse
 
-
 app = Flask(__name__, template_folder='Templates')
 
 
@@ -26,12 +25,22 @@ def upload_video():
         video_description = data['videoDescription']
         user_email = data['user']
         duration = data['duration']
-        server_logic.upload_vid_meta_data(blob_name=video_id, video_name=video_name, video_description=video_description,
+        server_logic.upload_vid_meta_data(blob_name=video_id, video_name=video_name,
+                                          video_description=video_description,
                                           duration=duration, user_id=user_email)
         server_logic.enqueue_message('video-to-extractor-q', video_id)
     except Exception as e:
         return e, 501
     return '', 200
+
+
+@app.route('/videoData', methods=['GET'])
+def video_data():
+    try:
+        vid_id = request.args.get('vidid')
+        return json.dumps(server_logic.get_video_info_by_vid_ids([vid_id])[0]), 200
+    except Exception as ex:
+        return ex, 501
 
 
 @app.route('/invertedIndex', methods=['GET'])

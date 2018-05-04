@@ -18,6 +18,8 @@
             src="{{ url_for('static', filename='packages/azure-storage.blob.min.js') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='packages/angular-local-storage.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='packages/fuse.min.js') }}"></script>
     <!--App scripts:-->
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='user.service.js') }}"></script>
@@ -49,7 +51,7 @@
     <script type="text/javascript"
             src="{{ url_for('static', filename='wordcloud2.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='packages/angular-material.min.css') }}">
-<link rel="stylesheet" type="text/css" href="/partial/style.css">
+    <link rel="stylesheet" type="text/css" href="/partial/style.css">
     <!--Bootstrap:-->
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -71,35 +73,72 @@
 </head>
 
 <body ng-controller="mainCtrl as ctrl" class="background">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="#"> <img src="../../static/logo.png" style=" height:50px;"></a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li ng-if="ctrl.userService.model.loggedIn"><a href="#upload">Upload</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li ng-if="!ctrl.userService.model.loggedIn"><a href="#login">Login</a></li>
-                    <li ng-if="!ctrl.userService.model.loggedIn"><a href="#signup">Sign up</a></li>
-                    <li ng-if="ctrl.userService.model.loggedIn"><a>Hello, [[ctrl.userService.User.username]]!</a></li>
-                    <li ng-if="ctrl.userService.model.loggedIn"><a onmouseover="" style="cursor: pointer;"
-                                                                   ng-click="ctrl.logout()">Log Out</a>
-                    </li>
-                    <li ng-if="ctrl.userService.model.loggedIn"><a href="#myVids">My Videos</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+    <md-toolbar md-theme="default">
+        <div class="md-toolbar-tools">
+            <a href="#">
+                <md-tooltip md-direction="bottom">Main Page</md-tooltip>
+                <img src="../../static/logo.png" style=" height:50px;">
+            </a>
+            </md-button>
+            <md-button ng-if="ctrl.userService.model.loggedIn" style="min-width: 1%" href="#upload"
+                       class=" md-no-focus md-primary">
+                <md-tooltip md-direction="bottom">Upload Video</md-tooltip>
+                <img src="../../static/upload.png" style=" height:35px;">
+            </md-button>
+            <md-menu ng-if="!ctrl.userService.model.loggedIn" md-position-mode="target-right bottom">
+                <md-button class=" md-no-focus md-primary" style="min-width: 1%" aria-label="User"
+                           ng-click="$mdMenu.open($event)">
+                    <md-tooltip md-direction="bottom">User Actions</md-tooltip>
+                    <img src="../../static/unkownUser.png" style=" height:35px;">
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="" href="#signup">
+                            <div layout="row" flex>
+                                <p flex>Sign Up</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="" href="#login">
+                            <div layout="row" flex>
+                                <p flex>Login</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu ng-if="ctrl.userService.model.loggedIn" md-position-mode="target-right bottom">
+                <md-button class=" md-no-focus md-primary" style="min-width: 1%" aria-label="User"
+                           ng-click="$mdMenu.open($event)">
+                    <md-tooltip md-direction="bottom">User Actions</md-tooltip>
+                    <img src="../../static/user.png" style=" height:35px;">
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <div layout="row" flex>
+                            <p flex style="font-weight:bold">Welcome, [[ctrl.userService.User.username]]</p>
+                        </div>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ng-click="" href="#myVids">
+                            <div layout="row" flex>
+                                <p flex>My Videos</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.logout()">
+                            <div layout="row" flex>
+                                <p flex>Logout</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
     <div class="center">
         <ng-view></ng-view>
     </div>

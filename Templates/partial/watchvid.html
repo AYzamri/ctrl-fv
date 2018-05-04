@@ -22,29 +22,31 @@
         }
     </style>
     <div class="pageHeader text-center">
-        <h1>Watch Video</h1>
+        <h1>[[ctrl.videoData.title]]</h1>
     </div>
-    <div class="container" style="margin-left:65%; width:35%">
-        <form ng-if="ctrl.indexLoaded"
-              ng-submit="ctrl.searchInVid()">
+    <div class="container" ng-if="ctrl.indexLoaded" style="margin-left:65%; width:35%">
+        <form ng-submit="ctrl.searchInVid()">
             <div class="input-group input-group-lg">
-                 <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
-                 <div class="input-group-btn">
-                <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                 </div>
+                <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
+                <div class="input-group-btn">
+                    <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </div>
             </div>
         </form>
-            </div>
-        <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
+        <h5 class="text-center" ng-if="ctrl.videoData.confidence">Transcript confidence:
+            [[ctrl.videoData.confidence*100|number:2]]%</h5>
+    </div>
+    <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
     <div ng-show="ctrl.showRealTimeProgress">
-           <uib-progress ng-if="ctrl.indexLoaded"
-                  max="[[ctrl.progress.totalSegments]]">
+        <uib-progress ng-if="ctrl.indexLoaded"
+                      max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
             <uib-bar
                     type="[[ctrl.progress.analyzedSegments.indexOf(segNum)>=0 ? 'info':'transparent']]"
                     value="1"></uib-bar>
             </span>
-    </uib-progress>
+        </uib-progress>
     </div>
     <div>
         <div class="video" style="float:left;">
