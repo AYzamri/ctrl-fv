@@ -46,35 +46,31 @@
             </span>
     </uib-progress>
     </div>
+    <div>
+        <div class="video" style="float:left;">
+            <video id="currentVideo" controls style="height : 50%">
+                <source ng-src="[[ctrl.currentVideoPath]]">
+            </video>
+        </div>
+        <div style="float:left; margin-left:20%">
+            <canvas id="my_canvas">
+            </canvas>
+        </div>
+        <div style="float:left;width: 40%;
+    margin-left: 7%;" ng-show="ctrl.search_results ">
 
-        <div class="container" style = "width:40%; float:right" ng-show="ctrl.search_results ">
-        <table class="table table-hover table-condensed" >
-            <thead>
-            <tr>
-                <th style="width:20%">Time</th>
-                <th>Sentence</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="(time,paragraph) in ctrl.search_results track by $index
+            <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index
 " ng-click="ctrl.jump(time)">
-                <td style="width:20%">[[time | secondsToDateTime | date:'HH:mm:ss']]</td>
-                <td>
+                <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
+                    <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
                     <span ng-repeat="word in paragraph.split(' ') track by $index"
                           md-highlight-text="[[' '+ctrl.searchValCurrentTerm+' ' ]]"
                           md-highlight-flags="gi"> [[' '+ word.split('.').join("")+ ' ']]</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    <br/>
+                </div>
+            </div>
+        </div>
     </div>
-    <div style="height:45%">
-        <video id="currentVideo" controls
-               style="margin-right: 60%; display: block ; height: auto; width:60%">
-            <source ng-src="[[ctrl.currentVideoPath]]">
-        </video>
-    </div>
-
-
-
 </div>
+
+
