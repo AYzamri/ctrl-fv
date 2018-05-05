@@ -3,6 +3,7 @@
         .container {
             width: 75%;
         }
+
         .highlight {
             font-weight: bold;
         }
@@ -55,10 +56,9 @@
 " ng-click="ctrl.jump(time)">
                 <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
                     <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
-                    <span ng-repeat="word in paragraph.split(' ') track by $index">
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
-                            [[word]]&nbsp;</mark></strong></span>
+                    <span ng-repeat="word in paragraph | split track by $index">
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word.toLowerCase()) === -1">[[word]]&nbsp;</span>
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word.toLowerCase()) > -1"><strong><mark>[[word]]&nbsp;</mark></strong></span>
                     </span>
                     <br/>
                 </div>
