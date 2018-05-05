@@ -14,7 +14,7 @@ app.factory('userService', ['$http','$location' ,'localStorageService', function
             if (isUnique.data === "true")
             {
                 service.User = user;
-                service.mode.logggedIn = true;
+                service.model.logggedIn = true;
                 registerDataToLocalStorage();
             }
             return Promise.resolve(isUnique);

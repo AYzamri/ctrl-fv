@@ -4,12 +4,23 @@ var server = app.config['server'];
 app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', function ($http, $location, $mdToast, userService) {
     var ctrl = this;
 
-    ctrl.user = {};
+    ctrl.user = {
+    email:"",
+    password:"",
+    username:"",
+    firstName:"",
+    lastName:""
+    };
 
     ctrl.signup = function () {
         userService.signup(ctrl.user).then(function (isEmailUnique) {
             if (isEmailUnique.data == "true")
             {
+               var toast = $mdToast.simple().textContent('Signed Up Succesfully').action('OK').highlightAction(false).position('top');
+                $mdToast.show(toast).then(function (response) {
+                    if (response === 'ok')
+                        $mdDialog.hide()
+                });
                 $location.path('/')
             }
             else
