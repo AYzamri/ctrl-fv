@@ -254,3 +254,48 @@ def signup(user):
         return False
         # raise ValueError('The email is allready in use!')
 # endregion
+
+
+def remove_video_from_system(video_id):
+    print("remove_video_from_system : ", video_id)
+    # delete from videosMetaData sql
+    sql_command = "DELETE FROM VideosMetaData "\
+                    "WHERE vid_id = ?"
+    cnxn = get_sql_cnxn()
+    cursor = cnxn.cursor()
+    cursor.execute(sql_command, video_id)
+    cnxn.commit()
+
+    print ("video_id deleted from sql : videosMetaData")
+
+    # delete from VideosInvertedIndexes azure table
+    try:
+        rows = table_service.query_entities(table_name='VideosInvertedIndexes',
+                                             filter='PartitionKey eq \'' + video_id + '\'')
+        if rows.items:
+            for entry in rows.items:
+                rowkey = entry['RowKey']
+                table_service.delete_entity(table_name='VideosInvertedIndexes',partition_key=video_id,row_key=rowkey)
+            print ("partition_key %s deleted from VideosInvertedIndexes" % video_id)
+    except Exception as e:
+        print("failed delete from VideosInvertedIndexes\n ")
+
+    delete_blob(video_id, "videoscontainer")
+    video_id_txt = video_id+".txt"
+    delete_blob(video_id_txt, "corpus-container")
+    video_id_png = os.path.splitext(video_id)[0]+".png"
+    delete_blob(video_id_png, "image-container")
+
+
+def delete_blob(blob_name, container_name):
+    block_blob_service = BlockBlobService(account_name=storage_acc_name, account_key=storage_acc_key)
+    # Set the permission so the blobs are public.
+    block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
+    try:
+        block_blob_service.delete_blob(container_name=container_name, blob_name=blob_name)
+    except:
+        print ("The blob not exist int the container")
+
+    print("%s deleted from container: %s" % (blob_name, container_name))
+
+

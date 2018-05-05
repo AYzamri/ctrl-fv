@@ -113,5 +113,17 @@ def allow_cross_domain(response):
     return response
 
 
+@app.route('/removeVideoFromSystem', methods=['GET'])
+def remove_video_from_system():
+    try:
+        video_id = request.args.get('vid')
+        video_id = urllib.parse.unquote(video_id)
+        server_logic.remove_video_from_system(video_id)
+        return '',200
+    except Exception as e:
+        return e, 501
+
+
+
 if __name__ == '__main__':
     app.run(threaded=True)

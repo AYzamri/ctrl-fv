@@ -1,7 +1,8 @@
 var app = angular.module('myApp');
 var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast) {
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
+{
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
@@ -11,62 +12,66 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.search_results = null;
 
     // Start updating until all index up-to-date:
-    ctrl.init = function () {
+    ctrl.init = function ()
+    {
         ctrl.vidId = $routeParams.vidId;
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
         ctrl.showRealTimeProgress = false;
-        ctrl.wordCloudList = [];
+        ctrl.wordCloudList=[];
+        ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
     };
-
-    ctrl.getVideoData = function () {
-        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
+    ctrl.setVideo = function()
+    {
+        var img_id = (ctrl.vidId).replace(".mp4",".png")
+        var myPlayer = videojs('currentVideo');
+        myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/"+img_id);
+        myPlayer.src(ctrl.currentVideoPath);
+    };
+    ctrl.getVideoData = function ()
+    {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
+        {
             ctrl.videoData = res.data;
-        }, function (reason) {
+        }, function (reason)
+        {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.updateInvertedIndex_Recursive = function () {
-        // noinspection JSUnnecessarySemicolon
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
+    ctrl.updateInvertedIndex_Recursive = function ()
+    {
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
+        {
             ctrl.invertedIndex = res.data.index;
-
             var wordCloudCanvas = document.getElementById('my_canvas');
             wordCloudCanvas.width = 400;
-            wordCloudCanvas.height = 300;
-            var maxWordCount = 0;
-            ctrl.wordCloudList = Object.entries(ctrl.invertedIndex).filter(function (term) {
-                return (Object.keys(term[1]).length > 1);
-            }).map(function (term) {
-                var wordCount = Object.keys(term[1]).length;
-                maxWordCount = wordCount >= maxWordCount ? wordCount : maxWordCount;
-                return [term[0], wordCount]
-            });
-            // noinspection JSLastCommaInObjectLiteral
-            WordCloud(wordCloudCanvas, {
-                list: ctrl.wordCloudList,
-                weightFactor: function (size) {
-                    return Math.pow(scaleBetween(size, 3, 10, 1, maxWordCount), 2.3) * wordCloudCanvas.width / 1024;
+             wordCloudCanvas.height = 300;
+             var maxWordCount=0;
+             ctrl.wordCloudList=Object.entries(ctrl.invertedIndex).filter(function(term){
+             return (Object.keys(term[1]).length>1);
+             }).map(function(term){
+             var wordCount = Object.keys(term[1]).length;
+             maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
+              return [term[0],wordCount]});
+             WordCloud(wordCloudCanvas,
+              { list: ctrl.wordCloudList,
+              weightFactor: function(size) {
+                    return  Math.pow(scaleBetween(size, 3, 10, 1 , maxWordCount), 2.3) *  wordCloudCanvas.width / 1024;
                 },
-                shape: 'circle',
-                gridSize: Math.round(25 * wordCloudCanvas.width / 1024),
-                click: (data) = > {
-                console.log(this);
-            ctrl.searchVal = data[0];
+ shape: 'circle',  gridSize: Math.round(25 *  wordCloudCanvas.width / 1024),  click: (data) => {
+            console.log(this);
+            ctrl.searchVal=data[0];
             ctrl.searchInVid();
-            $scope.$apply();
-        }
-        })
-            ;
-
+             $scope.$apply();}} );
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
                 ctrl.indexLoaded = true;
@@ -94,10 +99,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                 ctrl.showRealTimeProgress = false;
             }
 
-        }).catch(function (err) {
+        }).catch(function (err)
+        {
             var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
@@ -106,12 +113,14 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerm = "";
     ctrl.search_results = null;
-    ctrl.jump = function (time) {
-        var video = document.getElementById("currentVideo");
-        video.currentTime = Math.max(time - 2, 0);
+    ctrl.jump = function (time)
+    {
+        var myPlayer = videojs('currentVideo');
+        myPlayer.currentTime(Math.max(time - 2, 0));
     };
 
-    ctrl.searchInVid = function () {
+    ctrl.searchInVid = function ()
+    {
         ctrl.searchValCurrentTerms = [];
         var searchResults = {};
         var searchTerms = ctrl.searchVal.split(" ");
@@ -129,16 +138,24 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
-    ctrl.numberOfResults = function () {
+    ctrl.numberOfResults = function ()
+    {
         return Object.keys(ctrl.search_results).length;
     };
+    $scope.$on("$destroy", function(){
+        var oldPlayer = document.getElementById('currentVideo');
+        videojs(oldPlayer).dispose();
+    });
 
-    var sortAndCleanSearchResults = function (searchResults, threshold) {
+    var sortAndCleanSearchResults = function (searchResults, threshold)
+    {
         var sortedSearchResults = {};
         var prevKey = -1;
-        Object.keys(searchResults).sort(function (key1, key2) {
+        Object.keys(searchResults).sort(function (key1, key2)
+        {
             return key1.localeCompare(key2, "kn", {numeric: true})
-        }).forEach(function (key) {
+        }).forEach(function (key)
+        {
             if (prevKey === -1 || (key - prevKey) > threshold)
                 sortedSearchResults[key] = searchResults[key];
             prevKey = key;
@@ -146,8 +163,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         return sortedSearchResults;
     };
 }]);
-
-function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max)
-{
-    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max) {
+  return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }

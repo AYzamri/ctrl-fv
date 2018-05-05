@@ -40,14 +40,15 @@
     </div>
     <div>
         <div class="video" style="float:left;">
-            <video id="currentVideo" controls style="height : 60%">
-                <source ng-src="[[ctrl.currentVideoPath]]">
+            <video id="currentVideo" class="video-js" data-setup="{}" controls preload="auto" width="640" height="360">
             </video>
         </div>
         <div style="float:left;">
             <canvas id="my_canvas">
             </canvas>
         </div>
+        <h4 ng-if="ctrl.search_results && ctrl.numberOfResults() === 0 ">Found no results </h4>
+        <br>
         <div style="float:left;width: 35%;" ng-show="ctrl.search_results ">
 
             <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index
