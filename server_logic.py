@@ -52,6 +52,16 @@ def enqueue_message(q_name, message):
     queue_service.put_message(q_name, message)
 
 
+def update_videos_meta_data(key, column_name, column_value):
+    sql_command = "UPDATE VideosMetaData " \
+                  "SET {0} = '{1}' " \
+                  "WHERE vid_id = '{2}'".format(column_name, column_value, key)
+    cnxn = get_sql_cnxn()
+    cursor = cnxn.cursor()
+    cursor.execute(sql_command)
+    cnxn.commit()
+
+
 # endregion
 
 # region Video Inverted Index & Progress
@@ -95,13 +105,13 @@ def get_inverted_index_json(vid_id):
 # endregion
 
 
-def upload_vid_meta_data(blob_name, video_name, video_description, duration, user_id='none'):
+def upload_vid_meta_data(blob_name, video_name, video_description, duration, video_url, user_id='none'):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
-    table = "VideosMetaData"
-    query = "INSERT INTO {0} (vid_id,title,description,userID,duration) VALUES('{1}','{2}','{3}','{4}',{5})"
-    query = query.format(table, blob_name, video_name, video_description, user_id, duration)
-    cursor.execute(query)
+    query = "INSERT INTO VideosMetaData (vid_id, title, description, userID, duration, video_url) " \
+            "VALUES (?, ?, ?, ?, ?, ?)"
+    # query = query.format(blob_name, video_name, video_description, user_id, duration)
+    cursor.execute(query, (blob_name, video_name, video_description, user_id, duration, video_url))
     cnxn.commit()
 
 
@@ -157,10 +167,10 @@ def get_video_info_by_vid_ids(vid_ids):
     vid_ids_in_clause = ', '.join('\'{0}\''.format(id) for id in list_vid_ids)
     vid_ids_order_by_clause = ', '.join('{0}'.format(id) for id in list_vid_ids)
     query = "SELECT * " \
-            "FROM {0} " \
-            "WHERE vid_id in ({1}) " \
-            "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{2}')"
-    query = query.format('VideosMetaData', vid_ids_in_clause, vid_ids_order_by_clause)
+            "FROM VideosMetaData " \
+            "WHERE vid_id in ({0}) " \
+            "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{1}')"
+    query = query.format(vid_ids_in_clause, vid_ids_order_by_clause)
     cursor.execute(query)
     columns = [column[0] for column in cursor.description]
     data = cursor.fetchall()
@@ -172,6 +182,7 @@ def get_video_info_by_vid_ids(vid_ids):
 
 # endregion
 
+# region Whoosh Inverted Index
 def create_update_whoosh_index(video_id):
     container_name = "corpus-container"
     video_id_no_txt_extension = os.path.splitext(video_id)[0]
@@ -186,26 +197,19 @@ def create_update_whoosh_index(video_id):
     index_writer = index.writer()
     index_writer.add_document(title=video_id_no_txt_extension, content=video_content)
     index_writer.commit()
+    extract_and_update_video_keywords(video_id_no_txt_extension, video_content)
 
-    # Extract video keywords
+
+def extract_and_update_video_keywords(video_id, video_content):
     n = 5
     rake = Rake()
     rake.extract_keywords_from_text(video_content)
-    top_n_keywords = rake.get_word_frequency_distribution().most_common(
-        n)  # list of tuples (word, count) ordered by 'count' desc
-    update_video_keywords(video_id_no_txt_extension, top_n_keywords)
+    top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
+    top_n_keywords_str = ", ".join([kw_tuple[0] for kw_tuple in top_n_keywords])
+    update_videos_meta_data(video_id, "Keywords", top_n_keywords_str)
 
 
-def update_video_keywords(video_id, keywords):
-    keywords_str = ", ".join([kw_tuple[0] for kw_tuple in keywords])
-    sql_command = "UPDATE VideosMetaData " \
-                  "SET keywords = ? " \
-                  "WHERE vid_id = ?"
-    cnxn = get_sql_cnxn()
-    cursor = cnxn.cursor()
-    cursor.execute(sql_command, (keywords_str, video_id))
-    cnxn.commit()
-
+# endregion
 
 # region User Functions
 def login(email, password):
@@ -253,28 +257,29 @@ def signup(user):
     else:
         return False
         # raise ValueError('The email is allready in use!')
+
+
 # endregion
 
 
 def remove_video_from_system(video_id):
     print("remove_video_from_system : ", video_id)
     # delete from videosMetaData sql
-    sql_command = "DELETE FROM VideosMetaData "\
-                    "WHERE vid_id = ?"
+    sql_command = "DELETE FROM VideosMetaData " \
+                  "WHERE vid_id = ?"
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     cursor.execute(sql_command, video_id)
     cnxn.commit()
-    print ("video_id deleted from sql : videosMetaData")
+    print("video_id deleted from sql : videosMetaData")
 
     delete_from_azure_table("VideosInvertedIndexes", video_id)
-    delete_from_azure_table("VideosIndexProgress",video_id)
+    delete_from_azure_table("VideosIndexProgress", video_id)
     delete_blob(video_id, "videoscontainer")
-    video_id_txt = video_id+".txt"
+    video_id_txt = video_id + ".txt"
     delete_blob(video_id_txt, "corpus-container")
-    video_id_png = os.path.splitext(video_id)[0]+".png"
+    video_id_png = os.path.splitext(video_id)[0] + ".png"
     delete_blob(video_id_png, "image-container")
-
 
 
 def delete_blob(blob_name, container_name):
@@ -284,7 +289,7 @@ def delete_blob(blob_name, container_name):
     try:
         block_blob_service.delete_blob(container_name=container_name, blob_name=blob_name)
     except:
-        print ("The blob not exist int the container")
+        print("The blob not exist int the container")
 
     print("%s deleted from container: %s" % (blob_name, container_name))
 
@@ -297,6 +302,6 @@ def delete_from_azure_table(table_name, partition_key):
             for entry in rows.items:
                 rowkey = entry['RowKey']
                 table_service.delete_entity(table_name=table_name, partition_key=partition_key, row_key=rowkey)
-            print("partition_key %s deleted from % azure table" %(partition_key, table_name))
+            print("partition_key %s deleted from % azure table" % (partition_key, table_name))
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")

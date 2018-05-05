@@ -90,7 +90,8 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                 videoName: ctrl.videoName,
                 videoDescription: ctrl.videoDescription,
                 user: userService.User.email,
-                duration: ctrl.duration
+                duration: ctrl.duration,
+                videoUrl: ctrl.storageUrl + "/videoscontainer/" + videoID
             };
 
             var sas = '?sv=2017-07-29&ss=bfqt&srt=co&sp=rwacup&se=2018-06-30T17:44:01Z&st=2018-04-03T09:44:01Z&spr=https&sig=cjTWXrIh5yrImi%2FddvbXyvxlk%2F0DVTbJPxJHqj%2BoGt0%3D';
@@ -155,7 +156,7 @@ var successDialogTemplate = "<md-dialog aria-label=\"Upload Finished\">\n" +
     "  <form ng-cloak>\n" +
     "    <md-toolbar md-theme='blue'>\n" +
     "      <div class=\"md-toolbar-tools\">\n" +
-    "        <h2>Finished Uploading Video</h2>\n" +
+    "        <h2>Video Uploaded Successfully</h2>\n" +
     "      </div>\n" +
     "    </md-toolbar>\n" +
     "\n" +
@@ -186,7 +187,7 @@ var alertDialogTemplate = "<md-dialog aria-label=\"Upload Failed\">\n" +
     "    <md-dialog-content>\n" +
     "      <div class=\"md-dialog-content\">\n" +
     "        <h4>\n" +
-    "          An error has occurred while uploading video. The error: [[ctrl.error]]\n" +
+    "          An error has occurred while uploading video.\nThe error: [[ctrl.error]]\n" +
     "        </h4>\n" +
     "      </div>\n" +
     "    </md-dialog-content>\n" +

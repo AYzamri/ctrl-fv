@@ -25,9 +25,13 @@ def upload_video():
         video_description = data['videoDescription']
         user_email = data['user']
         duration = data['duration']
-        server_logic.upload_vid_meta_data(blob_name=video_id, video_name=video_name,
+        video_url = data['videoUrl']
+        server_logic.upload_vid_meta_data(blob_name=video_id,
+                                          video_name=video_name,
                                           video_description=video_description,
-                                          duration=duration, user_id=user_email)
+                                          duration=duration,
+                                          user_id=user_email,
+                                          video_url=video_url)
         server_logic.enqueue_message('video-to-extractor-q', video_id)
     except Exception as e:
         return e, 501
@@ -70,6 +74,19 @@ def create_update_whoosh_index():
         data = json.loads(request.data.decode())
         video_id = data["videoID"]
         server_logic.create_update_whoosh_index(video_id)
+        return '', 200
+    except Exception as e:
+        return e, 501
+
+
+@app.route('/updateVMD', methods=['POST'])
+def update_vmd():
+    try:
+        data = json.loads(request.data.decode())
+        video_id = data["videoID"]
+        column_name = data["columnName"]
+        column_value = data["columnValue"]
+        server_logic.update_videos_meta_data(video_id, column_name, column_value)
         return '', 200
     except Exception as e:
         return e, 501
@@ -119,10 +136,9 @@ def remove_video_from_system():
         video_id = request.args.get('vid')
         video_id = urllib.parse.unquote(video_id)
         server_logic.remove_video_from_system(video_id)
-        return '',200
+        return '', 200
     except Exception as e:
         return e, 501
-
 
 
 if __name__ == '__main__':
