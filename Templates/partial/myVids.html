@@ -1,6 +1,6 @@
 <div class="view" data-ng-init="ctrl.init()">
     <div class="section-title text-center">
-        <h1 class="pageHeader"> Videos Uploaded by [[ctrl.Service.User.username]]</h1>
+        <h1 class="pageHeader"> My videos</h1>
     </div>
     <div class="container" ng-repeat="vid in ctrl.getVideos()">
         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"
@@ -11,5 +11,10 @@
             </h3>
         </a>
         <p>[[vid.description]]</p>
+
+        <a ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)" class="btn-del icon-btn btn-danger" href="#myVids">
+        <span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>
+        Delete
+        </a>
     </div>
 </div>
