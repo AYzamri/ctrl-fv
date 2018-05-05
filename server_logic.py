@@ -271,16 +271,15 @@ def remove_video_from_system(video_id):
     cursor = cnxn.cursor()
     cursor.execute(sql_command, video_id)
     cnxn.commit()
-    print ("video_id deleted from sql : videosMetaData")
+    print("video_id deleted from sql : videosMetaData")
 
     delete_from_azure_table("VideosInvertedIndexes", video_id)
-    delete_from_azure_table("VideosIndexProgress",video_id)
+    delete_from_azure_table("VideosIndexProgress", video_id)
     delete_blob(video_id, "videoscontainer")
-    video_id_txt = video_id+".txt"
+    video_id_txt = video_id + ".txt"
     delete_blob(video_id_txt, "corpus-container")
-    video_id_png = os.path.splitext(video_id)[0]+".png"
+    video_id_png = os.path.splitext(video_id)[0] + ".png"
     delete_blob(video_id_png, "image-container")
-
 
 
 def delete_blob(blob_name, container_name):
@@ -290,7 +289,7 @@ def delete_blob(blob_name, container_name):
     try:
         block_blob_service.delete_blob(container_name=container_name, blob_name=blob_name)
     except:
-        print ("The blob not exist int the container")
+        print("The blob not exist int the container")
 
     print("%s deleted from container: %s" % (blob_name, container_name))
 
@@ -303,6 +302,6 @@ def delete_from_azure_table(table_name, partition_key):
             for entry in rows.items:
                 rowkey = entry['RowKey']
                 table_service.delete_entity(table_name=table_name, partition_key=partition_key, row_key=rowkey)
-            print("partition_key %s deleted from % azure table" %(partition_key, table_name))
+            print("partition_key %s deleted from % azure table" % (partition_key, table_name))
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")
