@@ -19,10 +19,17 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.indexLoaded = false;
         ctrl.showRealTimeProgress = false;
         ctrl.wordCloudList=[];
+        ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
     };
-
+    ctrl.setVideo = function()
+    {
+        var img_id = (ctrl.vidId).replace(".mp4",".png")
+        var myPlayer = videojs('currentVideo');
+        myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/"+img_id);
+        myPlayer.src(ctrl.currentVideoPath);
+    };
     ctrl.getVideoData = function ()
     {
         $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
@@ -108,8 +115,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.search_results = null;
     ctrl.jump = function (time)
     {
-        var video = document.getElementById("currentVideo");
-        video.currentTime = Math.max(time - 2, 0);
+        var myPlayer = videojs('currentVideo');
+        myPlayer.currentTime(Math.max(time - 2, 0));
     };
 
     ctrl.searchInVid = function ()
@@ -135,6 +142,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     {
         return Object.keys(ctrl.search_results).length;
     };
+    $scope.$on("$destroy", function(){
+        var oldPlayer = document.getElementById('currentVideo');
+        videojs(oldPlayer).dispose();
+    });
 
     var sortAndCleanSearchResults = function (searchResults, threshold)
     {
