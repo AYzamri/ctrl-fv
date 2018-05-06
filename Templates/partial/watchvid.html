@@ -1,70 +1,43 @@
-<div class="view" ng-init="ctrl.init()">
-    <style>
-        .container {
-            width: 75%;
-        }
-        .highlight {
-            font-weight: bold;
-        }
-
-        .progress-bar-transparent {
-            background-color: transparent;
-        }
-    </style>
-    <div class="pageHeader text-center">
-        <h1>[[ctrl.videoData.title]]</h1>
-    </div>
-    <div class="container" ng-if="ctrl.indexLoaded" style="margin-left:65%; width:35%">
-        <form ng-submit="ctrl.searchInVid()">
-            <div class="input-group input-group-lg">
-                <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
-                <div class="input-group-btn">
-                    <button class="btn btn-default" id="submit" type="submit"><i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-        <h5 class="text-center" ng-if="ctrl.videoData.confidence">Transcript confidence:
-            [[ctrl.videoData.confidence*100|number:2]]%</h5>
-    </div>
-    <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
-    <div ng-show="ctrl.showRealTimeProgress">
-        <uib-progress ng-if="ctrl.indexLoaded"
-                      max="[[ctrl.progress.totalSegments]]">
-        <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
-            <uib-bar
-                    type="[[ctrl.progress.analyzedSegments.indexOf(segNum)>=0 ? 'info':'transparent']]"
-                    value="1"></uib-bar>
-            </span>
-        </uib-progress>
-    </div>
-    <div>
-        <div class="video" style="float:left;">
-            <video id="currentVideo" class="video-js" data-setup="{}" controls preload="auto" width="640" height="360">
-            </video>
-        </div>
-        <div style="float:left;">
-            <canvas id="my_canvas">
-            </canvas>
-        </div>
-        <h4 ng-if="ctrl.search_results && ctrl.numberOfResults() === 0 ">Found no results </h4>
-        <br>
-        <div style="float:left;width: 35%;" ng-show="ctrl.search_results ">
-
-            <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index
-" ng-click="ctrl.jump(time)">
-                <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
-                    <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
-                    <span ng-repeat="word in paragraph.split(' ') track by $index">
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
-                            [[word]]&nbsp;</mark></strong></span>
-                    </span>
-                    <br/>
-                </div>
+<div id="watchVidDiv" ng-init="ctrl.init()">
+    <div id="watchVidLeft">
+        <div id="videoDiv">
+            <div class="video" id="videoWrapperDiv">
+                <video style="height: 100%;width: auto; max-width: 100%" id="currentVideo" class="video-js"
+                       data-setup="{}" controls
+                       preload="auto">
+                </video>
             </div>
         </div>
+        <div id="underVideoDiv">
+            <div id="metaDataDiv">
+                <span ng-show="ctrl.videoData">
+                <p>[[ctrl.videoData.title]]</p>
+                <p>[[ctrl.videoData.description]]</p>
+                <p>Published at [[ctrl.videoData.vid_id]]</p>
+                <p>Uploaded By: [[ctrl.videoData.userID]]</p>
+                <p ng-if="ctrl.videoData.confidence">Transcript Confidence:
+                    [[ctrl.videoData.confidence*100|number:2]]%</p>
+                </span>
+            </div>
+            <div id="wordCloudDiv">
+                {#                <canvas id="my_canvas">#}
+                {#                </canvas>#}
+            </div>
+        </div>
+    </div>
+    <div id="watchVidRight">
+        <div id="searchBar">
+            <form ng-show="ctrl.indexLoaded" ng-submit="ctrl.searchInVid()">
+                <div class="input-group input-group-lg">
+                    <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" id="submit" type="submit"><i
+                                class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="searchResults"></div>
     </div>
 </div>
-
-

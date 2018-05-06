@@ -52,9 +52,10 @@
             src="{{ url_for('static', filename='wordcloud2.js') }}"></script>
     <script type="text/javascript"
             src="{{ url_for('static', filename='video-js-7.0.0-rc.1/video.js') }}"></script>
-      <link rel="stylesheet" href="{{ url_for('static', filename='video-js-7.0.0-rc.1/video-js.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='video-js-7.0.0-rc.1/video-js.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='packages/angular-material.min.css') }}">
     <link rel="stylesheet" type="text/css" href="/partial/style.css">
+    <link rel="stylesheet" type="text/css" href="/partial/watchvid.css">
     <!--Bootstrap:-->
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -76,7 +77,7 @@
 </head>
 
 <body ng-controller="mainCtrl as ctrl" class="background">
-    <md-toolbar md-theme="default">
+    <md-toolbar md-theme="default" style="min-height: 8%;max-height: 8%">
         <div class="md-toolbar-tools">
             <a href="#">
                 <md-tooltip md-direction="bottom">Main Page</md-tooltip>
