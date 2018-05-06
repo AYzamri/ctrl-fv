@@ -156,11 +156,11 @@ def get_video_info_by_vid_ids(vid_ids):
     list_vid_ids = list(vid_ids)
     vid_ids_in_clause = ', '.join('\'{0}\''.format(id) for id in list_vid_ids)
     vid_ids_order_by_clause = ', '.join('{0}'.format(id) for id in list_vid_ids)
-    query = "SELECT * " \
-            "FROM {0} " \
-            "WHERE vid_id in ({1}) " \
-            "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{2}')"
-    query = query.format('VideosMetaData', vid_ids_in_clause, vid_ids_order_by_clause)
+    query = "SELECT VDM.*,U.username as username " \
+            "FROM VideosMetaData VDM join Users U on VDM.userID=U.email " \
+            "WHERE vid_id in ({0}) " \
+            "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{1}')"
+    query = query.format(vid_ids_in_clause, vid_ids_order_by_clause)
     cursor.execute(query)
     columns = [column[0] for column in cursor.description]
     data = cursor.fetchall()
@@ -253,37 +253,39 @@ def signup(user):
     else:
         return False
         # raise ValueError('The email is allready in use!')
+
+
 # endregion
 
 
 def remove_video_from_system(video_id):
     print("remove_video_from_system : ", video_id)
     # delete from videosMetaData sql
-    sql_command = "DELETE FROM VideosMetaData "\
-                    "WHERE vid_id = ?"
+    sql_command = "DELETE FROM VideosMetaData " \
+                  "WHERE vid_id = ?"
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     cursor.execute(sql_command, video_id)
     cnxn.commit()
 
-    print ("video_id deleted from sql : videosMetaData")
+    print("video_id deleted from sql : videosMetaData")
 
     # delete from VideosInvertedIndexes azure table
     try:
         rows = table_service.query_entities(table_name='VideosInvertedIndexes',
-                                             filter='PartitionKey eq \'' + video_id + '\'')
+                                            filter='PartitionKey eq \'' + video_id + '\'')
         if rows.items:
             for entry in rows.items:
                 rowkey = entry['RowKey']
-                table_service.delete_entity(table_name='VideosInvertedIndexes',partition_key=video_id,row_key=rowkey)
-            print ("partition_key %s deleted from VideosInvertedIndexes" % video_id)
+                table_service.delete_entity(table_name='VideosInvertedIndexes', partition_key=video_id, row_key=rowkey)
+            print("partition_key %s deleted from VideosInvertedIndexes" % video_id)
     except Exception as e:
         print("failed delete from VideosInvertedIndexes\n ")
 
     delete_blob(video_id, "videoscontainer")
-    video_id_txt = video_id+".txt"
+    video_id_txt = video_id + ".txt"
     delete_blob(video_id_txt, "corpus-container")
-    video_id_png = os.path.splitext(video_id)[0]+".png"
+    video_id_png = os.path.splitext(video_id)[0] + ".png"
     delete_blob(video_id_png, "image-container")
 
 
@@ -294,8 +296,6 @@ def delete_blob(blob_name, container_name):
     try:
         block_blob_service.delete_blob(container_name=container_name, blob_name=blob_name)
     except:
-        print ("The blob not exist int the container")
+        print("The blob not exist int the container")
 
     print("%s deleted from container: %s" % (blob_name, container_name))
-
-
