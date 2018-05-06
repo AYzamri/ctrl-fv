@@ -46,7 +46,8 @@
         <div id="progressDiv" ng-if="ctrl.showRealTimeProgress">
             <uib-progress ng-if="ctrl.indexLoaded"
                           max="[[ctrl.progress.totalSegments]]">
-        <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
+                <md-tooltip md-direction="bottom">Parts of the video in which you can search</md-tooltip>
+                <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
             <uib-bar
                     type="[[ctrl.progress.analyzedSegments.indexOf(segNum)>=0 ? 'info':'transparent']]"
                     value="1"></uib-bar>
