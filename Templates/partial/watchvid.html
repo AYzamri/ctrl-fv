@@ -1,4 +1,7 @@
 <div id="watchVidDiv" ng-init="ctrl.init()">
+    <style>.progress-bar-transparent {
+        background-color: transparent;
+    }</style>
     <div id="watchVidLeft">
         <div id="videoDiv">
             <div class="video" id="videoWrapperDiv">
@@ -40,7 +43,7 @@
             </form>
             <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
         </div>
-        <div ng-show="ctrl.showRealTimeProgress">
+        <div id="progressDiv" ng-if="ctrl.showRealTimeProgress">
             <uib-progress ng-if="ctrl.indexLoaded"
                           max="[[ctrl.progress.totalSegments]]">
         <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
@@ -50,7 +53,7 @@
             </span>
             </uib-progress>
         </div>
-        <div id="searchResults">
+        <div id="searchResults" ng-style="{'height': (ctrl.showRealTimeProgress)?'85.5%': '89.5%'}">
             <h4 ng-if="ctrl.search_results  ">Found
                 [[ctrl.numberOfResults()>0?ctrl.numberOfResults(): 'no']] results </h4>
             <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index" ng-click="ctrl.jump(time)">
