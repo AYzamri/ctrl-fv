@@ -13,7 +13,7 @@
         </div>
         <div id="underVideoDiv">
             <div id="metaDataDiv">
-                <span ng-show="ctrl.videoData">
+                <span ng-if="ctrl.videoData">
                 <p class="metaDataP"
                    style="font-weight: bolder;font-size: 24px;margin-top: auto">[[ctrl.videoData.title]]</p>
                 <p class="metaDataP metaDataPropValue" style="font-size: 18px;">[[ctrl.videoData.description]]</p>
@@ -55,17 +55,19 @@
             </uib-progress>
         </div>
         <div id="searchResults" ng-style="{'height': (ctrl.showRealTimeProgress)?'85.5%': '89.5%'}">
-            <h4 ng-if="ctrl.search_results  ">Found
+            <h4 ng-if="ctrl.search_results " style="height: 5%; margin: 0">Found
                 [[ctrl.numberOfResults()>0?ctrl.numberOfResults(): 'no']] results </h4>
-            <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index" ng-click="ctrl.jump(time)">
-                <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
-                    <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
-                    <span ng-repeat="word in paragraph.split(' ') track by $index">
+            <div style="height: 95%;overflow-y: scroll">
+                <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index" ng-click="ctrl.jump(time)">
+                    <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
+                        <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
+                        <span ng-repeat="word in paragraph.split(' ') track by $index">
                         <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
                         <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
                             [[word]]&nbsp;</mark></strong></span>
                     </span>
-                    <br/>
+                        <br/>
+                    </div>
                 </div>
             </div>
         </div>
