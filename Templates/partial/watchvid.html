@@ -11,12 +11,13 @@
         <div id="underVideoDiv">
             <div id="metaDataDiv">
                 <span ng-show="ctrl.videoData">
-                <p>[[ctrl.videoData.title]]</p>
-                <p>[[ctrl.videoData.description]]</p>
-                <p>Published at [[ctrl.videoData.vid_id]]</p>
-                <p>Uploaded By: [[ctrl.videoData.userID]]</p>
-                <p ng-if="ctrl.videoData.confidence">Transcript Confidence:
-                    [[ctrl.videoData.confidence*100|number:2]]%</p>
+                <p class="metaDataP"
+                   style="font-weight: bolder;font-size: 24px;margin-top: auto">[[ctrl.videoData.title]]</p>
+                <p class="metaDataP metaDataPropValue" style="font-size: 18px;">[[ctrl.videoData.description]]</p>
+                    <p class="metaDataP metaDataPropName">Published at <span class="metaDataPropValue">[[ctrl.videoData.vid_id|split:'_':-2|datetostring]]</span></p>
+                    <p class="metaDataP metaDataPropName">Uploaded By <span class="metaDataPropValue">[[ctrl.videoData.username]]</span></p>
+                <p class="metaDataP metaDataPropName" ng-if="ctrl.videoData.confidence">Transcript Confidence:
+                    <span class="metaDataPropValue">[[ctrl.videoData.confidence*100|number:2]]%</span></p>
                 </span>
             </div>
             <div id="wordCloudDiv">
@@ -27,7 +28,7 @@
     </div>
     <div id="watchVidRight">
         <div id="searchBar">
-            <form ng-show="ctrl.indexLoaded" ng-submit="ctrl.searchInVid()">
+            <form ng-if="ctrl.indexLoaded" ng-submit="ctrl.searchInVid()">
                 <div class="input-group input-group-lg">
                     <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
                     <div class="input-group-btn">
@@ -37,7 +38,22 @@
                     </div>
                 </div>
             </form>
+            <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
         </div>
-        <div id="searchResults"></div>
+        <div id="searchResults">
+            <h4 ng-if="ctrl.search_results  ">Found
+                [[ctrl.numberOfResults()>0?ctrl.numberOfResults(): 'no']] results </h4>
+            <div ng-repeat="(time,paragraph) in ctrl.search_results track by $index" ng-click="ctrl.jump(time)">
+                <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
+                    <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
+                    <span ng-repeat="word in paragraph.split(' ') track by $index">
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
+                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
+                            [[word]]&nbsp;</mark></strong></span>
+                    </span>
+                    <br/>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,8 +1,7 @@
 var app = angular.module('myApp');
 var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
-{
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast) {
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
@@ -12,45 +11,37 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.search_results = null;
 
     // Start updating until all index up-to-date:
-    ctrl.init = function ()
-    {
+    ctrl.init = function () {
         ctrl.vidId = $routeParams.vidId;
         ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
         ctrl.indexLoaded = false;
         ctrl.showRealTimeProgress = false;
-        ctrl.wordCloudList=[];
+        ctrl.wordCloudList = [];
         ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
     };
-    ctrl.setVideo = function()
-    {
-        var img_id = (ctrl.vidId).replace(".mp4",".png")
+    ctrl.setVideo = function () {
+        var img_id = (ctrl.vidId).replace(".mp4", ".png")
         var myPlayer = videojs('currentVideo');
-        myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/"+img_id);
+        myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id);
         myPlayer.src(ctrl.currentVideoPath);
     };
-    ctrl.getVideoData = function ()
-    {
-        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
-        {
+    ctrl.getVideoData = function () {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.videoData = res.data;
-        }, function (reason)
-        {
+        }, function (reason) {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response)
-            {
+            $mdToast.show(toast).then(function (response) {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.updateInvertedIndex_Recursive = function ()
-    {
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
-        {
+    ctrl.updateInvertedIndex_Recursive = function () {
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.invertedIndex = res.data.index;
             //            var wordCloudCanvas = document.getElementById('my_canvas');
             //            wordCloudCanvas.width = 400;
@@ -100,12 +91,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                 ctrl.showRealTimeProgress = false;
             }
 
-        }).catch(function (err)
-        {
+        }).catch(function (err) {
             var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response)
-            {
+            $mdToast.show(toast).then(function (response) {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
@@ -114,14 +103,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerm = "";
     ctrl.search_results = null;
-    ctrl.jump = function (time)
-    {
+    ctrl.jump = function (time) {
         var myPlayer = videojs('currentVideo');
         myPlayer.currentTime(Math.max(time - 2, 0));
     };
 
-    ctrl.searchInVid = function ()
-    {
+    ctrl.searchInVid = function () {
         ctrl.searchValCurrentTerms = [];
         var searchResults = {};
         var searchTerms = ctrl.searchVal.split(" ");
@@ -139,24 +126,20 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
-    ctrl.numberOfResults = function ()
-    {
+    ctrl.numberOfResults = function () {
         return Object.keys(ctrl.search_results).length;
     };
-    $scope.$on("$destroy", function(){
+    $scope.$on("$destroy", function () {
         var oldPlayer = document.getElementById('currentVideo');
         videojs(oldPlayer).dispose();
     });
 
-    var sortAndCleanSearchResults = function (searchResults, threshold)
-    {
+    var sortAndCleanSearchResults = function (searchResults, threshold) {
         var sortedSearchResults = {};
         var prevKey = -1;
-        Object.keys(searchResults).sort(function (key1, key2)
-        {
+        Object.keys(searchResults).sort(function (key1, key2) {
             return key1.localeCompare(key2, "kn", {numeric: true})
-        }).forEach(function (key)
-        {
+        }).forEach(function (key) {
             if (prevKey === -1 || (key - prevKey) > threshold)
                 sortedSearchResults[key] = searchResults[key];
             prevKey = key;
@@ -164,6 +147,34 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         return sortedSearchResults;
     };
 }]);
-function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max) {
-  return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+
+function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max)
+{
+    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
 }
+
+app.filter('split', function () {
+    return function (input, splitChar, splitIndex) {
+        var splitted = input.split(splitChar);
+        if (splitIndex >= 0) return splitted[splitIndex];
+        return splitted[splitted.length + splitIndex];
+    }
+});
+var format = function (format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
+};
+app.filter('datetostring', function () {
+    return function (input) {
+        var str = ["{0}{1}-{2}{3}-{4}{5}{6}{7}"];
+        var splitted = input.split("");
+        var args = str.concat(splitted);
+        return format.apply(this, args);
+    }
+});
+
