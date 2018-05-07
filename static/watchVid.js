@@ -108,7 +108,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
 
     ctrl.createWordCloud = function () {
         var wordCloudCanvas = document.getElementById('my_canvas');
-        wordCloudCanvas.width = 380;
+        wordCloudCanvas.width = 350;
         wordCloudCanvas.height = 150;
         var maxWordCount=0;
         ctrl.wordCloudList
