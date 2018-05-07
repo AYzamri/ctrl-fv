@@ -8,6 +8,9 @@
     /*font-family: Dinova;*/
     font-weight: bold;
     color: darkslategrey;
+    height: 9%;
+    margin-bottom: 1%;
+    margin-top: 0;
 }
 
 .thumbnail {
@@ -21,13 +24,14 @@
 }
 
 .btn-glyphicon {
-    padding:6px;
-    background:#ffffff;
-    margin-right:4px;
+    padding: 6px;
+    background: #ffffff;
+    margin-right: 4px;
 }
+
 .icon-btn {
     padding: 1px 15px 3px 2px;
-    border-radius:50px;
+    border-radius: 50px;
 }
 
 .btn-del {

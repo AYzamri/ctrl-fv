@@ -13,11 +13,11 @@ app.controller('myVidsCtrl', ['$http', '$location','$mdToast', 'userService', fu
 
     ctrl.getVideos = function () {
         return ctrl.Service.User.videosData;
-    }
+    };
     ctrl.getVideoThumbNail = function (video_id){
-    var img_id = video_id.replace(".mp4",".png")
+    var img_id = video_id.replace(".mp4",".png");
     return "https://cfvtes9c07.blob.core.windows.net/image-container/"+img_id
-    }
+    };
 
 
     ctrl.removeVideoFromSystem = function (video_id, index) {
