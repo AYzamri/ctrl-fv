@@ -43,27 +43,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.updateInvertedIndex_Recursive = function () {
         return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.invertedIndex = res.data.index;
-            //            var wordCloudCanvas = document.getElementById('my_canvas');
-            //            wordCloudCanvas.width = 400;
-            //             wordCloudCanvas.height = 300;
-            //             var maxWordCount=0;
-            //             ctrl.wordCloudList=Object.entries(ctrl.invertedIndex).filter(function(term){
-            //             return (Object.keys(term[1]).length>1);
-            //             }).map(function(term){
-            //             var wordCount = Object.keys(term[1]).length;
-            //             maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
-            //              return [term[0],wordCount]});
-            //             WordCloud(wordCloudCanvas,
-            //              { list: ctrl.wordCloudList,
-            //              weightFactor: function(size) {
-            //                    return  Math.pow(scaleBetween(size, 3, 10, 1 , maxWordCount), 2.3) *  wordCloudCanvas.width / 1024;
-            //                },
-            // shape: 'circle',  gridSize: Math.round(25 *  wordCloudCanvas.width / 1024),  click: (data) => {
-            //            console.log(this);
-            //            ctrl.searchVal=data[0];
-            //            ctrl.searchInVid();
-            //             $scope.$apply();}} );
-
+            ctrl.createWordCloud();
             ctrl.progress = res.data.progress;
             if (Object.keys(ctrl.invertedIndex).length > 0)
                 ctrl.indexLoaded = true;
@@ -126,6 +106,30 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
+    ctrl.createWordCloud = function () {
+        var wordCloudCanvas = document.getElementById('my_canvas');
+        wordCloudCanvas.width = 380;
+        wordCloudCanvas.height = 150;
+        var maxWordCount=0;
+        ctrl.wordCloudList
+        var wordCloudRaw=Object.entries(ctrl.invertedIndex).map(function(term){
+                                var wordCount = Object.keys(term[1]).length;
+                                maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
+                                return [term[0],wordCount]}).sort(Comparator);
+         var numberOfWordsInWordCLoud = Math.floor(wordCloudRaw.length/2)
+        ctrl.wordCloudList = wordCloudRaw.slice(0,numberOfWordsInWordCLoud );
+        WordCloud(wordCloudCanvas,
+            { list: ctrl.wordCloudList,
+            weightFactor: function(size) {
+                return  scaleBetween(size, 1,80, ctrl.wordCloudList[numberOfWordsInWordCLoud-1][1] , maxWordCount);
+                            },gridSize: 2,
+             shape: 'circle',  click: (data) => {
+                        console.log(this);
+                        ctrl.searchVal=data[0];
+                        ctrl.searchInVid();
+                         $scope.$apply();}} );
+
+    };
     ctrl.numberOfResults = function () {
         return Object.keys(ctrl.search_results).length;
     };
@@ -148,11 +152,17 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     };
 }]);
 
-function scaleBetween(unscaledNum, minAllowed, maxAllowed, min, max)
+function scaleBetween(oldValue, minFontSize, maxFontSize, min, max)
 {
-    return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed;
+    return newValue = (oldValue - min ) / (max - min) * (maxFontSize - minFontSize) + minFontSize;
 }
 
+
+ function Comparator(a, b) {
+   if (a[1] < b[1]) return 1;
+   if (a[1] > b[1]) return -1;
+   return 0;
+ }
 app.filter('split', function () {
     return function (input, splitChar, splitIndex) {
         var splitted = input.split(splitChar);
