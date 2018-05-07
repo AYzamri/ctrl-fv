@@ -30,12 +30,14 @@
         <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No relevant video was found</h5>
     </div>
     <div class="container" ng-repeat="vid in ctrl.vid_search_results">
-        <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" ng-src="[[vid.tn_url]]"/></a>
+        <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"
+                                                                               ng-src="[[vid.tn_url]]"/></a>
         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
-            <h3><strong>[[vid.title]]</strong>
+            <h3 style="margin-top: 0.5%;margin-bottom: 1%"><strong>[[vid.title]]</strong>
                 <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>
             </h3>
         </a>
-        <p>[[vid.description]]</p>
+        <p style="margin-bottom: 0.5%">[[vid.description]]</p>
+        <p ng-if="vid.keywords" style="margin-bottom: 0.5%"><b>Keywords:</b> [[vid.keywords]]</p>
     </div>
 </div>
