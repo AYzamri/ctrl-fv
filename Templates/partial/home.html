@@ -24,9 +24,9 @@
 
     <div class="container" style="height: 7%">
         <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
-            [[ctrl.vid_search_results.length]] relevant videos</h5>
-        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No relevant video was found</h5>
-        <div style="text-align: center">
+            [[ctrl.vid_search_results.length]] result[[ctrl.vid_search_results.length > 1 ? 's' : '']]</h5>
+        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No videos found</h5>
+        <div style="text-align: center; padding: 5% 0">
             <div style="display: inline-block">
                 <md-progress-circular ng-if="ctrl.vid_search_results.length === 0 && ctrl.searchFinished === false" md-mode="indeterminate"></md-progress-circular>
             </div>
