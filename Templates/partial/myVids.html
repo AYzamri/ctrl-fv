@@ -5,40 +5,33 @@
     <div style="height: 90%;width: 97vw; overflow-y: auto;overflow-x: hidden">
         <div class="container" style="width: 30%;height: 30%;margin: 0.5%;display: inline-block"
              ng-repeat="vid in ctrl.getVideos()">
-            {#            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail"#}
-            {#                                                                                   ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]"/></a>#}
-            {#            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none ">#}
-            {#                <h3><strong>[[vid.title]]</strong>#}
-            {#                    <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>#}
-            {#                </h3>#}
-            {#            </a>#}
-            {#            <p>[[vid.description]]</p>#}
-            {##}
-            {#            <a ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)" class="btn-del icon-btn btn-danger"#}
-            {#               href="#myVids">#}
-            {#                <span class="glyphicon btn-glyphicon glyphicon-trash img-circle text-danger"></span>#}
-            {#                Delete#}
-            {#            </a>#}
             <md-card style="width: 100%;height: 100%" md-theme="default" md-theme-watch>
-                <md-card-title>
-                    <md-card-title-text>
+                {#                <md-card-title>#}
+                {#                    <md-card-title-text></md-card-title-text>#}
+                {#                    <md-card-title-media>#}
+                {#                        <div class="md-media-sm card-media">#}
+                {#                            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">#}{#                        </div>#}
+                {#                    </md-card-title-media>#}
+                {#                </md-card-title>#}
+                <md-card-content style="height: 75%;padding-bottom: 1%">
+                    <div style="width: 40%;margin: 1%">
+                        <img class="thumbnail" style="height: auto;width: 100%"
+                             ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]"/></a>
+                    </div>
+                    <div style="width: 57%;float: right;margin: 0">
                         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none "><span class="md-headline">[[vid.title]]</span></a>
-                        <span class="md-subhead">[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</span>
-                    </md-card-title-text>
-                    <md-card-title-media>
-                        <div class="md-media-sm card-media">
-                            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
-                                <img class="thumbnail" ng-src="[[ctrl.getVideoThumbNail(vid.vid_id)]]"/></a>
-                        </div>
-                    </md-card-title-media>
-                </md-card-title>
-                <md-card-content style="height: auto">
-                    <p>[[vid.description]]</p>
+                        <p style="margin-bottom: 0.5%" class="md-subhead">[[vid.duration | secondsToDateTime |
+                            date:'HH:mm:ss']]</p>
+                        <p style="margin-bottom: 0.5%">[[vid.description]]</p>
+                    </div>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-href="#/watch/[[vid.vid_id]]">Watch</md-button>
-                    <md-button ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)" href="#myVids">Delete
+                    <md-button class="md-icon-button md-primary" ng-href="#/watch/[[vid.vid_id]]"><span
+                            class="glyphicon glyphicon-play"></span>
                     </md-button>
+                    <md-button class="md-icon-button md-primary md-warn" href="#myVids"
+                               ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)"><span
+                            class="glyphicon glyphicon-trash"></span></md-button>
                 </md-card-actions>
             </md-card>
         </div>
