@@ -17,7 +17,7 @@
                 <p class="metaDataP"
                    style="font-weight: bolder;font-size: 24px;margin-top: auto">[[ctrl.videoData.title]]</p>
                 <p class="metaDataP metaDataPropValue" style="font-size: 18px;">[[ctrl.videoData.description]]</p>
-                    <p class="metaDataP metaDataPropName">Published at <span class="metaDataPropValue">[[ctrl.videoData.vid_id|split:'_':-2|datetostring]]</span></p>
+                    <p class="metaDataP metaDataPropName">Published at <span class="metaDataPropValue">[[ctrl.videoData.vid_id | split:'_':-2 | datetostring]]</span></p>
                     <p class="metaDataP metaDataPropName">Uploaded By <span class="metaDataPropValue">[[ctrl.videoData.username]]</span></p>
                 <p class="metaDataP metaDataPropName" ng-if="ctrl.videoData.confidence">Transcript Confidence:
                     <span class="metaDataPropValue">[[ctrl.videoData.confidence*100|number:2]]%</span></p>
@@ -48,7 +48,7 @@
                 <md-tooltip md-direction="bottom">Parts of the video in which you can search</md-tooltip>
                 <span ng-if="ctrl.indexLoaded" ng-repeat="segNum in ctrl.range">
             <uib-bar
-                    type="[[ctrl.progress.analyzedSegments.indexOf(segNum)>=0 ? 'info':'transparent']]"
+                    type="[[ctrl.progress.analyzedSegments.indexOf(segNum) >= 0 ? 'info' : 'transparent']]"
                     value="1"></uib-bar>
             </span>
             </uib-progress>
@@ -61,10 +61,11 @@
                     <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
                         <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
                         <span ng-repeat="word in paragraph.split(' ') track by $index">
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>
-                        <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>
-                            [[word]]&nbsp;</mark></strong></span>
-                    </span>
+                            <span ng-if="ctrl.searchValCurrentTerms | word === -1">[[word]] </span>
+                            <span ng-if="ctrl.searchValCurrentTerms | word > -1"><strong><mark>[[word]] </mark></strong></span>
+{#                            <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>#}
+{#                            <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>[[word]]&nbsp;</mark></strong></span>#}
+                        </span>
                         <br/>
                     </div>
                 </div>

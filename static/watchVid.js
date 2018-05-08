@@ -1,7 +1,10 @@
 var app = angular.module('myApp');
 var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast) {
+
+
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
+{
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
     ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
@@ -9,39 +12,67 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerms = [];
     ctrl.search_results = null;
+    ctrl.showRealTimeProgress = false;
+    ctrl.wordCloudList = [];
 
     // Start updating until all index up-to-date:
-    ctrl.init = function () {
-        ctrl.vidId = $routeParams.vidId;
-        ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
-        ctrl.indexLoaded = false;
-        ctrl.showRealTimeProgress = false;
-        ctrl.wordCloudList = [];
+    ctrl.init = function ()
+    {
+        ctrl.searchValCurrentTerms.filter(function ()
+        {
+            return function (term)
+            {
+                if (term[term.length - 1] === '.' || term[term.length - 1] === ',')
+                    term = term.slice(0, -1);
+                return ctrl.searchValCurrentTerms.indexOf(term);
+            };
+            var pattern = new RegExp(word + "[,.]*", "gi");
+
+        });
         ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
     };
-    ctrl.setVideo = function () {
-        var img_id = (ctrl.vidId).replace(".mp4", ".png")
+
+    ctrl.setVideo = function ()
+    {
         var myPlayer = videojs('currentVideo');
-        myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id);
         myPlayer.src(ctrl.currentVideoPath);
     };
-    ctrl.getVideoData = function () {
-        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
+
+    ctrl.getVideoData = function ()
+    {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
+        {
             ctrl.videoData = res.data;
-        }, function (reason) {
+        }, function (reason)
+        {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.updateInvertedIndex_Recursive = function () {
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
+    ctrl.updateInvertedIndex_Recursive = function ()
+    {
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
+        {
+            var img_id = ctrl.vidId.substring(0, ctrl.vidId.lastIndexOf('.')) + ".png";
+            var myPlayer = videojs('currentVideo');
+            if (myPlayer.poster === "")
+            {
+                try
+                {
+                    myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id);
+                }
+                catch (err)
+                {
+                }
+            }
             ctrl.invertedIndex = res.data.index;
             ctrl.createWordCloud();
             ctrl.progress = res.data.progress;
@@ -53,7 +84,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                 // Update video details to get the confidence
                 ctrl.getVideoData();
                 ctrl.range = [];
-                // I honestly couldn't find a better way to calculate range
                 for (var i = 0; i < ctrl.progress.totalSegments; i++)
                     ctrl.range.push(i);
             }
@@ -71,24 +101,26 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                 ctrl.showRealTimeProgress = false;
             }
 
-        }).catch(function (err) {
+        }).catch(function (err)
+        {
             var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response) {
+            $mdToast.show(toast).then(function (response)
+            {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
-    ctrl.searchVal = "";
-    ctrl.searchValCurrentTerm = "";
-    ctrl.search_results = null;
-    ctrl.jump = function (time) {
+
+    ctrl.jump = function (time)
+    {
         var myPlayer = videojs('currentVideo');
         myPlayer.currentTime(Math.max(time - 2, 0));
     };
 
-    ctrl.searchInVid = function () {
+    ctrl.searchInVid = function ()
+    {
         ctrl.searchValCurrentTerms = [];
         var searchResults = {};
         var searchTerms = ctrl.searchVal.split(" ");
@@ -106,6 +138,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
+    ctrl.numberOfResults = function ()
+    {
     ctrl.createWordCloud = function () {
         var wordCloudCanvas = document.getElementById('my_canvas');
         wordCloudCanvas.width = 350;
@@ -133,17 +167,22 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.numberOfResults = function () {
         return Object.keys(ctrl.search_results).length;
     };
-    $scope.$on("$destroy", function () {
+
+    $scope.$on("$destroy", function ()
+    {
         var oldPlayer = document.getElementById('currentVideo');
         videojs(oldPlayer).dispose();
     });
 
-    var sortAndCleanSearchResults = function (searchResults, threshold) {
+    var sortAndCleanSearchResults = function (searchResults, threshold)
+    {
         var sortedSearchResults = {};
         var prevKey = -1;
-        Object.keys(searchResults).sort(function (key1, key2) {
+        Object.keys(searchResults).sort(function (key1, key2)
+        {
             return key1.localeCompare(key2, "kn", {numeric: true})
-        }).forEach(function (key) {
+        }).forEach(function (key)
+        {
             if (prevKey === -1 || (key - prevKey) > threshold)
                 sortedSearchResults[key] = searchResults[key];
             prevKey = key;
@@ -157,12 +196,20 @@ function scaleBetween(oldValue, minFontSize, maxFontSize, min, max)
     return newValue = (oldValue - min ) / (max - min) * (maxFontSize - minFontSize) + minFontSize;
 }
 
+app.filter('splitPara', function ()
+{
+    return function (input)
+    {
+        return input.split(/[ ,.]+/);
+    }
+});
 
- function Comparator(a, b) {
-   if (a[1] < b[1]) return 1;
-   if (a[1] > b[1]) return -1;
-   return 0;
- }
+function Comparator(a, b) {
+    if (a[1] < b[1]) return 1;
+    if (a[1] > b[1]) return -1;
+    return 0;
+}
+
 app.filter('split', function () {
     return function (input, splitChar, splitIndex) {
         var splitted = input.split(splitChar);
@@ -170,17 +217,23 @@ app.filter('split', function () {
         return splitted[splitted.length + splitIndex];
     }
 });
-var format = function (format) {
+
+var format = function (format)
+{
     var args = Array.prototype.slice.call(arguments, 1);
-    return format.replace(/{(\d+)}/g, function (match, number) {
+    return format.replace(/{(\d+)}/g, function (match, number)
+    {
         return typeof args[number] != 'undefined'
             ? args[number]
             : match
             ;
     });
 };
-app.filter('datetostring', function () {
-    return function (input) {
+
+app.filter('datetostring', function ()
+{
+    return function (input)
+    {
         var str = ["{0}{1}-{2}{3}-{4}{5}{6}{7}"];
         var splitted = input.split("");
         var args = str.concat(splitted);
