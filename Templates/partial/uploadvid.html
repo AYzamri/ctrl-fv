@@ -1,4 +1,4 @@
-<div class="view">
+<div class="view" style="text-align: center">
     <style>
         .container {
             width: 40%;
@@ -7,7 +7,7 @@
     <div class="pageHeader text-center">
         <h1>Upload Video</h1>
     </div>
-    <div class="container">
+    <div class="container" style="display: inline-block">
         <form id="uploadform" name="uploadform" ng-submit="ctrl.doUpload()">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
@@ -21,23 +21,28 @@
       </textarea>
             </div>
             <br>
-            <div class="input-group input-group-lg">
-
+            <div class="input-group input-group-lg" style="width: 100%">
                 <input id="videoFile" class="form-control" type="file" files-input accept="video/mp4" ng-model="ctrl.vidArray"
                        onchange="angular.element(this).scope().validateVidFile(this)" ng-change="ctrl.getDuration()" required>
                 [[VideoFileMessage]]
                 [[showMessage]]
             </div>
             <br>
-            <input class="btn btn-success btn-lg" type="submit" value="Upload" ng-disabled="ctrl.isUploading" style="margin-left:35%"></input>
+            <input class="btn btn-success btn-lg" type="submit" value="Upload" ng-disabled="ctrl.isUploading"></input>
         </form>
     </div>
-    <div ng-show="ctrl.isUploading">
-        <img   src="../../static/uploading.gif" style="margin-left: 45%; height: 10%;">
-        <div class="progress" style="width:50%;margin-left:25% ">
-            <div  class="progress-bar progress-bar-striped active" role="progressbar"
-                  aria-valuenow="[[ctrl.progress]]" aria-valuemin="0" aria-valuemax="100" style="width:[[ctrl.progress]]%">
-                [[ctrl.progress]]%
+    <div ng-if="ctrl.isUploading">
+        <div style="text-align: center">
+            <div style="display: inline-block">
+                <img src="../../static/uploading.gif" style="height: 10%;">
+            </div>
+        </div>
+        <div style="text-align: center">
+            <div class="progress" style="width:50%; display: inline-block">
+                <div class="progress-bar progress-bar-striped active" role="progressbar"
+                     aria-valuenow="[[ctrl.progress]]" aria-valuemin="0" aria-valuemax="100" style="width:[[ctrl.progress]]%">
+                    [[ctrl.progress]]%
+                </div>
             </div>
         </div>
     </div>
