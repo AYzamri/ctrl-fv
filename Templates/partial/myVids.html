@@ -28,10 +28,14 @@
                 <md-card-actions layout="row" layout-align="end center">
                     <md-button class="md-icon-button md-primary" ng-href="#/watch/[[vid.vid_id]]"><span
                             class="glyphicon glyphicon-play"></span>
+                        <md-tooltip md-direction="bottom">Watch Video</md-tooltip>
                     </md-button>
                     <md-button class="md-icon-button md-primary md-warn" href="#myVids"
                                ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)"><span
-                            class="glyphicon glyphicon-trash"></span></md-button>
+                            class="glyphicon glyphicon-trash"></span>
+                        <md-tooltip md-direction="bottom">Delete Video</md-tooltip>
+                    </md-button>
+
                 </md-card-actions>
             </md-card>
         </div>
