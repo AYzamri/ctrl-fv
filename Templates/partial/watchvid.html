@@ -29,7 +29,7 @@
         </div>
     </div>
     <div id="watchVidRight">
-        <div id="searchBar">
+        <div id="searchBar" style="text-align: center">
             <form ng-if="ctrl.indexLoaded" ng-submit="ctrl.searchInVid()">
                 <div class="input-group input-group-lg">
                     <input class="form-control" type="text" placeholder="Search Inside" ng-model=ctrl.searchVal>
@@ -40,7 +40,10 @@
                     </div>
                 </div>
             </form>
-            <h5 ng-if="!ctrl.indexLoaded">Loading video data...</h5>
+            <div style="display: inline-block">
+                <md-progress-circular ng-if="!ctrl.indexLoaded" md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <h4 ng-if="!ctrl.indexLoaded">Loading video data...</h4>
         </div>
         <div id="progressDiv" ng-if="ctrl.showRealTimeProgress">
             <uib-progress ng-if="ctrl.indexLoaded"

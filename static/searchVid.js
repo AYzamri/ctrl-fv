@@ -5,11 +5,11 @@ app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast', function ($http,
 {
     var ctrl = this;
     ctrl.searchVal = "";
-    ctrl.searchFinished = false;
-    ctrl.vid_search_results = [];
 
     ctrl.searchForVid = function ()
     {
+        ctrl.searchFinished = false;
+        ctrl.vid_search_results = [];
         $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
         {
             ctrl.searchFinished = true;

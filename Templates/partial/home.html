@@ -26,8 +26,13 @@
         <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
             [[ctrl.vid_search_results.length]] relevant videos</h5>
         <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No relevant video was found</h5>
+        <div style="text-align: center">
+            <div style="display: inline-block">
+                <md-progress-circular ng-if="ctrl.vid_search_results.length === 0 && ctrl.searchFinished === false" md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
     </div>
-    <div class="container" style="height:calc(62% - 130px); overflow: auto">
+    <div ng-if="ctrl.searchFinished" class="container" style="height:calc(62% - 130px); overflow: auto">
         <div style="float: left;width: 100%" ng-repeat="vid in ctrl.vid_search_results">
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" height="100%" ng-src="[[vid.tn_url]]"/></a>
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
