@@ -29,8 +29,7 @@
     </div>
     <div class="container" style="height:calc(62% - 130px); overflow: auto">
         <div style="float: left;width: 100%" ng-repeat="vid in ctrl.vid_search_results">
-            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" height="100%"
-                                                                                   ng-src="[[vid.tn_url]]"/></a>
+            <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" height="100%" ng-src="[[vid.tn_url]]"/></a>
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
                 <h3 style="margin-top: 0.5%;margin-bottom: 1%"><strong>[[vid.title]]</strong>
                     <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>

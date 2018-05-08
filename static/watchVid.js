@@ -1,13 +1,10 @@
 var app = angular.module('myApp');
-var containerUrl = "https://cfvtes9c07.blob.core.windows.net/videoscontainer";
 var server = app.config['server'];
-
 
 app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
 {
     var ctrl = this;
     ctrl.vidId = $routeParams.vidId;
-    ctrl.currentVideoPath = containerUrl + "/" + ctrl.vidId;
     ctrl.indexLoaded = false;
     ctrl.searchVal = "";
     ctrl.searchValCurrentTerms = [];
@@ -18,15 +15,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     // Start updating until all index up-to-date:
     ctrl.init = function ()
     {
-        ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
-    };
-
-    ctrl.setVideo = function ()
-    {
-        var myPlayer = videojs('currentVideo');
-        myPlayer.src(ctrl.currentVideoPath);
     };
 
     ctrl.getVideoData = function ()
@@ -34,6 +24,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
         {
             ctrl.videoData = res.data;
+            ctrl.setVideo();
         }, function (reason)
         {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
@@ -46,21 +37,21 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         });
     };
 
+    ctrl.setVideo = function ()
+    {
+        var myPlayer = videojs('currentVideo');
+        myPlayer.src(ctrl.videoData.video_url);
+    };
+
     ctrl.updateInvertedIndex_Recursive = function ()
     {
         return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
         {
-            var img_id = ctrl.vidId.substring(0, ctrl.vidId.lastIndexOf('.')) + ".png";
             var myPlayer = videojs('currentVideo');
             if (myPlayer.poster === "")
             {
-                try
-                {
-                    myPlayer.poster("https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id);
-                }
-                catch (err)
-                {
-                }
+                try { myPlayer.poster(ctrl.videoData.tn_url); }
+                catch (err) {}
             }
             ctrl.invertedIndex = res.data.index;
             ctrl.createWordCloud();
@@ -193,8 +184,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         });
         return sortedSearchResults;
     };
-}
-]);
+}]);
 
 function scaleBetween(oldValue, minFontSize, maxFontSize, min, max)
 {

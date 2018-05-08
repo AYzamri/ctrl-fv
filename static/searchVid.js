@@ -26,12 +26,6 @@ app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast', function ($http,
         });
     };
 
-    // ctrl.getVideoThumbNail = function (video_id)
-    // {
-    //     var img_id = video_id.substring(0, video_id.lastIndexOf('.')) + ".png";
-    //     return "https://cfvtes9c07.blob.core.windows.net/image-container/" + img_id
-    // };
-
     ctrl.getNumberOfResults = function ()
     {
         return Object.keys(ctrl.vid_search_results).length;

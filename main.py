@@ -98,7 +98,6 @@ def login():
         data = request.json
         email = data['email']
         password = data['password']
-
         user = server_logic.login(email, password)
         if not user:
             return 'Wrong username or password', 403
