@@ -18,8 +18,8 @@
                    style="font-weight: bolder;font-size: 24px;margin-top: auto">[[ctrl.videoData.title]]</p>
                 <p class="metaDataP metaDataPropValue" style="font-size: 18px;">[[ctrl.videoData.description]]</p>
                     <p class="metaDataP metaDataPropName">Published at <span class="metaDataPropValue">[[ctrl.videoData.vid_id | split:'_':-2 | datetostring]]</span></p>
-                    <p class="metaDataP metaDataPropName">Uploaded By <span class="metaDataPropValue">[[ctrl.videoData.username]]</span></p>
-                <p class="metaDataP metaDataPropName" ng-if="ctrl.videoData.confidence">Transcript Confidence:
+                    <p class="metaDataP metaDataPropName">Uploaded by <span class="metaDataPropValue">[[ctrl.videoData.username]]</span></p>
+                <p class="metaDataP metaDataPropName" ng-if="ctrl.videoData.confidence">Transcript confidence:
                     <span class="metaDataPropValue">[[ctrl.videoData.confidence*100|number:2]]%</span></p>
                 </span>
             </div>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </form>
-            <h5 ng-if="!ctrl.indexLoaded">Please wait for data to be loaded</h5>
+            <h5 ng-if="!ctrl.indexLoaded">Loading video data...</h5>
         </div>
         <div id="progressDiv" ng-if="ctrl.showRealTimeProgress">
             <uib-progress ng-if="ctrl.indexLoaded"
