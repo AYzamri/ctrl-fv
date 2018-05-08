@@ -24,7 +24,7 @@
                 </span>
             </div>
             <div id="wordCloudDiv">
-                   <canvas id="my_canvas"> </canvas>
+                <canvas id="my_canvas"></canvas>
             </div>
         </div>
     </div>
@@ -61,10 +61,8 @@
                     <div style="border:2px solid grey ;border-radius: 8px; padding: 5px; margin: 5px;">
                         <strong> [[time | secondsToDateTime | date:'HH:mm:ss']]</strong>
                         <span ng-repeat="word in paragraph.split(' ') track by $index">
-                            <span ng-if="ctrl.searchValCurrentTerms | word === -1">[[word]] </span>
-                            <span ng-if="ctrl.searchValCurrentTerms | word > -1"><strong><mark>[[word]] </mark></strong></span>
-{#                            <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) === -1">[[word]]&nbsp;</span>#}
-{#                            <span ng-if="ctrl.searchValCurrentTerms.indexOf(word) > -1"><strong><mark>[[word]]&nbsp;</mark></strong></span>#}
+                            <span ng-if="ctrl.isExist(word) === false">[[word]] </span>
+                            <span ng-if="ctrl.isExist(word) === true"><strong><mark>[[word]] </mark></strong></span>
                         </span>
                         <br/>
                     </div>

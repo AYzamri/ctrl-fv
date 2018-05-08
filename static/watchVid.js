@@ -18,17 +18,6 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     // Start updating until all index up-to-date:
     ctrl.init = function ()
     {
-        ctrl.searchValCurrentTerms.filter(function ()
-        {
-            return function (term)
-            {
-                if (term[term.length - 1] === '.' || term[term.length - 1] === ',')
-                    term = term.slice(0, -1);
-                return ctrl.searchValCurrentTerms.indexOf(term);
-            };
-            var pattern = new RegExp(word + "[,.]*", "gi");
-
-        });
         ctrl.setVideo();
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
@@ -138,33 +127,48 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
     };
 
-    ctrl.numberOfResults = function ()
+    ctrl.isExist = function (word)
     {
-    ctrl.createWordCloud = function () {
+        if (word[word.length - 1] === '.' || word[word.length - 1] === ',')
+            word = word.slice(0, -1);
+        return ctrl.searchValCurrentTerms.indexOf(word) > -1;
+    };
+
+    ctrl.createWordCloud = function ()
+    {
         var wordCloudCanvas = document.getElementById('my_canvas');
         wordCloudCanvas.width = 350;
         wordCloudCanvas.height = 150;
-        var maxWordCount=0;
+        var maxWordCount = 0;
         ctrl.wordCloudList
-        var wordCloudRaw=Object.entries(ctrl.invertedIndex).map(function(term){
-                                var wordCount = Object.keys(term[1]).length;
-                                maxWordCount = wordCount >= maxWordCount? wordCount : maxWordCount;
-                                return [term[0],wordCount]}).sort(Comparator);
-         var numberOfWordsInWordCLoud = Math.floor(wordCloudRaw.length/2)
-        ctrl.wordCloudList = wordCloudRaw.slice(0,numberOfWordsInWordCLoud );
-        WordCloud(wordCloudCanvas,
-            { list: ctrl.wordCloudList,
-            weightFactor: function(size) {
-                return  scaleBetween(size, 1,80, ctrl.wordCloudList[numberOfWordsInWordCLoud-1][1] , maxWordCount);
-                            },gridSize: 2,
-             shape: 'circle',  click: (data) => {
-                        console.log(this);
-                        ctrl.searchVal=data[0];
-                        ctrl.searchInVid();
-                         $scope.$apply();}} );
+        var wordCloudRaw = Object.entries(ctrl.invertedIndex).map(function (term)
+        {
+            var wordCount = Object.keys(term[1]).length;
+            maxWordCount = wordCount >= maxWordCount ? wordCount : maxWordCount;
+            return [term[0], wordCount]
+        }).sort(Comparator);
+        var numberOfWordsInWordCLoud = Math.floor(wordCloudRaw.length / 2);
+        ctrl.wordCloudList = wordCloudRaw.slice(0, numberOfWordsInWordCLoud);
+        //     WordCloud(wordCloudCanvas,
+        //         {
+        //             list: ctrl.wordCloudList,
+        //             weightFactor: function (size)
+        //             {
+        //                 return scaleBetween(size, 1, 80, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
+        //             }, gridSize: 2,
+        //             shape: 'circle', click: (data) = > {
+        //             console.log(this);
+        //     ctrl.searchVal = data[0];
+        //     ctrl.searchInVid();
+        //     $scope.$apply();
+        // }
+        // } )
+        //     ;
 
     };
-    ctrl.numberOfResults = function () {
+
+    ctrl.numberOfResults = function ()
+    {
         return Object.keys(ctrl.search_results).length;
     };
 
@@ -189,29 +193,25 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         });
         return sortedSearchResults;
     };
-}]);
+}
+]);
 
 function scaleBetween(oldValue, minFontSize, maxFontSize, min, max)
 {
     return newValue = (oldValue - min ) / (max - min) * (maxFontSize - minFontSize) + minFontSize;
 }
 
-app.filter('splitPara', function ()
+function Comparator(a, b)
 {
-    return function (input)
-    {
-        return input.split(/[ ,.]+/);
-    }
-});
-
-function Comparator(a, b) {
     if (a[1] < b[1]) return 1;
     if (a[1] > b[1]) return -1;
     return 0;
 }
 
-app.filter('split', function () {
-    return function (input, splitChar, splitIndex) {
+app.filter('split', function ()
+{
+    return function (input, splitChar, splitIndex)
+    {
         var splitted = input.split(splitChar);
         if (splitIndex >= 0) return splitted[splitIndex];
         return splitted[splitted.length + splitIndex];
