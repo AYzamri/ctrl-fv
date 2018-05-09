@@ -140,22 +140,21 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
         }).sort(Comparator);
         var numberOfWordsInWordCLoud = Math.floor(wordCloudRaw.length / 2);
         ctrl.wordCloudList = wordCloudRaw.slice(0, numberOfWordsInWordCLoud);
-        //     WordCloud(wordCloudCanvas,
-        //         {
-        //             list: ctrl.wordCloudList,
-        //             weightFactor: function (size)
-        //             {
-        //                 return scaleBetween(size, 1, 80, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
-        //             }, gridSize: 2,
-        //             shape: 'circle', click: (data) = > {
-        //             console.log(this);
-        //     ctrl.searchVal = data[0];
-        //     ctrl.searchInVid();
-        //     $scope.$apply();
-        // }
-        // } )
-        //     ;
-
+             WordCloud(wordCloudCanvas,
+                 {
+                     list: ctrl.wordCloudList,
+                     weightFactor: function (size)
+                     {
+                         return scaleBetween(size, 1, 80, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
+                     }, gridSize: 2,
+                     shape: 'circle',
+                     click: function(data) {
+                        ctrl.searchVal = data[0];
+                        ctrl.searchInVid();
+                        $scope.$apply();
+                     }
+                } )
+             ;
     };
 
     ctrl.numberOfResults = function ()
