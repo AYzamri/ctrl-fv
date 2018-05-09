@@ -11,7 +11,7 @@
         <div class="container" style="width: 30%;height: 30%;margin: 0.5%;display: inline-block"
              ng-repeat="vid in ctrl.getVideos()">
             <md-card ng-href="#/watch/[[vid.vid_id]]" style="width: 100%;height: 100%" md-theme="default">
-                <md-card-content style="height: 75%;padding-bottom: 1%">
+                <md-card-content style="height: 72%">
                     <div style="width: 40%;margin: 1%">
                         <a ng-href="#/watch/[[vid.vid_id]]">
                             <img class="thumbnail" style="height: auto;width: 100%" ng-src="[[vid.tn_url]]"/>
@@ -26,7 +26,7 @@
                         <p style="margin-bottom: 0.5%">[[vid.description]]</p>
                     </div>
                 </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
+                <md-card-actions layout="row" layout-align="end center" style="min-height: calc(30% - 16px);margin: 1%">
                     <a style="margin: 1%" ng-href="#/watch/[[vid.vid_id]]"
                        type="button"
                        class="btn btn-success"><span class="glyphicon glyphicon-play-circle"></span> Play
