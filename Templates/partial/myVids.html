@@ -20,7 +20,6 @@
                     <div style="width: 57%;float: right;margin: 0">
                         <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none ">
                             <span class="md-headline">[[vid.title]]</span>
-                            <md-tooltip md-direction="bottom">Watch Video</md-tooltip>
                         </a>
                         <p style="margin-bottom: 0.5%" class="md-subhead">[[vid.duration | secondsToDateTime |
                             date:'HH:mm:ss']]</p>
@@ -28,10 +27,14 @@
                     </div>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <button href="#myVids" ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)" type="button"
-                            class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span>
-                        <md-tooltip md-direction="bottom">Delete Video</md-tooltip>
-                    </button>
+                    <a style="margin: 1%" ng-href="#/watch/[[vid.vid_id]]"
+                       type="button"
+                       class="btn btn-success"><span class="glyphicon glyphicon-play-circle"></span> Play
+                    </a>
+                    <a style="margin:1%" ng-href="#myVids"
+                       ng-click="ctrl.removeVideoFromSystem(vid.vid_id, $index)" type="button"
+                       class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete
+                    </a>
                 </md-card-actions>
             </md-card>
         </div>
