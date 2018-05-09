@@ -1,9 +1,10 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', function ($http, $scope, $routeParams, $mdToast)
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast','headerService', function ($http, $scope, $routeParams, $mdToast, headerService)
 {
     var ctrl = this;
+    headerService.model.showHeader = true;
     ctrl.vidId = $routeParams.vidId;
     ctrl.indexLoaded = false;
     ctrl.searchVal = "";

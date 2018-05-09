@@ -12,9 +12,10 @@ Date.prototype.idFormat = function () {
     ].join('') + '_' + this.getHours() + this.getMinutes();
 };
 
-app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$mdDialog', 'upload', 'userService',
-    function ($http, $scope, $interval, $location, $mdDialog, upload, userService) {
+app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$mdDialog', 'upload', 'userService','headerService',
+    function ($http, $scope, $interval, $location, $mdDialog, upload, userService, headerService) {
         var ctrl = this;
+        headerService.model.showHeader = true;
         ctrl.isUploading = false;
         ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
         ctrl.serverUrl = server + '/videoData';

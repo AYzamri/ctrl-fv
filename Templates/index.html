@@ -23,6 +23,7 @@
     <!--App scripts:-->
     <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='user.service.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='header.service.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='app_config.js') }}"></script>
     <!--Controllers:-->
     <script type="text/javascript" src="{{ url_for('static', filename='uploadvid.js') }}"></script>
@@ -89,6 +90,9 @@
                 <md-tooltip md-direction="bottom">Upload Video</md-tooltip>
                 <img src="../../static/upload.png" style=" height:35px;">
             </md-button>
+            <span flex></span>
+                 <img ng-show = "ctrl.headerService.model.showHeader" ng-src="../../static/ctrlfv.png" style="height:100%; width:21%">
+            <span flex></span>
             <md-menu ng-if="!ctrl.userService.model.loggedIn" md-position-mode="target-right bottom">
                 <md-button class=" md-no-focus md-primary" style="min-width: 1%" aria-label="User"
                            ng-click="$mdMenu.open($event)">

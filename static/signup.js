@@ -1,9 +1,9 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', function ($http, $location, $mdToast, userService) {
+app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', 'headerService',  function ($http, $location, $mdToast, userService, headerService) {
     var ctrl = this;
-
+    headerService.model.showHeader = true;
     ctrl.user = {
     email:"",
     password:"",

@@ -1,11 +1,11 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast', function ($http, $scope, $mdToast)
+app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast','headerService', function ($http, $scope, $mdToast, headerService)
 {
     var ctrl = this;
+    headerService.model.showHeader = false;
     ctrl.searchVal = "";
-
     ctrl.searchForVid = function ()
     {
         ctrl.searchFinished = false;

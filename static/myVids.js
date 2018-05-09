@@ -1,10 +1,10 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', 'userService', function ($http, $location, $mdToast, userService)
+app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', 'userService', 'headerService',  function ($http, $location, $mdToast, userService, headerService)
 {
     var ctrl = this;
-
+    headerService.model.showHeader = true;
     ctrl.Service = userService;
 
     ctrl.init = function ()

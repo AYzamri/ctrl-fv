@@ -48,10 +48,10 @@ app.config(['$routeProvider', function ($routeProvider) {
     })
 }]);
 
-app.controller('mainCtrl', ['$scope', '$http', 'userService', function ($scope, $http, userService) {
+app.controller('mainCtrl', ['$scope', '$http', 'userService','headerService',  function ($scope, $http, userService, headerService) {
     var ctrl = this;
     ctrl.userService = userService;
-
+    ctrl.headerService = headerService;
     ctrl.logout = function () {
         ctrl.userService.logout();
     };
