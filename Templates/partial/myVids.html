@@ -3,6 +3,11 @@
         <h1 class="pageHeader"> My videos</h1>
     </div>
     <div style="height: 90%;width: 97vw; overflow-y: auto;overflow-x: hidden">
+        <h4 style="text-align: center" md-theme="default"
+            ng-if="ctrl.retrievedVideos && (!ctrl.getVideos() || ctrl.getVideos().length==0)">No
+            videos uploaded. <a
+                    href="#upload">Upload a video</a>
+        </h4>
         <div class="container" style="width: 30%;height: 30%;margin: 0.5%;display: inline-block"
              ng-repeat="vid in ctrl.getVideos()">
             <md-card ng-href="#/watch/[[vid.vid_id]]" style="width: 100%;height: 100%" md-theme="default">
