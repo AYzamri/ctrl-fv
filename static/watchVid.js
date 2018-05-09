@@ -128,10 +128,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
     ctrl.createWordCloud = function ()
     {
         var wordCloudCanvas = document.getElementById('my_canvas');
-        wordCloudCanvas.width = 350;
-        wordCloudCanvas.height = 150;
+        var wordCloudDiv = document.getElementById('wordCloudDiv');
+        wordCloudCanvas.width = wordCloudDiv.clientWidth;
+        wordCloudCanvas.height = wordCloudDiv.clientHeight;
         var maxWordCount = 0;
-        ctrl.wordCloudList
         var wordCloudRaw = Object.entries(ctrl.invertedIndex).map(function (term)
         {
             var wordCount = Object.keys(term[1]).length;
@@ -145,7 +145,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', f
                      list: ctrl.wordCloudList,
                      weightFactor: function (size)
                      {
-                         return scaleBetween(size, 1, 80, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
+                         return scaleBetween(size, 1, 70, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
                      }, gridSize: 2,
                      shape: 'circle',
                      click: function(data) {
