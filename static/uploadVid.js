@@ -92,16 +92,16 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                 videoDescription: ctrl.videoDescription,
                 user: userService.User.email,
                 duration: ctrl.duration,
-                videoUrl: ctrl.storageUrl + "/videoscontainer/" + videoID
+                videoUrl: ctrl.storageUrl + "/video-container/" + videoID
             };
 
-            var sas = '?sv=2017-07-29&ss=bfqt&srt=co&sp=rwacup&se=2018-06-30T17:44:01Z&st=2018-04-03T09:44:01Z&spr=https&sig=cjTWXrIh5yrImi%2FddvbXyvxlk%2F0DVTbJPxJHqj%2BoGt0%3D';
+            var sas = '?sv=2017-07-29&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-04-06T20:01:12Z&st=2018-05-11T12:01:12Z&spr=https,http&sig=GOrYy8FwZnVjUaguaPz0M64Twt01RfBYo%2BHs7SPA4zo%3D';
             var blobService = AzureStorage.Blob.createBlobServiceWithSas(ctrl.storageUrl, sas);
             var customBlockSize = file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
             blobService.singleBlobPutThresholdInBytes = customBlockSize;
             ctrl.isUploading = true;
 
-            var speedSummary = blobService.createBlockBlobFromBrowserFile('videoscontainer', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
+            var speedSummary = blobService.createBlockBlobFromBrowserFile('video-container', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
                     if (error)
                     {
                         $mdDialog.show({

@@ -1,5 +1,5 @@
 rake-nltk
-azure==2.0.0
+azure
 Flask==0.12.1
 pyodbc
 azure-storage==0.32
