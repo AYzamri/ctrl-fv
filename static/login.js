@@ -12,7 +12,7 @@ app.controller('loginCtrl', ['$http', '$location', '$mdToast', 'userService', 'h
 
             $mdToast.show(toast).then(function (response) {
                 if (response === 'ok')
-                    $mdDialog.hide()
+                    $mdToast.hide()
             });
         });
     }
