@@ -17,7 +17,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
         var ctrl = this;
         headerService.model.showHeader = true;
         ctrl.isUploading = false;
-        ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
+        ctrl.storageUrl = 'https://ctrlfvfunctionaa670.blob.core.windows.net';
         ctrl.serverUrl = server + '/videoData';
         ctrl.videoDescription = "";
         ctrl.progress = 0;
