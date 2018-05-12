@@ -95,7 +95,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                 videoUrl: ctrl.storageUrl + "/video-container/" + videoID
             };
 
-            var sas = '?sv=2017-07-29&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-12-08T03:33:30Z&st=2018-05-12T18:33:30Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=Ykaz96mxaMoX0NejyZpcvgpstz1MFNJ7pzQudPHSI10%3D';
+            var sas = '?sv=2017-07-29&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-10-05T03:09:49Z&st=2018-05-12T19:09:49Z&spr=https,http&sig=rYYA9h57BSg03lQNo%2FAAoGk4qLy28A4ohC%2B9%2BckN%2FqY%3D';
             var blobService = AzureStorage.Blob.createBlobServiceWithSas(ctrl.storageUrl, sas);
             var customBlockSize = file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
             blobService.singleBlobPutThresholdInBytes = customBlockSize;
