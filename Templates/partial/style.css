@@ -5,14 +5,10 @@
 /*}*/
 
 .pageHeader {
-    /*font-family: Dinova;
-    font-weight: bold;
-    color: darkslategrey;*/
-    font: 400 125px/1.3 'Lobster Two', Helvetica, sans-serif;
-    color: #2b2b2b;
-    text-shadow: 1px 1px 0px #ededed, 4px 4px 0px rgba(0, 0, 0, 0.15);
+    font: 400 100px/1.2 'Merienda One', Helvetica, sans-serif;
+    color: rgba(0,0,0,0.7);
+    text-shadow: 3px 3px 3px #fff;
     height: 9%;
-    margin-bottom: 1%;
     margin-top: 0;
 }
 
