@@ -1,27 +1,30 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', 'headerService',  function ($http, $location, $mdToast, userService, headerService) {
+app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', 'headerService', function ($http, $location, $mdToast, userService, headerService) {
     var ctrl = this;
     headerService.model.showHeader = true;
     ctrl.user = {
-    email:"",
-    password:"",
-    username:"",
-    firstName:"",
-    lastName:""
+        email: "",
+        password: "",
+        username: "",
+        firstName: "",
+        lastName: ""
     };
 
     ctrl.signup = function () {
         userService.signup(ctrl.user).then(function (isEmailUnique) {
-            if (isEmailUnique.data == "true")
+            if (isEmailUnique.data === "true")
             {
-               var toast = $mdToast.simple().textContent('Signed Up Succesfully').action('OK').highlightAction(false).position('top');
-                $mdToast.show(toast).then(function (response) {
-                    if (response === 'ok')
-                        $mdDialog.hide()
+                // var toast = $mdToast.simple().textContent('Signed Up Succesfully').action('OK').highlightAction(false).position('top');
+                //  $mdToast.show(toast).then(function (response) {
+                //      if (response === 'ok')
+                //          $mdDialog.hide()
+                //  });
+                //  $location.path('/')
+                userService.login(ctrl.user.email, ctrl.user.password).then(function () {
+                    $location.path('/')
                 });
-                $location.path('/')
             }
             else
             {
