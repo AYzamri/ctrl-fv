@@ -99,6 +99,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     ctrl.searchInVid = function () {
         ctrl.searchValCurrentTerms = [];
         var options = {
+            includeScore: true,
             shouldSort: true, // Sort by score
             threshold: 0.25, // At what point does the match algorithm give up.
             maxPatternLength: 32,
@@ -119,10 +120,24 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
             var results = fuse.search(term);
             if (results.length === 0)
                 continue;
-            if (term !== results[0].term)
+            var mostSuitingTerm = results[0].item;
+            var bestScore = results[0].score;
+            // Find the word with the max score & max appearances:
+            for (var index in results)
+            {
+                var result = results[index].item;
+                var score = results[index].score;
+                // Results are sorted by score, so when we find a result with a worse score we can stop
+                if (score < bestScore)
+                    break;
+                // Compare number of appearances and choose the word with more appearances
+                if (Object.keys(result.appearances).length > Object.keys(mostSuitingTerm.appearances).length)
+                    mostSuitingTerm = result;
+            }
+            if (term !== mostSuitingTerm.term)
                 ctrl.showDidYouMean = true;
-            ctrl.searchValCurrentTerms.push(results[0].term);
-            searchResults = Object.assign(searchResults, results[0].appearances);
+            ctrl.searchValCurrentTerms.push(mostSuitingTerm.term);
+            searchResults = Object.assign(searchResults, mostSuitingTerm.appearances);
         }
         ctrl.search_results = searchResults.length === 0 ? {} : sortAndCleanSearchResults(searchResults, 1);
 
