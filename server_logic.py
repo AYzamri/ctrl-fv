@@ -126,7 +126,7 @@ def get_videos_by_term(search_term):
 
 def get_video_ids_by_term(query):
     # region Whoosh search
-    levenshtein_distance = 2
+    levenshtein_distance = 1
     index = open_dir(corpus_index_dir)
 
     query_terms = query.split(" ")
@@ -261,7 +261,7 @@ def signup(user):
 
 # endregion
 
-
+# region Delete File
 def remove_video_from_system(video_id):
     print("remove_video_from_system : ", video_id)
     # delete from videosMetaData sql
@@ -305,3 +305,4 @@ def delete_from_azure_table(table_name, partition_key):
             print("partition_key %s deleted from % azure table" % (partition_key, table_name))
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")
+# endregion
