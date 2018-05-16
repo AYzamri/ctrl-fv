@@ -50,11 +50,14 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                 {
                 }
             }
-            ctrl.invertedIndex = res.data.index;
-            ctrl.createWordCloud();
-            ctrl.progress = res.data.progress;
-            if (Object.keys(ctrl.invertedIndex).length > 0)
-                ctrl.indexLoaded = true;
+            if (!ctrl.invertedIndex || Object.keys(ctrl.invertedIndex).length !== Object.keys(res.data.index).length)
+            {
+                ctrl.invertedIndex = res.data.index;
+                ctrl.createWordCloud();
+                ctrl.progress = res.data.progress;
+                if (Object.keys(ctrl.invertedIndex).length > 0)
+                    ctrl.indexLoaded = true;
+            }
 
             if ('totalSegments' in ctrl.progress && !('range' in ctrl))
             {
@@ -96,9 +99,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     ctrl.searchInVid = function () {
         ctrl.searchValCurrentTerms = [];
         var options = {
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
+            shouldSort: true, // Sort by score
+            threshold: 0.25, // At what point does the match algorithm give up.
             maxPatternLength: 32,
             minMatchCharLength: 1,
             keys: ["term"]
