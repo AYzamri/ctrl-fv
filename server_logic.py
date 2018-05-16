@@ -5,6 +5,7 @@ import datetime
 import urllib.parse
 from base64 import b64encode
 from rake_nltk import Rake
+from our_stopwords import stop_words
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
@@ -126,7 +127,7 @@ def get_videos_by_term(search_term):
 
 def get_video_ids_by_term(query):
     # region Whoosh search
-    levenshtein_distance = 2
+    levenshtein_distance = 1
     index = open_dir(corpus_index_dir)
 
     query_terms = query.split(" ")
@@ -202,7 +203,7 @@ def create_update_whoosh_index(video_id):
 
 def extract_and_update_video_keywords(video_id, video_content):
     n = 5
-    rake = Rake()
+    rake = Rake(stopwords=stop_words)
     rake.extract_keywords_from_text(video_content)
     top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
     top_n_keywords_str = ", ".join([kw_tuple[0] for kw_tuple in top_n_keywords])
@@ -261,7 +262,7 @@ def signup(user):
 
 # endregion
 
-
+# region Delete File
 def remove_video_from_system(video_id):
     print("remove_video_from_system : ", video_id)
     # delete from videosMetaData sql
@@ -305,3 +306,4 @@ def delete_from_azure_table(table_name, partition_key):
             print("partition_key %s deleted from % azure table" % (partition_key, table_name))
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")
+# endregion

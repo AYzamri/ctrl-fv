@@ -8,15 +8,15 @@
         <h1>Upload Video</h1>
     </div>
     <div class="container" style="display: inline-block">
-        <form id="uploadform" name="uploadform" ng-submit="ctrl.doUpload()">
+        <form id="uploadform" name="uploadform" ng-disabled="ctrl.isUploading" ng-submit="ctrl.doUpload()">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
-                <input ng-model="ctrl.videoName" required type="text" class="form-control" placeholder="Video Name">
+                <input ng-model="ctrl.videoName" required type="text" class="form-control" placeholder="Video name">
             </div>
             <br>
             <div class="input-group input-group-lg">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                <textarea rows=4 form="uploadform" class="form-control" ng-model="ctrl.videoDescription" placeholder="Video Description"
+                <textarea rows=4 form="uploadform" class="form-control" ng-model="ctrl.videoDescription" placeholder="Video description (optional)"
                           style="height:15%">
       </textarea>
             </div>

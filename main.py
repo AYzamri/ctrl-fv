@@ -34,7 +34,7 @@ def upload_video():
                                           video_url=video_url)
         server_logic.enqueue_message('video-to-extractor-q', video_id)
     except Exception as e:
-        return e, 501
+        return repr(e), 501
     return '', 200
 
 
@@ -43,8 +43,8 @@ def video_data():
     try:
         vid_id = request.args.get('vidid')
         return json.dumps(server_logic.get_video_info_by_vid_ids([vid_id])[0]), 200
-    except Exception as ex:
-        return ex, 501
+    except Exception as e:
+        return repr(e), 501
 
 
 @app.route('/invertedIndex', methods=['GET'])
@@ -53,7 +53,7 @@ def get_inverted_index():
         vid_id = request.args.get('vidid')
         index_json = server_logic.get_inverted_index_json(vid_id)
     except Exception as e:
-        return e, 501
+        return repr(e), 501
     return index_json, 200
 
 
@@ -65,7 +65,7 @@ def search_for_video():
         videos = server_logic.get_videos_by_term(search_term)
         return json.dumps(videos), 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 @app.route('/createUpdateWhooshIndex', methods=['POST'])
@@ -76,7 +76,7 @@ def create_update_whoosh_index():
         server_logic.create_update_whoosh_index(video_id)
         return '', 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 @app.route('/updateVMD', methods=['POST'])
@@ -89,7 +89,7 @@ def update_vmd():
         server_logic.update_videos_meta_data(video_id, column_name, column_value)
         return '', 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 @app.route('/login', methods=['POST'])
@@ -103,7 +103,7 @@ def login():
             return 'Wrong username or password', 403
         return json.dumps(user), 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 @app.route('/signup', methods=['POST'])
@@ -113,7 +113,7 @@ def signup():
         isUnique = server_logic.signup(user)
         return json.dumps(isUnique), 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 # def handle_error(status_code, error):
@@ -137,7 +137,7 @@ def remove_video_from_system():
         server_logic.remove_video_from_system(video_id)
         return '', 200
     except Exception as e:
-        return e, 501
+        return repr(e), 501
 
 
 if __name__ == '__main__':
