@@ -16,12 +16,6 @@ app.controller('signupCtrl', ['$http', '$location', '$mdToast', 'userService', '
         userService.signup(ctrl.user).then(function (isEmailUnique) {
             if (isEmailUnique.data === "true")
             {
-                // var toast = $mdToast.simple().textContent('Signed Up Succesfully').action('OK').highlightAction(false).position('top');
-                //  $mdToast.show(toast).then(function (response) {
-                //      if (response === 'ok')
-                //          $mdDialog.hide()
-                //  });
-                //  $location.path('/')
                 userService.login(ctrl.user.email, ctrl.user.password).then(function () {
                     $location.path('/')
                 });
