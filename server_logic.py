@@ -6,6 +6,7 @@ import urllib.parse
 from base64 import b64encode
 from rake_nltk import Rake
 from our_stopwords import stop_words
+from our_punctuation import punctuation
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
@@ -203,7 +204,7 @@ def create_update_whoosh_index(video_id):
 
 def extract_and_update_video_keywords(video_id, video_content):
     n = 5
-    rake = Rake(stopwords=stop_words)
+    rake = Rake(stopwords=stop_words, punctuations=punctuation)
     rake.extract_keywords_from_text(video_content)
     top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
     top_n_keywords_str = ", ".join([kw_tuple[0] for kw_tuple in top_n_keywords])
