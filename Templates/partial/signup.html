@@ -6,16 +6,15 @@
         .container {
             width: 40%;
         }
-
     </style>
     <div class="container">
         <form name="signUpForm" ng-submit="ctrl.signup()">
-            <div class="input-group input-group-lg">
-                <input class="form-control" type="text" ng-model="ctrl.user.firstName" placeholder="First Name">
+            <div class="input-group input-group-lg" style="width: 100%">
+                <input class="form-control" type="text" ng-model="ctrl.user.firstName" placeholder="First name">
             </div>
             <br>
-            <div class="input-group input-group-lg">
-                <input class="form-control" type="text" ng-model="ctrl.user.lastName" placeholder="Last Name">
+            <div class="input-group input-group-lg" style="width: 100%">
+                <input class="form-control" type="text" ng-model="ctrl.user.lastName" placeholder="Last name">
             </div>
             <br/>
             <div class="input-group input-group-lg">
@@ -23,19 +22,10 @@
                 <input class="form-control" name="email" ng-model="ctrl.user.email" type="email" placeholder="E-Mail"
                        required>
                 <span style="color:red" ng-show="signUpForm.email.$dirty && signUpForm.email.$invalid">
-            <br>
-                <span ng-show="signUpForm.email.$error.required">Email is required.</span>
-    <span ng-show="signUpForm.email.$error.email">Invalid email address.</span>
-    </span>
-            </div>
-            <br>
-            <div class="input-group input-group-lg">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                <input class="form-control" type="password" name="password" placeholder="Password"
-                       ng-model="ctrl.user.password" required>
-                <span style="color:red" ng-show="signUpForm.password.$dirty && signUpForm.password.$invalid">
-    <span ng-show="signUpForm.password.$error.required">Password is required.</span>
-    </span>
+                    <br>
+                    <span ng-show="signUpForm.email.$error.required">Email is required.</span>
+                    <span ng-show="signUpForm.email.$error.email">Invalid email address.</span>
+                </span>
             </div>
             <br>
             <div class="input-group input-group-lg">
@@ -43,11 +33,21 @@
                 <input class="form-control" type="text" name="username" placeholder="Username"
                        ng-model="ctrl.user.username" required>
                 <span style="color:red" ng-show="signUpForm.username.$dirty && signUpForm.username.$invalid">
-    <span ng-show="signUpForm.username.$error.required">Username is required.</span>
-    </span>
+                    <span ng-show="signUpForm.username.$error.required">Username is required.</span>
+                </span>
             </div>
             <br>
-            <br><br>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input class="form-control" type="password" name="password" placeholder="Password"
+                       ng-model="ctrl.user.password" required>
+                <span style="color:red" ng-show="signUpForm.password.$dirty && signUpForm.password.$invalid">
+                    <span ng-show="signUpForm.password.$error.required">Password is required.</span>
+                </span>
+            </div>
+            <br>
+            <br>
+            <br>
             <input class="btn btn-success btn-lg" type="submit" value="Sign up" style="margin-left: 40%;"/>
         </form>
     </div>
