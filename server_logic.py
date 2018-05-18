@@ -6,7 +6,6 @@ import urllib.parse
 from base64 import b64encode
 from rake_nltk import Rake
 from our_stopwords import stop_words
-from our_punctuation import punctuation
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
