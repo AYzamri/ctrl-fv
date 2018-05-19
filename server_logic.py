@@ -191,7 +191,7 @@ def create_update_whoosh_index(video_id):
     video_content = block_blob_service.get_blob_to_text(container_name, video_id).content
     if not os.path.exists(corpus_index_dir):
         os.mkdir(corpus_index_dir)
-        schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer(), spelling=True))
+        schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer()))
         index = create_in(corpus_index_dir, schema)
     else:
         index = open_dir(corpus_index_dir)
