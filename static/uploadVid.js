@@ -17,7 +17,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
         var ctrl = this;
         headerService.model.showHeader = true;
         ctrl.isUploading = false;
-        ctrl.storageUrl = 'https://cfvtes9c07.blob.core.windows.net';
+        ctrl.storageUrl = 'https://ctrlfvfunctionaa670.blob.core.windows.net';
         ctrl.serverUrl = server + '/videoData';
         ctrl.videoDescription = "";
         ctrl.progress = 0;
@@ -92,16 +92,16 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                 videoDescription: ctrl.videoDescription,
                 user: userService.User.email,
                 duration: ctrl.duration,
-                videoUrl: ctrl.storageUrl + "/videoscontainer/" + videoID
+                videoUrl: ctrl.storageUrl + "/video-container/" + videoID
             };
 
-            var sas = '?sv=2017-07-29&ss=bfqt&srt=co&sp=rwacup&se=2018-06-30T17:44:01Z&st=2018-04-03T09:44:01Z&spr=https&sig=cjTWXrIh5yrImi%2FddvbXyvxlk%2F0DVTbJPxJHqj%2BoGt0%3D';
+            var sas = '?sv=2017-07-29&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-10-05T03:09:49Z&st=2018-05-12T19:09:49Z&spr=https,http&sig=rYYA9h57BSg03lQNo%2FAAoGk4qLy28A4ohC%2B9%2BckN%2FqY%3D';
             var blobService = AzureStorage.Blob.createBlobServiceWithSas(ctrl.storageUrl, sas);
             var customBlockSize = file.size > 1024 * 1024 * 32 ? 1024 * 1024 * 4 : 1024 * 512;
             blobService.singleBlobPutThresholdInBytes = customBlockSize;
             ctrl.isUploading = true;
 
-            var speedSummary = blobService.createBlockBlobFromBrowserFile('videoscontainer', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
+            var speedSummary = blobService.createBlockBlobFromBrowserFile('video-container', videoID, file, {blockSize: customBlockSize}, function (error, result, response) {
                     if (error)
                     {
                         $mdDialog.show({

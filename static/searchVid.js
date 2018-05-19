@@ -21,7 +21,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast','headerService', 
             $mdToast.show(toast).then(function (response)
             {
                 if (response === 'ok')
-                    $mdDialog.hide()
+                    $mdToast.hide()
             });
         });
     };

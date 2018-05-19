@@ -16,18 +16,18 @@ from azure.storage.queue import QueueService
 from azure.storage.table import TableService
 from azure.storage.blob import BlockBlobService, PublicAccess
 
-storage_acc_name = 'cfvtes9c07'
-storage_acc_key = 'DSTJn6a1dS9aaoJuuw6ZOsnrsiW9V1jODJyHtekkYkc3BWofGVQjS6/ICWO7v51VUpTHSoiZXVvDI66uqTnOJQ=='
+storage_acc_name = 'ctrlfvfunctionaa670'
+storage_acc_key = 'MoPjP9rLlfN8nK4+uejH6fSCwZHOqqvvfwVa6Ais3emwtGlly59oCS2Z8VQ+8OiKzzVwMghRImUPddVyMPAN9Q=='
 table_service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
 corpus_index_dir = "CorpusIndex"
 
 
 # region Helper Functions
 def get_sql_cnxn():
-    server = 'cfvtest.database.windows.net'
-    database = 'cfvtest'
-    username = 'drasco'
-    server_password = 'testTest1'
+    server = 'ctrlfv.database.windows.net'
+    database = 'ctrlfvDB'
+    username = 'drasco2017'
+    server_password = 'shwilOO18'
     driver = '{ODBC Driver 13 for SQL Server}'
     cnxn = pyodbc.connect(
         'DRIVER=' + driver + ';PORT=1433;SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + server_password)
@@ -277,7 +277,7 @@ def remove_video_from_system(video_id):
 
     delete_from_azure_table("VideosInvertedIndexes", video_id)
     delete_from_azure_table("VideosIndexProgress", video_id)
-    delete_blob(video_id, "videoscontainer")
+    delete_blob(video_id, "video-container")
     video_id_txt = video_id + ".txt"
     delete_blob(video_id_txt, "corpus-container")
     video_id_png = os.path.splitext(video_id)[0] + ".png"
