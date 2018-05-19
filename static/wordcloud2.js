@@ -186,7 +186,7 @@ if (!window.clearImmediate) {
       minSize: 0, // 0 to disable
       weightFactor: 1,
       clearCanvas: true,
-      backgroundColor: '#fff',  // opaque white = rgba(255, 255, 255, 1)
+      backgroundColor: 'whitesmoke',  // opaque white = rgba(255, 255, 255, 1)
 
       gridSize: 8,
       drawOutOfBound: false,
@@ -201,14 +201,14 @@ if (!window.clearImmediate) {
       abort: function noop() {},
 
       minRotation: - Math.PI / 2,
-      maxRotation: Math.PI / 2,
+      maxRotation: Math.PI / 2 ,
       rotationSteps: 0,
 
       shuffle: true,
       rotateRatio: 0.1,
 
-      shape: 'circle',
-      ellipticity: 0.65,
+      shape: 'square',
+      ellipticity:0.7,
 
       classes: null,
 
