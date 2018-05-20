@@ -42,7 +42,7 @@ def upload_video():
 def video_data():
     try:
         vid_id = request.args.get('vidid')
-        return json.dumps(server_logic.get_video_info_by_vid_ids([vid_id])[0]), 200
+        return json.dumps(server_logic.get_videos_info([vid_id])[0]), 200
     except Exception as e:
         return repr(e), 501
 
@@ -60,9 +60,9 @@ def get_inverted_index():
 @app.route('/searchForVideo', methods=['GET'])
 def search_for_video():
     try:
-        search_term = request.args.get('searchterm')
-        search_term = urllib.parse.unquote(search_term)
-        videos = server_logic.get_videos_by_term(search_term)
+        query = request.args.get('query')
+        query = urllib.parse.unquote(query)
+        videos = server_logic.search_videos(query)
         return json.dumps(videos), 200
     except Exception as e:
         return repr(e), 501

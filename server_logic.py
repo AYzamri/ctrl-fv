@@ -4,8 +4,10 @@ import pyodbc
 import datetime
 import urllib.parse
 from base64 import b64encode
-from rake_nltk import Rake
 from our_stopwords import stop_words
+from nltk import pos_tag
+from rake_nltk import Rake
+from nltk.corpus import wordnet as wn
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
@@ -16,9 +18,9 @@ from azure.storage.queue import QueueService
 from azure.storage.table import TableService
 from azure.storage.blob import BlockBlobService, PublicAccess
 
-storage_acc_name = 'ctrlfvfunctionaa670'
-storage_acc_key = 'MoPjP9rLlfN8nK4+uejH6fSCwZHOqqvvfwVa6Ais3emwtGlly59oCS2Z8VQ+8OiKzzVwMghRImUPddVyMPAN9Q=='
-table_service = TableService(account_name=storage_acc_name, account_key=storage_acc_key)
+storage_account = 'ctrlfvfunctionaa670'
+storage_key = 'MoPjP9rLlfN8nK4+uejH6fSCwZHOqqvvfwVa6Ais3emwtGlly59oCS2Z8VQ+8OiKzzVwMghRImUPddVyMPAN9Q=='
+table_service = TableService(account_name=storage_account, account_key=storage_key)
 corpus_index_dir = "CorpusIndex"
 
 
@@ -41,7 +43,7 @@ def create_id_by_name(name):
 
 
 def upload_file_to_blob(name, file, container_name):
-    block_blob_service = BlockBlobService(account_name=storage_acc_name, account_key=storage_acc_key)
+    block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
     # Set the permission so the blobs are public.
     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
     block_blob_service.create_blob_from_stream(container_name=container_name, blob_name=name, stream=file)
@@ -49,7 +51,7 @@ def upload_file_to_blob(name, file, container_name):
 
 def enqueue_message(q_name, message):
     message = b64encode(message.encode('ascii')).decode()
-    queue_service = QueueService(account_name=storage_acc_name, account_key=storage_acc_key)
+    queue_service = QueueService(account_name=storage_account, account_key=storage_key)
     queue_service.put_message(q_name, message)
 
 
@@ -111,22 +113,58 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, vid
     cursor = cnxn.cursor()
     query = "INSERT INTO VideosMetaData (vid_id, title, description, userID, duration, video_url) " \
             "VALUES (?, ?, ?, ?, ?, ?)"
-    # query = query.format(blob_name, video_name, video_description, user_id, duration)
     cursor.execute(query, (blob_name, video_name, video_description, user_id, duration, video_url))
     cnxn.commit()
 
 
 # region Search For Video
-def get_videos_by_term(search_term):
-    vid_ids = get_video_ids_by_term(search_term.lower())
+def search_videos(query):
+    expanded_query = expand_query(query)
+    vid_ids = get_video_ids(expanded_query)
     if len(vid_ids) == 0:
         return {}
-    video_info = get_video_info_by_vid_ids(vid_ids)
-    return video_info
+    videos_info = get_videos_info(vid_ids)
+    return videos_info
 
 
-def get_video_ids_by_term(query):
-    # region Whoosh search
+def expand_query(query):
+    max_synonyms_per_qt = 3
+    query = query.lower()
+    query_terms = query.split(" ")
+    seen_synonyms = set()
+    query_synonyms = []
+    for qt in query_terms:
+        qt_unique_synonyms = []
+        try:
+            qt_pos = get_wordnet_pos(pos_tag([qt]))
+            qt_synonyms = wn.synsets(qt, pos=qt_pos)
+            for qt_syn in qt_synonyms:
+                for lemma in qt_syn.lemmas():
+                    lemma_name = lemma.name()
+                    if lemma_name in seen_synonyms or lemma_name == qt:
+                        continue
+                    seen_synonyms.add(lemma_name)
+                    qt_unique_synonyms.append(lemma_name.replace("_", " "))
+                    if len(qt_unique_synonyms) == max_synonyms_per_qt:
+                        raise BreakLoop
+        except BreakLoop:
+            query_synonyms += qt_unique_synonyms
+    return " ".join(query_terms + query_synonyms)
+
+
+def get_wordnet_pos(word_pos):
+    if word_pos[0][1].startswith("J"):
+        return wn.ADJ
+    elif word_pos[0][1].startswith("V"):
+        return wn.VERB
+    elif word_pos[0][1].startswith("N"):
+        return wn.NOUN
+    elif word_pos[0][1].startswith("R"):
+        return wn.ADV
+    return None
+
+
+def get_video_ids(query):
     levenshtein_distance = 1
     index = open_dir(corpus_index_dir)
 
@@ -147,21 +185,11 @@ def get_video_ids_by_term(query):
     with index.searcher(weighting=scoring.TF_IDF()) as searcher:
         results = searcher.search(fuzzy_query_parser, limit=None)
         video_ids = [result.fields()["title"] for result in results]
-    # endregion
-
-    # region Naive search
-    # vid_ids = table_service.query_entities(table_name='CorpusInvertedIndex',
-    #                                        filter='PartitionKey eq \'' + search_term + '\'',
-    #                                        select='RowKey')
-    # if not vid_ids.items or len(vid_ids.items) == 0:
-    #     return []
-    # video_ids = {record['RowKey'] for record in vid_ids.items}
-    # endregion
 
     return video_ids
 
 
-def get_video_info_by_vid_ids(vid_ids):
+def get_videos_info(vid_ids):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     list_vid_ids = list(vid_ids)
@@ -187,7 +215,7 @@ def get_video_info_by_vid_ids(vid_ids):
 def create_update_whoosh_index(video_id):
     container_name = "corpus-container"
     video_id_no_txt_extension = os.path.splitext(video_id)[0]
-    block_blob_service = BlockBlobService(storage_acc_name, storage_acc_key)
+    block_blob_service = BlockBlobService(storage_account, storage_key)
     video_content = block_blob_service.get_blob_to_text(container_name, video_id).content
     if not os.path.exists(corpus_index_dir):
         os.mkdir(corpus_index_dir)
@@ -204,7 +232,6 @@ def create_update_whoosh_index(video_id):
 def extract_and_update_video_keywords(video_id, video_content):
     n = 5
     rake = Rake(stopwords=stop_words)
-    print("Extracting keywords using RAKE...")
     rake.extract_keywords_from_text(video_content)
     top_n_keywords = rake.get_word_frequency_distribution().most_common(n)  # list of tuples (word, count) ordered by 'count' desc
     top_n_keywords_str = ", ".join([kw_tuple[0] for kw_tuple in top_n_keywords])
@@ -250,7 +277,7 @@ def signup(user):
     cursor.execute(query)
     data = cursor.fetchall()
     if not data or len(data) == 0:
-        query = "INSERT INTO Users(email,username,password,firstName,lastName)" \
+        query = "INSERT INTO Users(email, username, password, firstName, lastName)" \
                 "VALUES ('{0}','{1}','{2}','{3}','{4}')"
         query = query.format(user['email'], user['username'], user['password'], user['firstName'], user['lastName'])
         cursor.execute(query)
@@ -285,7 +312,7 @@ def remove_video_from_system(video_id):
 
 
 def delete_blob(blob_name, container_name):
-    block_blob_service = BlockBlobService(account_name=storage_acc_name, account_key=storage_acc_key)
+    block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
     # Set the permission so the blobs are public.
     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
     try:
@@ -307,4 +334,5 @@ def delete_from_azure_table(table_name, partition_key):
             print("partition_key %s deleted from % azure table" % (partition_key, table_name))
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")
+
 # endregion

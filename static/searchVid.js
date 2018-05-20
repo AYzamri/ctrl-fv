@@ -10,7 +10,7 @@ app.controller('searchVidCtrl', ['$http', '$scope', '$mdToast','headerService', 
     {
         ctrl.searchFinished = false;
         ctrl.vid_search_results = [];
-        $http.get(server + '/searchForVideo?searchterm=' + encodeURI(ctrl.searchVal)).then(function (results)
+        $http.get(server + '/searchForVideo?query=' + encodeURI(ctrl.searchVal)).then(function (results)
         {
             ctrl.searchFinished = true;
             ctrl.vid_search_results = results.data;
