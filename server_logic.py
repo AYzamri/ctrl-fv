@@ -195,8 +195,8 @@ def get_videos_info(vid_ids):
     list_vid_ids = list(vid_ids)
     vid_ids_in_clause = ', '.join('\'{0}\''.format(id) for id in list_vid_ids)
     vid_ids_order_by_clause = ', '.join('{0}'.format(id) for id in list_vid_ids)
-    query = "SELECT VDM.*,U.username as username " \
-            "FROM VideosMetaData VDM join Users U on VDM.userID=U.email " \
+    query = "SELECT VMD.*, U.username as username " \
+            "FROM VideosMetaData VMD join Users U on VMD.userID=U.email " \
             "WHERE vid_id in ({0}) " \
             "ORDER BY CHARINDEX(CAST(vid_id AS VARCHAR), '{1}')"
     query = query.format(vid_ids_in_clause, vid_ids_order_by_clause)
@@ -335,4 +335,8 @@ def delete_from_azure_table(table_name, partition_key):
     except Exception as e:
         print("failed delete from VideosInvertedIndexes")
 
+
 # endregion
+
+class BreakLoop(Exception):
+    pass
