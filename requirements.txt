@@ -1,3 +1,4 @@
+nltk
 rake-nltk
 azure
 Flask==0.12.1
