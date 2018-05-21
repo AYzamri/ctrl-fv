@@ -144,7 +144,7 @@ def expand_query(query):
             for qt_syn in qt_synonyms:
                 for lemma in qt_syn.lemmas():
                     lemma_name = lemma.name()
-                    if lemma_name in seen_synonyms or lemma_name == qt:
+                    if lemma_name in seen_synonyms or lemma_name.lower() == qt:
                         continue
                     seen_synonyms.add(lemma_name)
                     qt_unique_synonyms.append(lemma_name.replace("_", " "))
