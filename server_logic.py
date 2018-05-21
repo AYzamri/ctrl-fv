@@ -1,6 +1,7 @@
 import os
 import json
 import pyodbc
+import logging
 import datetime
 import urllib.parse
 from base64 import b64encode
@@ -21,6 +22,7 @@ from azure.storage.blob import BlockBlobService, PublicAccess
 storage_account = 'ctrlfvfunctionaa670'
 storage_key = 'MoPjP9rLlfN8nK4+uejH6fSCwZHOqqvvfwVa6Ais3emwtGlly59oCS2Z8VQ+8OiKzzVwMghRImUPddVyMPAN9Q=='
 table_service = TableService(account_name=storage_account, account_key=storage_key)
+logging.basicConfig(filename='webAppLog.log', level=logging.DEBUG)
 corpus_index_dir = "CorpusIndex"
 
 
@@ -119,9 +121,9 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, vid
 
 # region Search For Video
 def search_videos(query):
-    print("Original query:", query)
+    logging.debug("Original query:", query)
     expanded_query = expand_query(query)
-    print("Expanded query:", expanded_query)
+    logging.debug("Expanded query:", expanded_query)
     vid_ids = get_video_ids(expanded_query)
     if len(vid_ids) == 0:
         return {}
