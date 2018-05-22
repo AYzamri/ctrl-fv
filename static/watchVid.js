@@ -1,8 +1,7 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', 'headerService', function ($http, $scope, $routeParams, $mdToast, headerService)
-{
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', 'headerService', function ($http, $scope, $routeParams, $mdToast, headerService) {
     var ctrl = this;
     headerService.model.showHeader = true;
     ctrl.vidId = $routeParams.vidId;
@@ -14,40 +13,32 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     ctrl.wordCloudList = [];
 
     // Start updating until all index up-to-date:
-    ctrl.init = function ()
-    {
+    ctrl.init = function () {
         ctrl.getVideoData();
         ctrl.updateInvertedIndex_Recursive();
     };
 
-    ctrl.getVideoData = function ()
-    {
-        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res)
-        {
+    ctrl.getVideoData = function () {
+        $http.get(server + '/videoData?vidid=' + ctrl.vidId).then(function (res) {
             ctrl.videoData = res.data;
             ctrl.setVideo();
-        }, function (reason)
-        {
+        }, function (reason) {
             var toast = $mdToast.simple().textContent('Failed retrieving video data').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response)
-            {
+            $mdToast.show(toast).then(function (response) {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
         });
     };
 
-    ctrl.setVideo = function ()
-    {
+    ctrl.setVideo = function () {
         var myPlayer = videojs('currentVideo');
         myPlayer.src(ctrl.videoData.video_url);
     };
 
-    ctrl.updateInvertedIndex_Recursive = function ()
-    {
-        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res)
-            {
+    ctrl.updateInvertedIndex_Recursive = function () {
+        return $http.get(server + '/invertedIndex?vidid=' + ctrl.vidId).then(function (res) {
                 try
                 {
                     var myPlayer = videojs('currentVideo');
@@ -89,12 +80,10 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                 }
 
             }
-        ).catch(function (err)
-        {
+        ).catch(function (err) {
             var toast = $mdToast.simple().textContent('Error importing inverted index').action('OK').highlightAction(true).position('bottom right');
 
-            $mdToast.show(toast).then(function (response)
-            {
+            $mdToast.show(toast).then(function (response) {
                 if (response === 'ok')
                     $mdDialog.hide()
             });
@@ -102,14 +91,12 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     }
     ;
 
-    ctrl.jump = function (time)
-    {
+    ctrl.jump = function (time) {
         var myPlayer = videojs('currentVideo');
         myPlayer.currentTime(Math.max(time - 2, 0));
     };
 
-    ctrl.searchInVid = function ()
-    {
+    ctrl.searchInVid = function () {
         ctrl.searchValCurrentTerms = [];
         var options = {
             includeScore: true,
@@ -119,8 +106,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
             minMatchCharLength: 1,
             keys: ["term"]
         };
-        var fuseIndex = Object.keys(ctrl.invertedIndex).map(function (term)
-        {
+        var fuseIndex = Object.keys(ctrl.invertedIndex).map(function (term) {
             return {'term': term, 'appearances': ctrl.invertedIndex[term]}
         });
         var fuse = new Fuse(fuseIndex, options);
@@ -130,7 +116,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
         var searchTerms = ctrl.searchVal.split(" ");
         for (var i = 0; i < searchTerms.length; i++)
         {
-            var term = searchTerms[i];
+            var term = searchTerms[i].toLowerCase();
             var results = fuse.search(term);
             if (results.length === 0)
                 continue;
@@ -141,6 +127,8 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
             {
                 var result = results[index].item;
                 var score = results[index].score;
+                if (result.term === term)
+                    break;
                 // Results are sorted by score, so when we find a result with a worse score we can stop
                 if (score < bestScore)
                     break;
@@ -157,22 +145,19 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
 
     };
 
-    ctrl.isExist = function (word)
-    {
+    ctrl.isExist = function (word) {
         if (word[word.length - 1] === '.' || word[word.length - 1] === ',')
             word = word.slice(0, -1);
         return ctrl.searchValCurrentTerms.indexOf(word) > -1;
     };
 
-    ctrl.createWordCloud = function ()
-    {
+    ctrl.createWordCloud = function () {
         var wordCloudCanvas = document.getElementById('my_canvas');
         var wordCloudDiv = document.getElementById('wordCloudDiv');
         wordCloudCanvas.width = wordCloudDiv.clientWidth;
         wordCloudCanvas.height = wordCloudDiv.clientHeight;
         var maxWordCount = 0;
-        var wordCloudRaw = Object.entries(ctrl.invertedIndex).map(function (term)
-        {
+        var wordCloudRaw = Object.entries(ctrl.invertedIndex).map(function (term) {
             var wordCount = Object.keys(term[1]).length;
             maxWordCount = wordCount >= maxWordCount ? wordCount : maxWordCount;
             return [term[0], wordCount]
@@ -182,13 +167,11 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
         WordCloud(wordCloudCanvas,
             {
                 list: ctrl.wordCloudList,
-                weightFactor: function (size)
-                {
+                weightFactor: function (size) {
                     return scaleBetween(size, 1, 70, ctrl.wordCloudList[numberOfWordsInWordCLoud - 1][1], maxWordCount);
                 }, gridSize: 2,
                 shape: 'circle',
-                click: function (data)
-                {
+                click: function (data) {
                     ctrl.searchVal = data[0];
                     ctrl.searchInVid();
                     $scope.$apply();
@@ -197,26 +180,21 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
         ;
     };
 
-    ctrl.numberOfResults = function ()
-    {
+    ctrl.numberOfResults = function () {
         return Object.keys(ctrl.search_results).length;
     };
 
-    $scope.$on("$destroy", function ()
-    {
+    $scope.$on("$destroy", function () {
         var oldPlayer = document.getElementById('currentVideo');
         videojs(oldPlayer).dispose();
     });
 
-    var sortAndCleanSearchResults = function (searchResults, threshold)
-    {
+    var sortAndCleanSearchResults = function (searchResults, threshold) {
         var sortedSearchResults = {};
         var prevKey = -1;
-        Object.keys(searchResults).sort(function (key1, key2)
-        {
+        Object.keys(searchResults).sort(function (key1, key2) {
             return key1.localeCompare(key2, "kn", {numeric: true})
-        }).forEach(function (key)
-        {
+        }).forEach(function (key) {
             if (prevKey === -1 || (key - prevKey) > threshold)
                 sortedSearchResults[key] = searchResults[key];
             prevKey = key;
@@ -238,21 +216,17 @@ function Comparator(a, b)
     return 0;
 }
 
-app.filter('split', function ()
-{
-    return function (input, splitChar, splitIndex)
-    {
+app.filter('split', function () {
+    return function (input, splitChar, splitIndex) {
         var splitted = input.split(splitChar);
         if (splitIndex >= 0) return splitted[splitIndex];
         return splitted[splitted.length + splitIndex];
     }
 });
 
-var format = function (format)
-{
+var format = function (format) {
     var args = Array.prototype.slice.call(arguments, 1);
-    return format.replace(/{(\d+)}/g, function (match, number)
-    {
+    return format.replace(/{(\d+)}/g, function (match, number) {
         return typeof args[number] != 'undefined'
             ? args[number]
             : match
@@ -260,10 +234,8 @@ var format = function (format)
     });
 };
 
-app.filter('datetostring', function ()
-{
-    return function (input)
-    {
+app.filter('datetostring', function () {
+    return function (input) {
         var str = ["{0}{1}-{2}{3}-{4}{5}{6}{7}"];
         var splitted = input.split("");
         var args = str.concat(splitted);
