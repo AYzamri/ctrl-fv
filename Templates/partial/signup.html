@@ -1,13 +1,17 @@
 <div class="view">
-    <div class="pageHeader text-center">
-        <h1>Sign Up</h1>
-    </div>
     <style>
         .container {
             width: 40%;
         }
     </style>
-    <div class="container">
+
+
+    <div class="pageHeader text-center" style="text-align: center">
+        <h1>Sign Up</h1>
+    </div>
+
+
+    <div class="container" style="text-align: center">
         <form name="signUpForm" ng-submit="ctrl.signup()">
             <div class="input-group input-group-lg" style="width: 100%">
                 <input class="form-control" type="text" ng-model="ctrl.user.firstName" placeholder="First name">
@@ -51,5 +55,4 @@
             <input class="btn btn-success btn-lg" type="submit" value="Sign up" style="margin-left: 40%;"/>
         </form>
     </div>
-
 </div>
