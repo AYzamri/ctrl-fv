@@ -148,7 +148,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     ctrl.isExist = function (word) {
         if (word[word.length - 1] === '.' || word[word.length - 1] === ',')
             word = word.slice(0, -1);
-        return ctrl.searchValCurrentTerms.indexOf(word) > -1;
+        return ctrl.searchValCurrentTerms.indexOf(word.toLowerCase()) > -1;
     };
 
     ctrl.createWordCloud = function () {
