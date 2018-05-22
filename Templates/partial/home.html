@@ -41,11 +41,11 @@
     </div>
 
 
-    <div ng-show="ctrl.searchFinished" class="container" style="text-align: center; height:calc(62% - 130px); overflow: auto">
+    <div ng-show="ctrl.searchFinished" class="container" style="height:calc(62% - 130px); overflow: auto">
         <div style="float: left; width: 100%" ng-repeat="vid in ctrl.vid_search_results">
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" height="100%" ng-src="[[vid.tn_url]]"/></a>
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
-                <h3 style="margin-top: 0.5%;margin-bottom: 1%"><strong>[[vid.title]]</strong>
+                <h3 style="margin-top: 0.5%; margin-bottom: 0"><strong>[[vid.title]]</strong>
                     <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>
                 </h3>
             </a>
