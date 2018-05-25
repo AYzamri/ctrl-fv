@@ -257,6 +257,7 @@ def login(email, password):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     table = 'Users'
+
     query = "SELECT * " \
             "FROM {0} " \
             "WHERE email = '{1}' AND password = '{2}'"
@@ -266,11 +267,17 @@ def login(email, password):
     user_data = cursor.fetchone()
     if not user_data:
         return None
+
     user = dict(zip(user_columns, user_data))
-    query = "SELECT * " \
-            "FROM VideosMetaData " \
-            "WHERE userID = '{0}'"
-    query = query.format(email)
+    is_admin = (email == "admin@cfv.com")
+    if is_admin:
+        query = "SELECT * " \
+                "FROM VideosMetaData "
+    else:
+        query = "SELECT * " \
+                "FROM VideosMetaData " \
+                "WHERE userID = '{0}'"
+        query = query.format(email)
     cursor = cnxn.cursor()
     cursor.execute(query)
     videos_columns = [column[0] for column in cursor.description]
