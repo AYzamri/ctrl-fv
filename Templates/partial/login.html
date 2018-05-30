@@ -4,10 +4,14 @@
             width: 40%;
         }
     </style>
-    <div class="pageHeader text-center">
-        <h1 >Login</h1>
+
+
+    <div class="pageHeader text-center" style="text-align: center">
+        <h1>Login</h1>
     </div>
-    <div class="container">
+
+
+    <div class="container" style="text-align: center">
         <form name="login" ng-submit="ctrl.login()">
             <div class="input-group input-group-lg">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
@@ -19,9 +23,7 @@
                 <input class="form-control" type="password" ng-model="ctrl.password" placeholder="Password" required>
             </div>
             <br>
-            <input type="submit" value="Login" class="btn btn-success btn-lg" style="margin-left: 40%;"/>
+            <input type="submit" value="Login" class="btn btn-success btn-lg"/>
         </form>
-
-
     </div>
 </div>

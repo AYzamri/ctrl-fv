@@ -4,17 +4,23 @@
             width: 55%;
         }
     </style>
-    <div style="height: 13%"></div>
-    <img src="../../static/headerBar.png" alt="Responsive image"
-         style=" height:130px;text-align: center; margin-left:30%;">
+
+
+    <div style="text-align: center">
+        <div style="display: inline-block">
+            <img src="../../static/headerBar.png" alt="Responsive image"
+                 style=" height:130px;text-align: center;">
+        </div>
+    </div>
+
+
     <!!class="img-responsive">
-    <div class="container" style="height: 8%">
-        <form
-                ng-submit="ctrl.searchForVid()">
-            <div class="input-group input-group-lg">
+    <div class="container" style="height: 8%; text-align: center">
+        <form ng-submit="ctrl.searchForVid()">
+            <div class="input-group input-group-lg" style="display: inline-table">
                 <input class="form-control" type="text" placeholder="Search for a video" ng-model=ctrl.searchVal>
                 <div class="input-group-btn">
-                    <button style="background-color: rgb(96,125,139)" class="btn btn-default" id="submit" value="Search" type="submit"><i
+                    <button class="btn btn-default" id="submit" value="Search" type="submit"><i
                             class="glyphicon glyphicon-search"></i></button>
                 </div>
             </div>
@@ -23,25 +29,28 @@
 
 
     <div class="container" style="height: 7%">
-        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
+        <h5 ng-show="ctrl.searchFinished && ctrl.getNumberOfResults() > 0">Found
             [[ctrl.vid_search_results.length]] result[[ctrl.vid_search_results.length > 1 ? 's' : '']]</h5>
-        <h5 ng-if="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No videos found</h5>
+        <h5 ng-show="ctrl.searchFinished && ctrl.getNumberOfResults() === 0">No videos found</h5>
         <div style="text-align: center; padding: 5% 0">
             <div style="display: inline-block">
-                <md-progress-circular ng-if="ctrl.vid_search_results.length === 0 && ctrl.searchFinished === false" md-mode="indeterminate"></md-progress-circular>
+                <md-progress-circular ng-show="ctrl.vid_search_results.length === 0 && ctrl.searchFinished === false"
+                                      md-mode="indeterminate"></md-progress-circular>
             </div>
         </div>
     </div>
-    <div ng-if="ctrl.searchFinished" class="container" style="height:calc(62% - 130px); overflow: auto">
-        <div style="float: left;width: 100%" ng-repeat="vid in ctrl.vid_search_results">
+
+
+    <div ng-show="ctrl.searchFinished" class="container" style="height:calc(62% - 130px); overflow: auto">
+        <div style="float: left; width: 100%" ng-repeat="vid in ctrl.vid_search_results">
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none"><img class="thumbnail" height="100%" ng-src="[[vid.tn_url]]"/></a>
             <a ng-href="#/watch/[[vid.vid_id]]" style="text-decoration: none">
-                <h3 style="margin-top: 0.5%;margin-bottom: 1%"><strong>[[vid.title]]</strong>
+                <h3 style="margin-top: 0.5%; margin-bottom: 0"><strong>[[vid.title]]</strong>
                     <small>[[vid.duration | secondsToDateTime | date:'HH:mm:ss']]</small>
                 </h3>
             </a>
             <p style="margin-bottom: 0.5%">[[vid.description]]</p>
-            <p ng-if="vid.keywords" style="margin-bottom: 0.5%"><b>Keywords:</b> [[vid.keywords]]</p>
+            <p ng-show="vid.keywords" style="margin-bottom: 0.5%"><b>Keywords:</b> [[vid.keywords]]</p>
         </div>
     </div>
 </div>

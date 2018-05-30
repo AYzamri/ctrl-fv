@@ -123,15 +123,24 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, vid
 
 # region Search For Video
 def search_videos(query):
-    with open("webAppLog.log", "a") as log:
-        log.write("Original query: {}\n".format(query))
-        expanded_query = expand_query(query)
-        log.write("Expanded query: {}\n".format(expanded_query))
-        vid_ids = get_video_ids(expanded_query)
-        if len(vid_ids) == 0:
-            return {}
-        videos_info = get_videos_info(vid_ids)
-        return videos_info
+    if not query:
+        return {}
+    # try:
+    #     with open("webAppLog.log", "a") as log:
+    #         log.write("Original query: {}\n".format(query))
+    # except:
+    #     pass
+    expanded_query = expand_query(query)
+    # try:
+    #     with open("webAppLog.log", "a") as log:
+    #         log.write("Expanded query: {}\n".format(expanded_query))
+    # except:
+    #     pass
+    vid_ids = get_video_ids(expanded_query)
+    if len(vid_ids) == 0:
+        return {}
+    videos_info = get_videos_info(vid_ids)
+    return videos_info
 
 
 def expand_query(query):
@@ -253,6 +262,7 @@ def login(email, password):
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
     table = 'Users'
+
     query = "SELECT * " \
             "FROM {0} " \
             "WHERE email = '{1}' AND password = '{2}'"
@@ -262,11 +272,17 @@ def login(email, password):
     user_data = cursor.fetchone()
     if not user_data:
         return None
+
     user = dict(zip(user_columns, user_data))
-    query = "SELECT * " \
-            "FROM VideosMetaData " \
-            "WHERE userID = '{0}'"
-    query = query.format(email)
+    is_admin = (email == "admin@cfv.com")
+    if is_admin:
+        query = "SELECT * " \
+                "FROM VideosMetaData "
+    else:
+        query = "SELECT * " \
+                "FROM VideosMetaData " \
+                "WHERE userID = '{0}'"
+        query = query.format(email)
     cursor = cnxn.cursor()
     cursor.execute(query)
     videos_columns = [column[0] for column in cursor.description]

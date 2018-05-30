@@ -4,16 +4,22 @@
             width: 40%;
         }
     </style>
-    <div class="pageHeader text-center">
+
+
+    <div class="pageHeader text-center" style="text-align: center">
         <h1>Upload Video</h1>
     </div>
+
+
     <div class="container" style="display: inline-block">
         <form id="uploadform" name="uploadform" ng-submit="ctrl.doUpload()">
             <fieldset ng-disabled="ctrl.isUploading">
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
-                    <input ng-model="ctrl.videoName" required type="text" class="form-control" placeholder="Video name">
+                    <input name="videoName" ng-model="ctrl.videoName" required type="text" class="form-control" placeholder="Video name"
+                           ng-pattern="/^[a-zA-Z0-9\_\- ]*$/">
                 </div>
+                <span style="color:red" ng-show="uploadform.videoName.$error.pattern">Video name must be in English.</span>
                 <br>
                 <div class="input-group input-group-lg">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
@@ -34,6 +40,8 @@
             </fieldset>
         </form>
     </div>
+
+
     <div ng-if="ctrl.isUploading">
         <div style="text-align: center">
             <div style="display: inline-block">
