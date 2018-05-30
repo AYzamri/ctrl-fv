@@ -69,7 +69,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                 if (window.location.href.includes(ctrl.vidId) && (
                     !('totalSegments' in ctrl.progress) ||
                     !('analyzedSegments' in ctrl.progress) ||
-                    ctrl.progress.totalSegments !== Object.keys(ctrl.progress.analyzedSegments).length))
+                    ctrl.progress.totalSegments > Object.keys(ctrl.progress.analyzedSegments).length))
                 {
                     ctrl.showRealTimeProgress = true;
                     return setTimeout(ctrl.updateInvertedIndex_Recursive, 1000)
