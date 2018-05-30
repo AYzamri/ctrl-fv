@@ -325,14 +325,19 @@ def remove_video_from_system(video_id):
     cursor.execute(sql_command, video_id)
     cnxn.commit()
     print("video_id deleted from sql : videosMetaData")
-
     delete_from_azure_table("VideosInvertedIndexes", video_id)
-    delete_from_azure_table("VideosIndexProgress", video_id)
     delete_blob(video_id, "video-container")
     video_id_txt = video_id + ".txt"
     delete_blob(video_id_txt, "corpus-container")
     video_id_png = os.path.splitext(video_id)[0] + ".png"
     delete_blob(video_id_png, "image-container")
+
+    pk_filter = 'PartitionKey ge \'{0}\' and PartitionKey le \'{0}_999\''.format(video_id)
+    data_returned = table_service.query_entities(table_name='VideosIndexProgress',
+                                                 filter=pk_filter, select='PartitionKey')
+    for item in data_returned.items:
+        if item['PartitionKey'].startswith(video_id):
+            delete_from_azure_table("VideosIndexProgress", item['PartitionKey'])
 
 
 def delete_blob(blob_name, container_name):
