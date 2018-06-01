@@ -12,8 +12,8 @@ Date.prototype.idFormat = function () {
     ].join('') + '_' + this.getHours() + this.getMinutes();
 };
 
-app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$mdDialog', 'upload', 'userService','headerService',
-    function ($http, $scope, $interval, $location, $mdDialog, upload, userService, headerService) {
+app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$mdDialog', '$log', 'upload', 'userService', 'headerService',
+    function ($http, $scope, $interval, $location, $mdDialog, $log, upload, userService, headerService) {
         var ctrl = this;
         headerService.model.showHeader = true;
         ctrl.isUploading = false;
@@ -68,6 +68,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
 
         ctrl.doUpload = function () {
             ctrl.progress = 0;
+            $log.log(new Date().toLocaleTimeString() + ' Started Uploading File');
 
             function refreshProgress()
             {
@@ -118,6 +119,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
                     else
                         $http.post(ctrl.serverUrl, req_body).then(function () {
                             ctrl.isUploading = false;
+                            $log.log(new Date().toLocaleTimeString() + ' Finished Uploading File');
                             $mdDialog.show({
                                 template: successDialogTemplate,
                                 controller: DialogController,

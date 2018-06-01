@@ -1,7 +1,7 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', 'headerService', function ($http, $scope, $routeParams, $mdToast, headerService) {
+app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '$log', 'headerService', function ($http, $scope, $routeParams, $mdToast, $log, headerService) {
     var ctrl = this;
     headerService.model.showHeader = true;
     ctrl.vidId = $routeParams.vidId;
@@ -54,7 +54,11 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                     ctrl.createWordCloud();
                     ctrl.progress = res.data.progress;
                     if (Object.keys(ctrl.invertedIndex).length > 0)
+                    {
+                        if (!ctrl.indexLoaded)
+                            $log.log(new Date().toLocaleTimeString() + ' Started receiving Real Time Data');
                         ctrl.indexLoaded = true;
+                    }
                 }
 
                 if ('totalSegments' in ctrl.progress && !('range' in ctrl))
@@ -76,6 +80,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                 }
                 else
                 {
+                    $log.log(new Date().toLocaleTimeString() + ' All index received, end of Real time search');
                     ctrl.showRealTimeProgress = false;
                 }
 
