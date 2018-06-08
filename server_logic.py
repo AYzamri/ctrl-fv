@@ -130,7 +130,7 @@ def search_videos(query):
     #         log.write("Original query: {}\n".format(query))
     # except:
     #     pass
-    expanded_query = expand_query(query)
+    expanded_query = query #expand_query(query)
     # try:
     #     with open("webAppLog.log", "a") as log:
     #         log.write("Expanded query: {}\n".format(expanded_query))
