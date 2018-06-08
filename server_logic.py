@@ -130,7 +130,7 @@ def search_videos(query):
     #         log.write("Original query: {}\n".format(query))
     # except:
     #     pass
-    expanded_query = query #expand_query(query)
+    expanded_query = expand_query(query)
     # try:
     #     with open("webAppLog.log", "a") as log:
     #         log.write("Expanded query: {}\n".format(expanded_query))
@@ -157,7 +157,7 @@ def expand_query(query):
             for qt_syn in qt_synonyms:
                 for lemma in qt_syn.lemmas():
                     lemma_name = lemma.name()
-                    if lemma_name in seen_synonyms or lemma_name.lower() == qt:
+                    if lemma_name in seen_synonyms or lemma_name.lower() == qt or "state" in lemma_name.lower():
                         continue
                     seen_synonyms.add(lemma_name)
                     qt_unique_synonyms.append(lemma_name.replace("_", " "))
@@ -166,6 +166,7 @@ def expand_query(query):
         except BreakLoop:
             query_synonyms += qt_unique_synonyms
     return " ".join(query_terms + query_synonyms)
+
 
 
 def get_wordnet_pos(word_pos):
