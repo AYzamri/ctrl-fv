@@ -11,7 +11,7 @@ from nltk.corpus import wordnet as wn
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
-from whoosh.fields import Schema, TEXT
+from whoosh.fields import Schema, TEXT , ID
 from whoosh.index import create_in, open_dir
 from whoosh.analysis import StemmingAnalyzer
 from azure.storage.queue import QueueService
@@ -231,7 +231,7 @@ def create_update_whoosh_index(video_id):
     video_content = block_blob_service.get_blob_to_text(container_name, video_id).content
     if not os.path.exists(corpus_index_dir):
         os.mkdir(corpus_index_dir)
-        schema = Schema(title=TEXT(stored=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer()))
+        schema = Schema(title=ID(stored=True, unique=True), content=TEXT(stored=True, analyzer=StemmingAnalyzer()))
         index = create_in(corpus_index_dir, schema)
     else:
         index = open_dir(corpus_index_dir)
@@ -329,8 +329,19 @@ def remove_video_from_system(video_id):
     video_id_png = os.path.splitext(video_id)[0] + ".png"
     delete_blob(video_id_png, "image-container")
 
+    delete_video_from_whoosh(video_id)
+
+
+def delete_video_from_whoosh(video_id):
+
+    index = open_dir(corpus_index_dir)
+    index_writer = index.writer()
+    print("video deleted from whoosh: ", index_writer.delete_by_term(u'title', video_id))
+    index_writer.commit()
+
 
 def delete_blob(blob_name, container_name):
+
     block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
     # Set the permission so the blobs are public.
     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
