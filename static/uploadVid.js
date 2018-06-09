@@ -21,26 +21,27 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
         ctrl.serverUrl = server + '/videoData';
         ctrl.videoDescription = "";
         ctrl.progress = 0;
+        ctrl.allowedFormats = [".flv", ".avi", ".mov", ".mp4", ".mpg", ".mpeg", ".wmv", ".3gp", ".mkv"];
 
         $scope.validateVidFile = function (element) {
-            var allowedFormats = [".flv", ".avi", ".mov", ".mp4", ".mpg", ".mpeg", ".wmv", ".3gp", ".mkv"];
-            $scope.$apply($scope.validateFile(allowedFormats, element));
+            if (element.files.length < 1)
+                return;
+            $scope.$apply($scope.validateFile(ctrl.allowedFormats, element));
         };
 
         $scope.validateFile = function (allowedFormats, element) {
-            if (element.files.length < 1)
-                return;
             $scope.theFile = element.files[0];
             var filename = $scope.theFile.name;
             var index = filename.lastIndexOf(".");
             var fileExtension = filename.substring(index, filename.length);
             if (!allowedFormats.includes(fileExtension))
             {
-                $scope.theFile = '';
+                element.value = "";
                 $scope.FileMessage = 'Apparently this file is not a video. Please choose a video file.';
             }
             else
             {
+                ctrl.fileExtension = fileExtension;
                 $scope.FileMessage = '';
             }
         };
@@ -79,7 +80,7 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
             // If one file has been selected in the HTML file input element
             var file = ctrl.vidArray[0];
             var currentTime = new Date();
-            var videoID = ctrl.videoName.replace(/ /g, "_") + '_' + currentTime.idFormat() + '.mp4';
+            var videoID = ctrl.videoName.replace(/ /g, "_") + '_' + currentTime.idFormat() + ctrl.fileExtension;
             var req_body = {
                 videoID: videoID,
                 videoName: ctrl.videoName,
