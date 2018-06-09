@@ -23,33 +23,26 @@ app.controller('uploadVidCtrl', ['$http', '$scope', '$interval', '$location', '$
         ctrl.progress = 0;
 
         $scope.validateVidFile = function (element) {
-            $scope.$apply($scope.validateFile(".mp4", element));
+            var allowedFormats = [".flv", ".avi", ".mov", ".mp4", ".mpg", ".mpeg", ".wmv", ".3gp", ".mkv"];
+            $scope.$apply($scope.validateFile(allowedFormats, element));
         };
 
-        $scope.validateFile = function (fileExtension, element) {
+        $scope.validateFile = function (allowedFormats, element) {
+            if (element.files.length < 1)
+                return;
             $scope.theFile = element.files[0];
-            var FileMessage = '';
             var filename = $scope.theFile.name;
             var index = filename.lastIndexOf(".");
-            var strsubstring = filename.substring(index, filename.length);
-            if (strsubstring !== fileExtension)
+            var fileExtension = filename.substring(index, filename.length);
+            if (!allowedFormats.includes(fileExtension))
             {
                 $scope.theFile = '';
-                FileMessage = 'Please upload correct File, File extension should be ' + fileExtension;
+                $scope.FileMessage = 'Apparently this file is not a video. Please choose a video file.';
             }
             else
             {
                 $scope.FileMessage = '';
             }
-            if (fileExtension === ".mp4")
-            {
-                $scope.VideoFileMessage = FileMessage;
-            }
-            if (fileExtension === ".txt")
-            {
-                $scope.TranscriptFileMessage = FileMessage;
-            }
-
         };
 
         ctrl.getDuration = function () {

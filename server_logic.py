@@ -36,17 +36,17 @@ def get_sql_cnxn():
     return cnxn
 
 
-def create_id_by_name(name):
-    date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H%M')
-    name = '{}_{}.mp4'.format(name, date_time_str)
-    return name
+# def create_id_by_name(name):
+#     date_time_str = datetime.datetime.today().strftime('%d%m%Y_%H%M')
+#     name = '{}_{}.mp4'.format(name, date_time_str)
+#     return name
 
 
-def upload_file_to_blob(name, file, container_name):
-    block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
-    # Set the permission so the blobs are public.
-    block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
-    block_blob_service.create_blob_from_stream(container_name=container_name, blob_name=name, stream=file)
+# def upload_file_to_blob(name, file, container_name):
+#     block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
+#     # Set the permission so the blobs are public.
+#     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
+#     block_blob_service.create_blob_from_stream(container_name=container_name, blob_name=name, stream=file)
 
 
 def enqueue_message(q_name, message):
@@ -125,17 +125,7 @@ def upload_vid_meta_data(blob_name, video_name, video_description, duration, vid
 def search_videos(query):
     if not query:
         return {}
-    # try:
-    #     with open("webAppLog.log", "a") as log:
-    #         log.write("Original query: {}\n".format(query))
-    # except:
-    #     pass
     expanded_query = expand_query(query)
-    # try:
-    #     with open("webAppLog.log", "a") as log:
-    #         log.write("Expanded query: {}\n".format(expanded_query))
-    # except:
-    #     pass
     vid_ids = get_video_ids(expanded_query)
     if len(vid_ids) == 0:
         return {}
@@ -310,7 +300,6 @@ def signup(user):
         return True
     else:
         return False
-        # raise ValueError('The email is allready in use!')
 
 
 # endregion
@@ -346,7 +335,6 @@ def remove_video_from_system(video_id):
 
 
 def delete_video_from_whoosh(video_id):
-
     index = open_dir(corpus_index_dir)
     index_writer = index.writer()
     print("video deleted from whoosh: ", index_writer.delete_by_term(u'title', video_id))
@@ -354,7 +342,6 @@ def delete_video_from_whoosh(video_id):
 
 
 def delete_blob(blob_name, container_name):
-
     block_blob_service = BlockBlobService(account_name=storage_account, account_key=storage_key)
     # Set the permission so the blobs are public.
     block_blob_service.set_container_acl(container_name, public_access=PublicAccess.Container)
