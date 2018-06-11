@@ -11,7 +11,7 @@ from nltk.corpus import wordnet as wn
 from whoosh import scoring
 from whoosh import qparser
 from whoosh.query import Or
-from whoosh.fields import Schema, TEXT , ID
+from whoosh.fields import Schema, TEXT, ID
 from whoosh.index import create_in, open_dir
 from whoosh.analysis import StemmingAnalyzer
 from azure.storage.queue import QueueService
@@ -70,18 +70,27 @@ def update_videos_meta_data(key, column_name, column_value):
 # region Video Inverted Index & Progress
 
 def get_inverted_index(vid_id):
-    terms = table_service.query_entities(table_name='VideosInvertedIndexes',
-                                         filter='PartitionKey eq \'' + vid_id + '\'')
-    if not terms.items:
-        return {}
+    next_marker = None
     index = {}
-    for entry in terms.items:
-        word = entry['RowKey']
-        index[word] = {}
-        for prop in entry:
-            if prop.startswith('t_'):
-                time = prop.replace('t_', '').replace('_', '.')
-                index[word][time] = entry[prop]
+    while True:
+        terms = table_service.query_entities(table_name='VideosInvertedIndexes',
+                                             filter='PartitionKey eq \'' + vid_id + '\'',
+                                             marker=next_marker)
+        if not terms.items:
+            return index
+
+        for entry in terms.items:
+            word = entry['RowKey']
+            index[word] = {}
+            for prop in entry:
+                if prop.startswith('t_'):
+                    time = prop.replace('t_', '').replace('_', '.')
+                    index[word][time] = entry[prop]
+
+        # If there is more than 1,000 records, continue querying:
+        if not hasattr(terms, 'next_marker') or len(terms.next_marker) == 0:
+            break
+        next_marker = terms.next_marker
     return index
 
 
@@ -156,7 +165,6 @@ def expand_query(query):
         except BreakLoop:
             query_synonyms += qt_unique_synonyms
     return " ".join(query_terms + query_synonyms)
-
 
 
 def get_wordnet_pos(word_pos):
