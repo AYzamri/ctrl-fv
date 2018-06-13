@@ -57,11 +57,11 @@ def enqueue_message(q_name, message):
 
 def update_videos_meta_data(key, column_name, column_value):
     sql_command = "UPDATE VideosMetaData " \
-                  "SET {0} = '{1}' " \
-                  "WHERE vid_id = '{2}'".format(column_name, column_value, key)
+                  "SET {0} = ? " \
+                  "WHERE vid_id = ?".format(column_name)
     cnxn = get_sql_cnxn()
     cursor = cnxn.cursor()
-    cursor.execute(sql_command)
+    cursor.execute(sql_command, (column_value, key))
     cnxn.commit()
 
 
@@ -264,9 +264,9 @@ def login(email, password):
 
     query = "SELECT * " \
             "FROM {0} " \
-            "WHERE email = '{1}' AND password = '{2}'"
-    query = query.format(table, email, password)
-    cursor.execute(query)
+            "WHERE email = ? AND password = ?"
+    query = query.format(table)
+    cursor.execute(query, (email, password))
     user_columns = [column[0] for column in cursor.description]
     user_data = cursor.fetchone()
     if not user_data:
@@ -294,10 +294,10 @@ def login(email, password):
 def signup(user):
     cnxn = get_sql_cnxn()
     table = 'Users'
-    query = "SELECT email FROM {0} WHERE email = '{1}'"
-    query = query.format(table, user['email'])
+    query = "SELECT email FROM {0} WHERE email = ?"
+    query = query.format(table)
     cursor = cnxn.cursor()
-    cursor.execute(query)
+    cursor.execute(query, (user['email']))
     data = cursor.fetchall()
     if not data or len(data) == 0:
         query = "INSERT INTO Users(email, username, password, firstName, lastName)" \
