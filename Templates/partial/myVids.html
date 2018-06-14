@@ -10,7 +10,6 @@
         cursor: pointer;
         color: #337ab7;
     }
-
 </style>
 <div class=" view pageHeader text-center" style="margin-bottom: auto">
     <h1> My videos</h1>
@@ -31,15 +30,18 @@
                             <img class="thumbnail" style="height: auto;width: 100%" ng-src="[[vid.tn_url]]"/>
                         </a>
                     </div>
-                    <div class="details" style="width: 57%;float: right;margin: 0">
+                    <div style="width: 57%;float: right;margin: 0">
                         <p ng-href="#/watch/[[vid.vid_id]]" class="noWrap pLink"
                            onmouseover="this.style.color='#23527c';this.style.textDecoration='underline'"
                            onmouseout="this.style.color='#337ab7';this.style.textDecoration='none'">
-                            <span class="md-headline" style="width: 100%">[[vid.title]]</span>
+                            <a ng-href="#/watch/[[vid.vid_id]]" class="md-headline"
+                               style="width: 100%">[[vid.title]]</a>
+                            <md-tooltip md-direction="top"> [[vid.title]]</md-tooltip>
                         </p>
                         <p style="margin-bottom: 0.5%" class="md-subhead">[[vid.duration | secondsToDateTime |
                             date:'HH:mm:ss']]</p>
                         <p style="margin-bottom: 0.5%" class="noWrap">[[vid.description]]</p>
+                        <md-tooltip md-direction="bottom"> [[vid.description]]</md-tooltip>
                     </div>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center" style="min-height: calc(30% - 16px);margin: 1%">
