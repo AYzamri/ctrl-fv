@@ -31,17 +31,22 @@
                         </a>
                     </div>
                     <div style="width: 57%;float: right;margin: 0">
-                        <p ng-href="#/watch/[[vid.vid_id]]" class="noWrap pLink"
+                        <p class="noWrap pLink"
+                           ng-attr-id="[['vidTitle-' + $index]]"
                            onmouseover="this.style.color='#23527c';this.style.textDecoration='underline'"
                            onmouseout="this.style.color='#337ab7';this.style.textDecoration='none'">
                             <a ng-href="#/watch/[[vid.vid_id]]" class="md-headline"
                                style="width: 100%">[[vid.title]]</a>
-                            <md-tooltip md-direction="top"> [[vid.title]]</md-tooltip>
+                            <md-tooltip md-direction="top">
+                                [[getIfOverflow('vidTitle-' + $index)? vid.title: '']]
+                            </md-tooltip>
                         </p>
                         <p style="margin-bottom: 0.5%" class="md-subhead">[[vid.duration | secondsToDateTime |
                             date:'HH:mm:ss']]</p>
-                        <p style="margin-bottom: 0.5%" class="noWrap">[[vid.description]]</p>
-                        <md-tooltip md-direction="bottom"> [[vid.description]]</md-tooltip>
+                        <p style="margin-bottom: 0.5%" class="noWrap" ng-attr-id="[['vidDesc-' + $index]]">[[vid.description]]
+                            <md-tooltip md-direction="bottom"> [[getIfOverflow('vidDesc-' + $index)? vid.description: '']]
+                            </md-tooltip>
+                        </p>
                     </div>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center" style="min-height: calc(30% - 16px);margin: 1%">

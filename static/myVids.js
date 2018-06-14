@@ -1,8 +1,7 @@
 var app = angular.module('myApp');
 var server = app.config['server'];
 
-app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', 'userService', 'headerService',  function ($http, $location, $mdToast, userService, headerService)
-{
+app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', '$scope', 'userService', 'headerService', function ($http, $location, $mdToast, $scope, userService, headerService) {
     var ctrl = this;
     headerService.model.showHeader = true;
     ctrl.retrievedVideos = false;
@@ -34,4 +33,14 @@ app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', 'userService', '
             });
         }
     };
+
+    $scope.test = 'test!!!!';
+    $scope.getIfOverflow = function (id) {
+        if (document.readyState !== "complete")
+        {
+            return false;
+        }
+        var e = document.getElementById(id);
+        return (e.offsetWidth < e.scrollWidth);
+    }
 }]);
