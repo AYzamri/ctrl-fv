@@ -29,18 +29,15 @@ app.controller('myVidsCtrl', ['$http', '$location', '$mdToast', '$scope', 'userS
                 $mdToast.show(toast).then(function (response) {
                     if (response === 'ok')
                         $mdDialog.hide()
-                });
+                }).catch({});
             });
         }
     };
 
-    $scope.test = 'test!!!!';
     $scope.getIfOverflow = function (id) {
-        if (document.readyState !== "complete")
-        {
+        if (document.readyState === "loading")
             return false;
-        }
         var e = document.getElementById(id);
-        return (e.offsetWidth < e.scrollWidth);
+        return e !== null && (e.offsetWidth < e.scrollWidth);
     }
 }]);

@@ -37,14 +37,16 @@
                            onmouseout="this.style.color='#337ab7';this.style.textDecoration='none'">
                             <a ng-href="#/watch/[[vid.vid_id]]" class="md-headline"
                                style="width: 100%">[[vid.title]]</a>
-                            <md-tooltip md-direction="top">
-                                [[getIfOverflow('vidTitle-' + $index)? vid.title: '']]
+                            <md-tooltip ng-if="getIfOverflow('vidTitle-' + $index)" md-direction="top">
+                                [[ vid.title]]
                             </md-tooltip>
                         </p>
                         <p style="margin-bottom: 0.5%" class="md-subhead">[[vid.duration | secondsToDateTime |
                             date:'HH:mm:ss']]</p>
-                        <p style="margin-bottom: 0.5%" class="noWrap" ng-attr-id="[['vidDesc-' + $index]]">[[vid.description]]
-                            <md-tooltip md-direction="bottom"> [[getIfOverflow('vidDesc-' + $index)? vid.description: '']]
+                        <p style="margin-bottom: 0.5%" class="noWrap" ng-attr-id="[['vidDesc-' + $index]]">
+                            [[vid.description]]
+                            <md-tooltip ng-if="getIfOverflow('vidDesc-' + $index)" md-direction="bottom">
+                                [[vid.description]]
                             </md-tooltip>
                         </p>
                     </div>
