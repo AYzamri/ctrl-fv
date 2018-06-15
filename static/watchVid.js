@@ -159,6 +159,7 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
     ctrl.createWordCloud = function () {
         var wordCloudCanvas = document.getElementById('my_canvas');
         var wordCloudDiv = document.getElementById('wordCloudDiv');
+        wordCloudDiv.style.cursor = "pointer";
         wordCloudCanvas.width = wordCloudDiv.clientWidth;
         wordCloudCanvas.height = wordCloudDiv.clientHeight;
         var maxWordCount = 0;
@@ -180,6 +181,17 @@ app.controller('watchVidCtrl', ['$http', '$scope', '$routeParams', '$mdToast', '
                     ctrl.searchVal = data[0];
                     ctrl.searchInVid();
                     $scope.$apply();
+                },
+                hover:function(element, dimension, mousemove){
+                    if(element != undefined){
+                        document.getElementById('tooltip').style.top = mousemove.clientY;
+                        document.getElementById('tooltip').style.left = mousemove.clientX + 15;
+                        document.getElementById('tooltip').style.display = 'block';
+                        document.getElementById('tooltip').innerHTML = element[0] + ": " + element[1];
+                    }
+                    else{
+                        document.getElementById('tooltip').style.display = 'none';
+                    }
                 }
             })
         ;
